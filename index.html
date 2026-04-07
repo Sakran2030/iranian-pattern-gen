@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المُولد الشامل للزخارف الإيرانية</title>
+    <style>
+        :root { 
+            --primary: #1e293b; 
+            --accent: #b48608; 
+            --bg: #f1f5f9; 
+            --panel: #ffffff;
+            --blue: #063970;
+            --teal: #178582;
+        }
+        
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        
+        h1 { color: var(--primary); text-align: center; margin-bottom: 25px; font-weight: 800; border-bottom: 3px solid var(--accent); padding-bottom: 10px; font-size: 1.8rem;}
+
+        .app-container { 
+            display: grid;
+            grid-template-columns: 480px 1fr; 
+            gap: 25px;
+            max-width: 1700px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .controls-wrapper { 
+            background: var(--panel); padding: 25px; border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); height: 88vh; overflow-y: auto;
+            border: 1px solid #cbd5e1;
+            position: relative; /* ضروري لعمل الجولة التعليمية */
+        }
+        
+        .controls-wrapper::-webkit-scrollbar { width: 8px; }
+        .controls-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+        .preview-card { 
+            background: #fff; padding: 0; border-radius: 15px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); height: 88vh;
+            display: flex; justify-content: center; align-items: center; 
+            position: sticky; top: 20px; overflow: hidden;
+            background-image: 
+                linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .section-title { 
+            font-size: 1rem; color: white; background: var(--primary); 
+            padding: 10px 15px; border-radius: 8px; margin: 25px 0 15px 0; 
+            font-weight: bold; border-right: 5px solid var(--accent);
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s; /* لتأثير التعليمات */
+        }
+
+        .control-group { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 15px; transition: all 0.3s; }
+        .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+        
+        label { font-size: 0.9rem; font-weight: 600; color: #475569; display: flex; align-items: center; gap: 8px;}
+        .val-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 6px; font-size: 0.8rem; font-family: monospace; min-width: 45px; text-align: center; }
+        
+        /* تحسينات الآيفون: منع التقريب عند لمس النطاقات والقوائم */
+        input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; margin-top: 5px; touch-action: manipulation;}
+        input[type="color"] { border: 2px solid #cbd5e1; width: 45px; height: 35px; border-radius: 8px; cursor: pointer; padding: 0; }
+        select { padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-family: inherit; font-weight: bold; font-size: 16px;}
+        
+        .btn-rand-mini { background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 10px; cursor: pointer; transition: 0.2s; font-size: 1.1rem; touch-action: manipulation;}
+        .btn-rand-mini:hover { background: #cbd5e1; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; transition: all 0.3s;}
+        button { padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: all 0.2s ease; width: 100%; text-transform: uppercase; touch-action: manipulation;}
+        .btn-shapes { background: var(--teal); color: white; }
+        .btn-colors { background: var(--blue); color: white; }
+        .btn-all { background: var(--primary); color: white; margin-top: 15px; font-size: 1.1rem; padding: 18px; border: 2px solid var(--accent); transition: all 0.3s;}
+        .btn-save { background: #10b981; color: #fff; margin-top: 15px; transition: all 0.3s;}
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); filter: brightness(1.1); }
+
+        svg { width: 100%; height: 100%; }
+        .texture-layer { pointer-events: none; mix-blend-mode: multiply; }
+
+        /* ========= تنسيقات الجولة التعليمية (Tutorial) ========= */
+        .tour-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.7); z-index: 9998;
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .tour-overlay.active { opacity: 1; visibility: visible; }
+        
+        .tour-modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            background: white; padding: 25px; border-radius: 20px; z-index: 9999;
+            width: 90%; max-width: 420px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .tour-modal.active { transform: translate(-50%, -50%) scale(1); opacity: 1; visibility: visible; }
+        
+        .tour-title { color: var(--primary); font-size: 1.4rem; margin-bottom: 12px; font-weight: 900; }
+        .tour-text { margin-bottom: 25px; line-height: 1.6; color: #475569; font-size: 1.05rem; }
+        .tour-btn { background: var(--teal); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; width: auto; display: inline-block; margin: 5px;}
+        .tour-btn-skip { background: #e2e8f0; color: #475569; }
+        
+        /* تظليل العنصر النشط أثناء الجولة */
+        .highlight-tour {
+            position: relative; z-index: 10000 !important;
+            background: white !important;
+            box-shadow: 0 0 0 5px var(--accent), 0 10px 30px rgba(0,0,0,0.5) !important;
+            border-radius: 12px;
+            pointer-events: none; /* لمنع العبث أثناء الشرح */
+        }
+
+        /* ========= توافقية الجوال والآيفون (Responsive) ========= */
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; gap: 15px; }
+            .controls-wrapper { height: auto; max-height: 55vh; }
+            .preview-card { position: relative; top: 0; height: 50vh; margin-bottom: 20px;}
+            h1 { font-size: 1.4rem; }
+            .btn-all { font-size: 1rem; padding: 15px; }
+            .tour-modal { position: fixed; top: auto; bottom: 20px; left: 50%; transform: translate(-50%, 20px) scale(0.9); }
+            .tour-modal.active { transform: translate(-50%, 0) scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tour-overlay" id="tourOverlay"></div>
+    <div class="tour-modal" id="tourModal">
+        <div class="tour-title" id="tourTitle">مرحباً بك! ✨</div>
+        <div class="tour-text" id="tourText">هل تود أخذ جولة سريعة وممتعة لتعلم كيف تستخدم كل زر في هذا البرنامج؟</div>
+        <div>
+            <button class="tour-btn tour-btn-skip" id="btnTourSkip">لا شكراً، سأكتشف بنفسي</button>
+            <button class="tour-btn" id="btnTourNext">نعم، ابدأ الجولة! 🚀</button>
+        </div>
+    </div>
+
+    <h1>✨ المولد الشامل للزخارف الإيرانية المتقدمة ✨</h1>
+
+    <div class="app-container">
+        <div class="controls-wrapper" id="controlsWrap">
+            
+            <div class="section-title" id="tour-sec-1">
+                ⚙️ إعدادات العرض والنمط
+                <button class="btn-rand-mini" onclick="randomizeSettings()" title="عشوائية الإعدادات">🎲</button>
+            </div>
+            <div class="control-group" id="tour-group-1">
+                <div class="row">
+                    <label>نوع العرض:</label>
+                    <select id="patternMode">
+                        <option value="multi" selected>نمط متكرر (باترن)</option>
+                        <option value="single">شكل مركزي مفرد (لوغو/لوحة)</option>
+                    </select>
+                </div>
+                <div class="row"><label><input type="checkbox" id="transBg" checked> خلفية شفافة (PNG)</label></div>
+                <div class="row" style="margin-top:10px;"><label>حجم التكرار (Scale):</label><span class="val-badge" id="val-scale">1.5</span></div>
+                <input type="range" id="scale" min="0.5" max="3" step="0.1" value="1.5">
+            </div>
+
+            <div class="section-title" id="tour-sec-2">
+                📐 الهيكل والتداخل المتقدم
+                <button class="btn-rand-mini" onclick="randomizeShapes()" title="عشوائية الأشكال">🎲</button>
+            </div>
+            <div class="control-group" id="tour-group-2">
+                <div class="row"><label>عدد الرؤوس الهندسية:</label><span class="val-badge" id="val-sides">12</span></div>
+                <input type="range" id="sides" min="6" max="24" step="2" value="12">
+                
+                <div class="row" style="margin-top:15px;"><label>عمق الزوايا (حدة النجمة):</label><span class="val-badge" id="val-inner">0.35</span></div>
+                <input type="range" id="inner" min="0.1" max="0.9" step="0.05" value="0.35">
+
+                <div class="row" style="margin-top:15px;"><label>نسبة التداخل (Overlap):</label><span class="val-badge" id="val-overlap">1.0</span></div>
+                <input type="range" id="overlap" min="0.5" max="2.0" step="0.05" value="1.0">
+
+                <div class="row" style="margin-top:15px;"><label>عدد الطبقات (Layers):</label><span class="val-badge" id="val-layers">3</span></div>
+                <input type="range" id="layers" min="1" max="5" step="1" value="3">
+                
+                <div class="row" style="margin-top:15px;"><label>كثافة شبكة التقاطعات (Girih):</label><span class="val-badge" id="val-web">4</span></div>
+                <input type="range" id="web" min="0" max="12" step="1" value="4">
+            </div>
+
+            <div class="section-title" id="tour-sec-3">
+                ✨ التفاصيل والزخارف
+            </div>
+            <div class="control-group" id="tour-group-3">
+                <div class="row"><label><input type="checkbox" id="showCenter" checked> إضافة شمسة المركز</label></div>
+                <div class="row"><label><input type="checkbox" id="showDots" checked> إضافة نقاط "المينا" التراثية</label></div>
+                <div class="row" style="margin-top:10px;"><label>تقطيع الخطوط (Dash):</label><span class="val-badge" id="val-dash">0</span></div>
+                <input type="range" id="dash" min="0" max="20" step="1" value="0">
+                <div class="row" style="margin-top:15px;"><label>ملمس القدم (تأثير الجدار):</label><span class="val-badge" id="val-texture">0</span></div>
+                <input type="range" id="texture" min="0" max="10" step="1" value="0">
+            </div>
+
+            <div class="section-title" id="tour-sec-4">
+                🎨 الألوان المستقلة
+                <button class="btn-rand-mini" onclick="randomizeAllColors()" title="عشوائية كل الألوان">🎲</button>
+            </div>
+            <div class="control-group" id="tour-group-4">
+                <div class="row">
+                    <label>اللون الأساسي (Primary):</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="color" id="col1" value="#063970">
+                        <button class="btn-rand-mini" onclick="rndCol('col1')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>اللون الثانوي (Secondary):</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="color" id="col2" value="#178582">
+                        <button class="btn-rand-mini" onclick="rndCol('col2')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>لون التذهيب (Gold):</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="color" id="colGold" value="#b48608">
+                        <button class="btn-rand-mini" onclick="rndCol('colGold')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>لون الخلفية (Background):</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="color" id="colBg" value="#f4edd8">
+                        <button class="btn-rand-mini" onclick="rndCol('colBg')">🎲</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group" id="tour-sec-5">
+                <button class="btn-shapes" onclick="randomizeShapes()">🎲 عشوائية الأشكال</button>
+                <button class="btn-colors" onclick="randomizeAllColors()">🎨 عشوائية الألوان</button>
+            </div>
+            <button class="btn-all" id="tour-sec-6" onclick="randomizeAll()">🔥 عشوائية كل شيء (المفاجأة)</button>
+            <button class="btn-save" id="tour-sec-7" onclick="downloadSVG()">💾 حفظ التصميم النهائي</button>
+        </div>
+
+        <div class="preview-card" id="canvasHolder">
+            <svg id="svgCanvas" width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="roughFilter">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" result="noise" />
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
+                    </filter>
+                    <filter id="antiquePaper" x="0" y="0" width="100%" height="100%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" result="noise" />
+                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.9 0 0 0  0 0.8 0 0 0  0 0 0 0.3 0" in="noise" result="coloredNoise" />
+                        <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply" />
+                    </filter>
+                    <pattern id="mainPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse" overflow="visible">
+                        <g id="patternGroup"></g>
+                    </pattern>
+                </defs>
+
+                <rect id="bgRect" width="100%" height="100%" fill="#f4edd8" />
+                <rect id="patternLayer" width="100%" height="100%" fill="url(#mainPattern)" />
+                <rect id="textureOverlay" class="texture-layer" width="100%" height="100%" fill="#fff" filter="url(#antiquePaper)" opacity="0" />
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        // ========= نظام الجولة التعليمية (Tutorial Logic) =========
+        const tourSteps = [
+            { el: null, title: "مرحباً بك! ✨", text: "هل تود أخذ جولة سريعة وممتعة لتعلم كيف تستخدم كل زر في هذا البرنامج؟", btn: "نعم، ابدأ الجولة! 🚀" },
+            { el: "#tour-group-1", title: "إعدادات العرض ⚙️", text: "هنا تختار شكل الزخرفة (نمط متكرر أو شكل مركزي مفرد)، وتتحكم بحجمها. يمكنك أيضاً جعل الخلفية شفافة لتحميل التصميم كـ PNG.", btn: "التالي" },
+            { el: "#tour-group-2", title: "الهيكل والتداخل 📐", text: "مركز الإبداع! غيّر 'عدد الرؤوس' و 'حدة النجمة' لصنع أشكال هندسية إسلامية معقدة. النرد 🎲 في الأعلى يختار أرقاماً عشوائية لك.", btn: "التالي" },
+            { el: "#tour-group-3", title: "التفاصيل والزخارف ✨", text: "أضف شمسة للمركز، أو نقاط المينا التراثية. ميزة 'ملمس القدم' تعطي تصميمك طابعاً قديماً كأنه مرسوم على جدار أثري!", btn: "التالي" },
+            { el: "#tour-group-4", title: "لوحة الألوان 🎨", text: "اختر ألوانك بدقة. يمكنك الضغط على أيقونة النرد 🎲 بجانب أي لون لاختيار لون عشوائي متناسق.", btn: "التالي" },
+            { el: "#tour-sec-5", title: "أزرار الإبداع 🪄", text: "إذا نفدت أفكارك، اضغط هنا لخلط الأشكال فقط أو الألوان فقط لترى خيارات جديدة كلياً.", btn: "التالي" },
+            { el: "#tour-sec-6", title: "المفاجأة! 🔥", text: "هذا الزر السحري يقوم بتغيير كل شيء في اللوحة (أشكال وألوان وإعدادات) بضغطة واحدة!", btn: "التالي" },
+            { el: "#tour-sec-7", title: "حفظ التحفة 💾", text: "عندما تصل للنتيجة المطلوبة، اضغط هنا لتحميل الزخرفة كملف (SVG) عالي الدقة جداً، جاهز للطباعة أو استخدامه في التصميم.", btn: "إنهاء الجولة 🎉" }
+        ];
+
+        let currentStep = 0;
+        const tourOverlay = document.getElementById('tourOverlay');
+        const tourModal = document.getElementById('tourModal');
+        const tourTitle = document.getElementById('tourTitle');
+        const tourText = document.getElementById('tourText');
+        const btnTourNext = document.getElementById('btnTourNext');
+        const btnTourSkip = document.getElementById('btnTourSkip');
+        const controlsWrap = document.getElementById('controlsWrap');
+
+        function showTourStep(stepIndex) {
+            // إزالة التظليل السابق
+            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+            
+            if (stepIndex >= tourSteps.length) {
+                endTour();
+                return;
+            }
+
+            const step = tourSteps[stepIndex];
+            tourTitle.innerText = step.title;
+            tourText.innerText = step.text;
+            btnTourNext.innerText = step.btn;
+
+            if (stepIndex === 0) {
+                btnTourSkip.style.display = "inline-block";
+            } else {
+                btnTourSkip.style.display = "none";
+                // إضافة التظليل للعنصر الجديد
+                if(step.el) {
+                    const targetEl = document.querySelector(step.el);
+                    if(targetEl) {
+                        targetEl.classList.add('highlight-tour');
+                        // تمرير القائمة لتظهر العنصر المظلل
+                        controlsWrap.scrollTo({
+                            top: targetEl.offsetTop - 50,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+        }
+
+        function startTour() {
+            tourOverlay.classList.add('active');
+            tourModal.classList.add('active');
+            showTourStep(0);
+        }
+
+        function endTour() {
+            tourOverlay.classList.remove('active');
+            tourModal.classList.remove('active');
+            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+        }
+
+        btnTourNext.addEventListener('click', () => {
+            currentStep++;
+            showTourStep(currentStep);
+        });
+
+        btnTourSkip.addEventListener('click', endTour);
+
+        // تشغيل الجولة عند فتح الصفحة
+        window.addEventListener('DOMContentLoaded', startTour);
+        // ========================================================
+
+        const inputs = document.querySelectorAll('input, select');
+        const elements = {};
+        inputs.forEach(el => elements[el.id] = el);
+
+        function getStarPath(sides, inner, cx, cy, radius, rot) {
+            let d = "";
+            for (let i = 0; i < sides * 2; i++) {
+                const r = i % 2 === 0 ? radius : radius * inner;
+                const a = (Math.PI / sides) * i + (rot * Math.PI / 180);
+                d += (i === 0 ? "M" : "L") + (cx + r * Math.cos(a)).toFixed(2) + "," + (cy + r * Math.sin(a)).toFixed(2);
+            }
+            return d + "Z";
+        }
+
+        function getWebPath(sides, cx, cy, radius, step) {
+            if (step == 0) return "";
+            let d = "";
+            for (let i = 0; i < sides; i++) {
+                const a1 = (Math.PI * 2 / sides) * i;
+                const a2 = (Math.PI * 2 / sides) * (i + step);
+                d += `M${(cx + radius * Math.cos(a1)).toFixed(2)},${(cy + radius * Math.sin(a1)).toFixed(2)} L${(cx + radius * Math.cos(a2)).toFixed(2)},${(cy + radius * Math.sin(a2)).toFixed(2)} `;
+            }
+            return d;
+        }
+
+        function update() {
+            // Update Badges
+            Object.keys(elements).forEach(key => {
+                const lb = document.getElementById('val-' + key);
+                if (lb && elements[key] && elements[key].type === 'range') lb.innerText = elements[key].value;
+            });
+
+            const isSingle = elements.patternMode.value === 'single';
+            const s = parseInt(elements.sides.value);
+            const inn = parseFloat(elements.inner.value);
+            const sc = parseFloat(elements.scale.value);
+            const overlap = parseFloat(elements.overlap.value);
+            const webStep = parseInt(elements.web.value);
+            const layerCount = parseInt(elements.layers.value);
+            const dash = parseInt(elements.dash.value);
+            const texture = parseInt(elements.texture.value);
+            
+            const col1 = elements.col1.value;
+            const col2 = elements.col2.value;
+            const colGold = elements.colGold.value;
+            const colBg = elements.colBg.value;
+
+            // Background & Texture
+            if (elements.transBg.checked) {
+                document.getElementById('bgRect').setAttribute('fill', 'none');
+                document.getElementById('textureOverlay').setAttribute('opacity', '0');
+            } else {
+                document.getElementById('bgRect').setAttribute('fill', colBg);
+                document.getElementById('textureOverlay').setAttribute('opacity', texture > 0 ? (texture/10).toString() : '0');
+            }
+
+            // Roughness
+            const filterAttr = texture > 5 ? `filter="url(#roughFilter)"` : '';
+            document.querySelector('#roughFilter feDisplacementMap').setAttribute('scale', Math.max(1, texture/2));
+
+            // Dimensions
+            const pSize = isSingle ? 800 : 400 * (1 / sc);
+            document.getElementById('mainPattern').setAttribute('width', pSize);
+            document.getElementById('mainPattern').setAttribute('height', pSize);
+
+            // Radius calculation with overlap
+            const rad = (pSize / 2) * 0.95 * overlap;
+            const center = pSize / 2;
+
+            // Centers to draw (for overlap to work in patterns, we draw in center and 4 corners)
+            const drawCenters = isSingle ? [[center, center]] : [
+                [center, center], [0, 0], [pSize, 0], [0, pSize], [pSize, pSize]
+            ];
+
+            const dashStyle = dash > 0 ? `stroke-dasharray="${dash},${dash/2}"` : "";
+            let g = `<g ${filterAttr}>`;
+
+            // Draw for each center (Center + Corners) to create seamless overlap
+            drawCenters.forEach(([cx, cy]) => {
+                
+                // 1. Layers
+                for(let i = layerCount; i >= 1; i--) {
+                    let currentRad = rad * (i / layerCount);
+                    let strokeCol = i % 2 === 0 ? col1 : col2;
+                    let fillCol = i % 2 === 0 ? col2 : "none";
+                    let fillOpacity = i === layerCount ? "0.1" : "0.3";
+                    
+                    g += `<path d="${getStarPath(s, inn + 0.1, cx, cy, currentRad, (180/s))}" fill="${fillCol}" fill-opacity="${fillOpacity}" stroke="${strokeCol}" stroke-width="2" />`;
+                    g += `<path d="${getStarPath(s, inn, cx, cy, currentRad, 0)}" fill="none" stroke="${colGold}" stroke-width="3" ${dashStyle} />`;
+                }
+
+                // 2. Girih Web
+                if (webStep > 0) {
+                    g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, webStep)}" fill="none" stroke="${col1}" stroke-width="1.5" opacity="0.6" ${dashStyle} />`;
+                    g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, Math.max(1, webStep - 2))}" fill="none" stroke="${col2}" stroke-width="1" opacity="0.4" />`;
+                }
+
+                // 3. Center Medallion
+                if (elements.showCenter.checked) {
+                    const medRad = rad * 0.25;
+                    g += `<path d="${getStarPath(s > 12 ? 12 : s, 0.6, cx, cy, medRad, 0)}" fill="${col1}" stroke="${colGold}" stroke-width="2" />`;
+                    g += `<circle cx="${cx}" cy="${cy}" r="${medRad * 0.4}" fill="${col2}" stroke="${colGold}" stroke-width="1" />`;
+                    g += `<circle cx="${cx}" cy="${cy}" r="${medRad * 0.15}" fill="${colGold}" />`;
+                }
+
+                // 4. Mina Dots
+                if (elements.showDots.checked) {
+                    for (let i = 0; i < s; i++) {
+                        const a = (Math.PI * 2 / s) * i;
+                        const aMid = a + (Math.PI / s);
+                        
+                        let dx = cx + (rad * 0.95) * Math.cos(a);
+                        let dy = cy + (rad * 0.95) * Math.sin(a);
+                        g += `<circle cx="${dx}" cy="${dy}" r="${2 * overlap}" fill="${colGold}" />`;
+
+                        dx = cx + (rad * inn * 0.85) * Math.cos(aMid);
+                        dy = cy + (rad * inn * 0.85) * Math.sin(aMid);
+                        g += `<circle cx="${dx}" cy="${dy}" r="${3 * overlap}" fill="${col2}" stroke="${col1}" stroke-width="1"/>`;
+                    }
+                }
+            });
+
+            g += `</g>`;
+            document.getElementById('patternGroup').innerHTML = g;
+        }
+
+        // --- Randomization Functions ---
+        function getRndHex() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
+        
+        function rndCol(id) { 
+            elements[id].value = getRndHex(); 
+            update(); 
+        }
+
+        function randomizeAllColors() {
+            elements.col1.value = getRndHex();
+            elements.col2.value = getRndHex();
+            elements.colGold.value = getRndHex();
+            elements.colBg.value = getRndHex();
+            update();
+        }
+
+        function randomizeShapes() {
+            elements.sides.value = [6, 8, 10, 12, 16][Math.floor(Math.random()*5)];
+            elements.inner.value = (Math.random() * 0.6 + 0.15).toFixed(2);
+            elements.overlap.value = (Math.random() * 1.0 + 0.5).toFixed(2);
+            elements.layers.value = Math.floor(Math.random() * 4) + 1;
+            elements.web.value = Math.floor(Math.random() * 8);
+            update();
+        }
+
+        function randomizeSettings() {
+            elements.patternMode.value = Math.random() > 0.5 ? 'single' : 'multi';
+            elements.scale.value = (Math.random() * 2 + 0.5).toFixed(1);
+            elements.dash.value = Math.random() > 0.7 ? Math.floor(Math.random() * 15) + 5 : 0;
+            update();
+        }
+
+        function randomizeAll() {
+            randomizeSettings();
+            randomizeShapes();
+            randomizeAllColors();
+            // Forces update implicitly
+        }
+
+        function downloadSVG() {
+            const svg = document.getElementById('svgCanvas').outerHTML;
+            const blob = new Blob(['<?xml version="1.0" encoding="utf-8"?>\r\n', svg], {type: 'image/svg+xml'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Persian-Masterpiece-${Date.now()}.svg`;
+            a.click();
+        }
+
+        inputs.forEach(el => el.addEventListener('input', update));
+        update(); // Init
+    </script>
+</body>
+</html>
+
