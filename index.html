@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المُولد الشامل للزخارف الإيرانية</title>
+    <title>المُولد الشامل للنقوش والزخارف المتقدمة</title>
     <style>
         :root { 
             --primary: #1e293b; 
@@ -12,12 +12,30 @@
             --panel: #ffffff;
             --blue: #063970;
             --teal: #178582;
+            --glow-color: rgba(180, 134, 8, 0.6);
+            --shadow-intensity: 4px;
         }
         
         * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+            color: #333;
+            transition: background 0.5s ease;
+        }
         
-        h1 { color: var(--primary); text-align: center; margin-bottom: 25px; font-weight: 800; border-bottom: 3px solid var(--accent); padding-bottom: 10px; font-size: 1.8rem;}
+        h1 { 
+            color: var(--primary); 
+            text-align: center; 
+            margin-bottom: 25px; 
+            font-weight: 800; 
+            border-bottom: 3px solid var(--accent); 
+            padding-bottom: 10px; 
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
 
         .app-container { 
             display: grid;
@@ -29,20 +47,31 @@
         }
 
         .controls-wrapper { 
-            background: var(--panel); padding: 25px; border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); height: 88vh; overflow-y: auto;
+            background: var(--panel); 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            height: 88vh; 
+            overflow-y: auto;
             border: 1px solid #cbd5e1;
-            position: relative; /* ضروري لعمل الجولة التعليمية */
+            position: relative; 
         }
         
         .controls-wrapper::-webkit-scrollbar { width: 8px; }
         .controls-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
         .preview-card { 
-            background: #fff; padding: 0; border-radius: 15px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15); height: 88vh;
-            display: flex; justify-content: center; align-items: center; 
-            position: sticky; top: 20px; overflow: hidden;
+            background: #fff; 
+            padding: 0; 
+            border-radius: 15px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            height: 88vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: sticky; 
+            top: 20px; 
+            overflow: hidden;
             background-image: 
                 linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
                 linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
@@ -50,42 +79,198 @@
                 linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
             background-size: 20px 20px;
             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            transition: all 0.3s ease;
         }
 
         .section-title { 
-            font-size: 1rem; color: white; background: var(--primary); 
-            padding: 10px 15px; border-radius: 8px; margin: 25px 0 15px 0; 
-            font-weight: bold; border-right: 5px solid var(--accent);
-            display: flex; justify-content: space-between; align-items: center;
-            transition: all 0.3s; /* لتأثير التعليمات */
+            font-size: 1rem; 
+            color: white; 
+            background: var(--primary); 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            margin: 25px 0 15px 0; 
+            font-weight: bold; 
+            border-right: 5px solid var(--accent);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            transition: all 0.3s; 
+            cursor: pointer;
+        }
+        
+        .section-title:hover { transform: translateX(-3px); }
+
+        .control-group { 
+            background: #f8fafc; 
+            padding: 15px; 
+            border-radius: 10px; 
+            border: 1px solid #e2e8f0; 
+            margin-bottom: 15px; 
+            transition: all 0.3s; 
+        }
+        
+        .control-group:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        .row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 12px; 
+        }
+        
+        label { 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            color: #475569; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        
+        .val-badge { 
+            background: var(--primary); 
+            color: white; 
+            padding: 3px 10px; 
+            border-radius: 6px; 
+            font-size: 0.8rem; 
+            font-family: monospace; 
+            min-width: 45px; 
+            text-align: center; 
+        }
+        
+        input[type="range"] { 
+            width: 100%; 
+            accent-color: var(--teal); 
+            cursor: pointer; 
+            margin-top: 5px; 
+            touch-action: manipulation;
+        }
+        
+        input[type="color"] { 
+            border: 2px solid #cbd5e1; 
+            width: 45px; 
+            height: 35px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            padding: 0; 
+        }
+        
+        select { 
+            padding: 8px; 
+            border-radius: 6px; 
+            border: 1px solid #cbd5e1; 
+            font-family: inherit; 
+            font-weight: bold; 
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .btn-rand-mini { 
+            background: #e2e8f0; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 6px; 
+            padding: 5px 10px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-size: 1.1rem; 
+            touch-action: manipulation;
+        }
+        
+        .btn-rand-mini:hover { 
+            background: var(--accent); 
+            color: white;
+            transform: scale(1.1);
         }
 
-        .control-group { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 15px; transition: all 0.3s; }
-        .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .btn-group { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-top: 15px; 
+            transition: all 0.3s;
+        }
         
-        label { font-size: 0.9rem; font-weight: 600; color: #475569; display: flex; align-items: center; gap: 8px;}
-        .val-badge { background: var(--primary); color: white; padding: 3px 10px; border-radius: 6px; font-size: 0.8rem; font-family: monospace; min-width: 45px; text-align: center; }
+        button { 
+            padding: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 0.95rem; 
+            transition: all 0.2s ease; 
+            width: 100%; 
+            text-transform: uppercase; 
+            touch-action: manipulation;
+        }
         
-        /* تحسينات الآيفون: منع التقريب عند لمس النطاقات والقوائم */
-        input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; margin-top: 5px; touch-action: manipulation;}
-        input[type="color"] { border: 2px solid #cbd5e1; width: 45px; height: 35px; border-radius: 8px; cursor: pointer; padding: 0; }
-        select { padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-family: inherit; font-weight: bold; font-size: 16px;}
-        
-        .btn-rand-mini { background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 6px; padding: 5px 10px; cursor: pointer; transition: 0.2s; font-size: 1.1rem; touch-action: manipulation;}
-        .btn-rand-mini:hover { background: #cbd5e1; }
-
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; transition: all 0.3s;}
-        button { padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.95rem; transition: all 0.2s ease; width: 100%; text-transform: uppercase; touch-action: manipulation;}
         .btn-shapes { background: var(--teal); color: white; }
         .btn-colors { background: var(--blue); color: white; }
-        .btn-all { background: var(--primary); color: white; margin-top: 15px; font-size: 1.1rem; padding: 18px; border: 2px solid var(--accent); transition: all 0.3s;}
-        .btn-save { background: #10b981; color: #fff; margin-top: 15px; transition: all 0.3s;}
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.15); filter: brightness(1.1); }
+        .btn-all { 
+            background: var(--primary); 
+            color: white; 
+            margin-top: 15px; 
+            font-size: 1.1rem; 
+            padding: 18px; 
+            border: 2px solid var(--accent); 
+            transition: all 0.3s;
+        }
+        
+        /* أزرار الحفظ */
+        .btn-save-group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 15px; 
+        }
+        
+        .btn-save-svg { background: #10b981; color: #fff; transition: all 0.3s; }
+        .btn-save-png { background: #8b5cf6; color: #fff; transition: all 0.3s; }
+        
+        button:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+            filter: brightness(1.1); 
+        }
+
+        /* ✨ تأثيرات بصرية جديدة ✨ */
+        .glow-effect {
+            filter: drop-shadow(0 0 8px var(--glow-color)) drop-shadow(0 0 16px var(--glow-color));
+            transition: filter 0.3s ease;
+        }
+        
+        .shadow-3d {
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)) drop-shadow(-1px -1px 2px rgba(255,255,255,0.5));
+        }
+        
+        .animate-rotate {
+            animation: rotatePattern var(--rotation-speed, 30s) linear infinite;
+            transform-origin: center;
+        }
+        
+        @keyframes rotatePattern {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ✨ خلفيات معتقة وملمس ✨ */
+        .texture-aged-paper {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+        }
+        
+        .texture-stone-wall {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='brick' x='0' y='0' width='20' height='10' patternUnits='userSpaceOnUse'%3E%3Crect x='0' y='0' width='19' height='9' fill='none' stroke='%23999' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='url(%23brick)'/%3E%3Cfilter id='rough'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='2'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23rough)' opacity='0.3'/%3E%3C/svg%3E");
+        }
+        
+        .texture-fabric {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='weave' x='0' y='0' width='4' height='4' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 2h4M2 0v4' stroke='%23ccc' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='%23f5f5dc'/%3E%3Crect width='100' height='100' fill='url(%23weave)' opacity='0.4'/%3E%3C/svg%3E");
+        }
 
         svg { width: 100%; height: 100%; }
         .texture-layer { pointer-events: none; mix-blend-mode: multiply; }
 
-        /* ========= تنسيقات الجولة التعليمية (Tutorial) ========= */
+        /* ========= تنسيقات الجولة التعليمية ========= */
         .tour-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.7); z-index: 9998;
@@ -108,16 +293,15 @@
         .tour-btn { background: var(--teal); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; width: auto; display: inline-block; margin: 5px;}
         .tour-btn-skip { background: #e2e8f0; color: #475569; }
         
-        /* تظليل العنصر النشط أثناء الجولة */
         .highlight-tour {
             position: relative; z-index: 10000 !important;
             background: white !important;
             box-shadow: 0 0 0 5px var(--accent), 0 10px 30px rgba(0,0,0,0.5) !important;
             border-radius: 12px;
-            pointer-events: none; /* لمنع العبث أثناء الشرح */
+            pointer-events: none; 
         }
 
-        /* ========= توافقية الجوال والآيفون (Responsive) ========= */
+        /* ========= توافقية الجوال ========= */
         @media (max-width: 900px) {
             .app-container { grid-template-columns: 1fr; gap: 15px; }
             .controls-wrapper { height: auto; max-height: 55vh; }
@@ -126,6 +310,22 @@
             .btn-all { font-size: 1rem; padding: 15px; }
             .tour-modal { position: fixed; top: auto; bottom: 20px; left: 50%; transform: translate(-50%, 20px) scale(0.9); }
             .tour-modal.active { transform: translate(-50%, 0) scale(1); }
+        }
+        
+        /* ✨ مؤشرات الحالة ✨ */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
         }
     </style>
 </head>
@@ -141,7 +341,7 @@
         </div>
     </div>
 
-    <h1>✨ المولد الشامل للزخارف الإيرانية المتقدمة ✨</h1>
+    <h1>✨ المُولد الشامل للنقوش والزخارف المتقدمة ✨ <span class="status-indicator" title="نظام جاهز"></span></h1>
 
     <div class="app-container">
         <div class="controls-wrapper" id="controlsWrap">
@@ -196,6 +396,97 @@
                 <input type="range" id="texture" min="0" max="10" step="1" value="0">
             </div>
 
+            <!-- ✨ الخلفيات المعتقة والملمس (جديد!) ✨ -->
+            <div class="section-title" id="tour-sec-bg">
+                🎨 الخلفيات المعتقة والملمس
+                <button class="btn-rand-mini" onclick="randomizeBackground()" title="عشوائية الخلفية فقط!">🎲</button>
+            </div>
+            <div class="control-group" id="tour-group-bg">
+                <div class="row">
+                    <label>نوع الخلفية:</label>
+                    <select id="bgTexture">
+                        <option value="solid" selected>سادة (لون مصمت)</option>
+                        <option value="aged-paper">📜 ورق معتق (قديم)</option>
+                        <option value="stone-wall">🧱 جدار حجري</option>
+                        <option value="fabric">🧵 قماش تاريخي</option>
+                        <option value="marble">✨ رخام ملكي</option>
+                        <option value="parchment">📜 برشمان فاخر</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>شدة الملمس:</label>
+                    <span class="val-badge" id="val-textureIntensity">5</span>
+                </div>
+                <input type="range" id="textureIntensity" min="0" max="10" step="1" value="5">
+                <div class="row" style="margin-top:10px;">
+                    <button class="btn-rand-mini" style="width:100%; background: var(--accent); color: white;" onclick="randomizeBackground()">
+                        🎲 عشوائية الخلفية والملمس فقط
+                    </button>
+                </div>
+            </div>
+
+            <!-- ✨ تأثيرات بصرية متقدمة (جديد!) ✨ -->
+            <div class="section-title" id="tour-sec-vfx">
+                💫 تأثيرات بصرية متقدمة (VFX)
+            </div>
+            <div class="control-group" id="tour-group-vfx">
+                <div class="row">
+                    <label><input type="checkbox" id="enableGlow"> ✨ توهج سحري (Glow)</label>
+                </div>
+                <div class="row" id="glowRow" style="display:none;">
+                    <label>شدة التوهج:</label>
+                    <span class="val-badge" id="val-glowIntensity">6</span>
+                </div>
+                <input type="range" id="glowIntensity" min="0" max="20" step="1" value="6" style="display:none;">
+                
+                <div class="row" style="margin-top:12px;">
+                    <label><input type="checkbox" id="enableShadow"> 🌑 ظل ثلاثي الأبعاد (3D Shadow)</label>
+                </div>
+                <div class="row" id="shadowRow" style="display:none;">
+                    <label>عمق الظل:</label>
+                    <span class="val-badge" id="val-shadowDepth">4</span>
+                </div>
+                <input type="range" id="shadowDepth" min="0" max="10" step="1" value="4" style="display:none;">
+                
+                <div class="row" style="margin-top:12px;">
+                    <label><input type="checkbox" id="enableAnimation"> 🔄 دوران وحركة (Animation)</label>
+                </div>
+                <div class="row" id="animRow" style="display:none;">
+                    <label>سرعة الدوران:</label>
+                    <span class="val-badge" id="val-rotationSpeed">30s</span>
+                </div>
+                <input type="range" id="rotationSpeed" min="5" max="120" step="5" value="30" style="display:none;">
+                <div style="font-size:0.75rem; color:#64748b; margin-top:5px; text-align:center;">
+                    ⏱️ القيمة بالثواني لدورة كاملة
+                </div>
+            </div>
+
+            <!-- ✨ ثيمات ألوان جاهزة (جديد!) ✨ -->
+            <div class="section-title" id="tour-sec-themes">
+                🎨 ثيمات ألوان جاهزة
+            </div>
+            <div class="control-group" id="tour-group-themes">
+                <div class="row">
+                    <label>اختر لوحة ألوان تراثية:</label>
+                    <select id="colorTheme">
+                        <option value="custom" selected>🎨 ألوان مخصصة (يدوي)</option>
+                        <option value="andalusian">🕌 أندلسي (أزرق-ذهبي-عاجي)</option>
+                        <option value="persian">🌹 فارسي (فيروزي-وردي-ذهبي)</option>
+                        <option value="nightly">🌙 ليلي (كحلي-فضي-أرجواني)</option>
+                        <option value="royal">👑 ملكي (أحمر-ذهبي-أسود)</option>
+                        <option value="ottoman">☪️ عثماني (أخضر-ذهبي-أبيض)</option>
+                        <option value="mamluk">⚔️ مملوكي (نحاسي-أزرق-بيج)</option>
+                        <option value="desert">🏜️ صحراوي (رملي-ترابي-ذهبي)</option>
+                        <option value="ocean">🌊 محيطي (أزرق-تركواز-لؤلؤي)</option>
+                    </select>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <button class="btn-rand-mini" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" onclick="applyRandomTheme()">
+                        🎲 ثيم عشوائي متناسق
+                    </button>
+                </div>
+            </div>
+
             <div class="section-title" id="tour-sec-4">
                 🎨 الألوان المستقلة
                 <button class="btn-rand-mini" onclick="randomizeAllColors()" title="عشوائية كل الألوان">🎲</button>
@@ -236,7 +527,12 @@
                 <button class="btn-colors" onclick="randomizeAllColors()">🎨 عشوائية الألوان</button>
             </div>
             <button class="btn-all" id="tour-sec-6" onclick="randomizeAll()">🔥 عشوائية كل شيء (المفاجأة)</button>
-            <button class="btn-save" id="tour-sec-7" onclick="downloadSVG()">💾 حفظ التصميم النهائي</button>
+            
+            <div class="btn-save-group" id="tour-sec-7">
+                <button class="btn-save-png" onclick="downloadPNG()">🖼️ حفظ كـ صورة عالية الدقة (PNG)</button>
+                <button class="btn-save-svg" onclick="downloadSVG()">💾 حفظ كـ ملف فكتور (SVG)</button>
+                <button class="btn-save-png" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="copyToClipboard()">📋 نسخ كود التصميم</button>
+            </div>
         </div>
 
         <div class="preview-card" id="canvasHolder">
@@ -251,6 +547,20 @@
                         <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.9 0 0 0  0 0.8 0 0 0  0 0 0 0.3 0" in="noise" result="coloredNoise" />
                         <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply" />
                     </filter>
+                    <!-- ✨ فلتر التوهج السحري ✨ -->
+                    <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <!-- ✨ فلتر الظل ثلاثي الأبعاد ✨ -->
+                    <filter id="shadow3D" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.4"/>
+                        <feDropShadow dx="-1" dy="-1" stdDeviation="1" flood-color="white" flood-opacity="0.3"/>
+                    </filter>
                     <pattern id="mainPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse" overflow="visible">
                         <g id="patternGroup"></g>
                     </pattern>
@@ -264,16 +574,19 @@
     </div>
 
     <script>
-        // ========= نظام الجولة التعليمية (Tutorial Logic) =========
+        // ========= نظام الجولة التعليمية =========
         const tourSteps = [
             { el: null, title: "مرحباً بك! ✨", text: "هل تود أخذ جولة سريعة وممتعة لتعلم كيف تستخدم كل زر في هذا البرنامج؟", btn: "نعم، ابدأ الجولة! 🚀" },
             { el: "#tour-group-1", title: "إعدادات العرض ⚙️", text: "هنا تختار شكل الزخرفة (نمط متكرر أو شكل مركزي مفرد)، وتتحكم بحجمها. يمكنك أيضاً جعل الخلفية شفافة لتحميل التصميم كـ PNG.", btn: "التالي" },
             { el: "#tour-group-2", title: "الهيكل والتداخل 📐", text: "مركز الإبداع! غيّر 'عدد الرؤوس' و 'حدة النجمة' لصنع أشكال هندسية إسلامية معقدة. النرد 🎲 في الأعلى يختار أرقاماً عشوائية لك.", btn: "التالي" },
             { el: "#tour-group-3", title: "التفاصيل والزخارف ✨", text: "أضف شمسة للمركز، أو نقاط المينا التراثية. ميزة 'ملمس القدم' تعطي تصميمك طابعاً قديماً كأنه مرسوم على جدار أثري!", btn: "التالي" },
+            { el: "#tour-group-bg", title: "الخلفيات المعتقة 🎨", text: "اختر من قائمة الخلفيات: ورق معتق، جدار حجري، قماش تاريخي، أو سادة. زر 'عشوائية الخلفية' يغير الملمس واللون فقط!", btn: "التالي" },
+            { el: "#tour-group-vfx", title: "تأثيرات بصرية متقدمة 💫", text: "فعّل التوهج السحري للنيون، الظل ثلاثي الأبعاد للعمق، أو الدوران المتحرك! كل تأثير له شريط تحكم منفصل.", btn: "التالي" },
+            { el: "#tour-group-themes", title: "ثيمات ألوان جاهزة 🎨", text: "اختر من لوحات ألوان تراثية متناسقة: أندلسي، فارسي، ليلي، ملكي... أو اضغط 'ثيم عشوائي' لمفاجأة!", btn: "التالي" },
             { el: "#tour-group-4", title: "لوحة الألوان 🎨", text: "اختر ألوانك بدقة. يمكنك الضغط على أيقونة النرد 🎲 بجانب أي لون لاختيار لون عشوائي متناسق.", btn: "التالي" },
             { el: "#tour-sec-5", title: "أزرار الإبداع 🪄", text: "إذا نفدت أفكارك، اضغط هنا لخلط الأشكال فقط أو الألوان فقط لترى خيارات جديدة كلياً.", btn: "التالي" },
             { el: "#tour-sec-6", title: "المفاجأة! 🔥", text: "هذا الزر السحري يقوم بتغيير كل شيء في اللوحة (أشكال وألوان وإعدادات) بضغطة واحدة!", btn: "التالي" },
-            { el: "#tour-sec-7", title: "حفظ التحفة 💾", text: "عندما تصل للنتيجة المطلوبة، اضغط هنا لتحميل الزخرفة كملف (SVG) عالي الدقة جداً، جاهز للطباعة أو استخدامه في التصميم.", btn: "إنهاء الجولة 🎉" }
+            { el: "#tour-sec-7", title: "حفظ التحفة 💾", text: "اختر الحفظ كـ (صورة PNG) لجوالك بدقة عالية جداً، أو كـ (فكتور SVG) للتصاميم والطباعة الاحترافية، أو انسخ الكود!", btn: "إنهاء الجولة 🎉" }
         ];
 
         let currentStep = 0;
@@ -286,7 +599,6 @@
         const controlsWrap = document.getElementById('controlsWrap');
 
         function showTourStep(stepIndex) {
-            // إزالة التظليل السابق
             document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
             
             if (stepIndex >= tourSteps.length) {
@@ -303,12 +615,10 @@
                 btnTourSkip.style.display = "inline-block";
             } else {
                 btnTourSkip.style.display = "none";
-                // إضافة التظليل للعنصر الجديد
                 if(step.el) {
                     const targetEl = document.querySelector(step.el);
                     if(targetEl) {
                         targetEl.classList.add('highlight-tour');
-                        // تمرير القائمة لتظهر العنصر المظلل
                         controlsWrap.scrollTo({
                             top: targetEl.offsetTop - 50,
                             behavior: 'smooth'
@@ -337,14 +647,37 @@
 
         btnTourSkip.addEventListener('click', endTour);
 
-        // تشغيل الجولة عند فتح الصفحة
         window.addEventListener('DOMContentLoaded', startTour);
         // ========================================================
 
+        // ========= المتغيرات والعناصر =========
         const inputs = document.querySelectorAll('input, select');
         const elements = {};
         inputs.forEach(el => elements[el.id] = el);
 
+        // ✨ ثيمات الألوان الجاهزة ✨
+        const colorThemes = {
+            andalusian: { col1: '#063970', col2: '#178582', colGold: '#b48608', colBg: '#f4edd8' },
+            persian: { col1: '#008080', col2: '#d4a5a5', colGold: '#d4af37', colBg: '#fff9f0' },
+            nightly: { col1: '#1a1a40', col2: '#c0c0c0', colGold: '#e6d3a7', colBg: '#2d1b4d' },
+            royal: { col1: '#8b0000', col2: '#000000', colGold: '#ffd700', colBg: '#f5f5dc' },
+            ottoman: { col1: '#006400', col2: '#ffffff', colGold: '#daa520', colBg: '#f0e6d2' },
+            mamluk: { col1: '#b87333', col2: '#4682b4', colGold: '#cd7f32', colBg: '#f5deb3' },
+            desert: { col1: '#c19a6b', col2: '#8b7355', colGold: '#d4af37', colBg: '#f4e4c1' },
+            ocean: { col1: '#003366', col2: '#40e0d0', colGold: '#e6e6fa', colBg: '#f0f8ff' }
+        };
+
+        // ✨ خلفيات الملمس ✨
+        const texturePatterns = {
+            'solid': '',
+            'aged-paper': 'texture-aged-paper',
+            'stone-wall': 'texture-stone-wall',
+            'fabric': 'texture-fabric',
+            'marble': 'texture-aged-paper',
+            'parchment': 'texture-fabric'
+        };
+
+        // ========= دوال التحكم الأساسية =========
         function getStarPath(sides, inner, cx, cy, radius, rot) {
             let d = "";
             for (let i = 0; i < sides * 2; i++) {
@@ -366,13 +699,116 @@
             return d;
         }
 
+        // ✨ تحديث التأثيرات البصرية ✨
+        function updateVisualEffects() {
+            const patternLayer = document.getElementById('patternLayer');
+            const patternGroup = document.getElementById('patternGroup');
+            const canvasHolder = document.getElementById('canvasHolder');
+            
+            // إزالة الفلاتر السابقة
+            patternGroup.classList.remove('glow-effect', 'shadow-3d', 'animate-rotate');
+            canvasHolder.style.setProperty('--rotation-speed', '30s');
+            document.documentElement.style.setProperty('--glow-color', 'rgba(180, 134, 8, 0.6)');
+            
+            // تطبيق التوهج
+            if (elements.enableGlow.checked) {
+                const intensity = parseInt(elements.glowIntensity.value);
+                document.documentElement.style.setProperty('--glow-color', `rgba(${hexToRgb(elements.colGold.value)}, ${intensity/20})`);
+                patternGroup.classList.add('glow-effect');
+            }
+            
+            // تطبيق الظل ثلاثي الأبعاد
+            if (elements.enableShadow.checked) {
+                const depth = parseInt(elements.shadowDepth.value);
+                patternGroup.classList.add('shadow-3d');
+            }
+            
+            // تطبيق الحركة
+            if (elements.enableAnimation.checked) {
+                const speed = parseInt(elements.rotationSpeed.value);
+                canvasHolder.style.setProperty('--rotation-speed', `${speed}s`);
+                patternGroup.classList.add('animate-rotate');
+            }
+        }
+
+        // ✨ تحويل HEX إلى RGB ✨
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '180, 134, 8';
+        }
+
+        // ✨ تحديث الخلفية والملمس ✨
+        function updateBackground() {
+            const bgType = elements.bgTexture.value;
+            const intensity = parseInt(elements.textureIntensity.value) / 10;
+            const textureOverlay = document.getElementById('textureOverlay');
+            const bgRect = document.getElementById('bgRect');
+            const canvasHolder = document.getElementById('canvasHolder');
+            
+            // إزالة جميع كلاسات الملمس
+            canvasHolder.className = 'preview-card';
+            
+            // تطبيق الملمس المختار
+            if (texturePatterns[bgType]) {
+                canvasHolder.classList.add(texturePatterns[bgType]);
+                textureOverlay.setAttribute('opacity', elements.transBg.checked ? '0' : intensity);
+            } else {
+                textureOverlay.setAttribute('opacity', '0');
+            }
+            
+            // تحديث لون الخلفية
+            if (!elements.transBg.checked) {
+                bgRect.setAttribute('fill', elements.colBg.value);
+            }
+        }
+
+        // ✨ تطبيق ثيم الألوان ✨
+        function applyColorTheme(themeName) {
+            if (themeName === 'custom') return;
+            
+            const theme = colorThemes[themeName];
+            if (theme) {
+                elements.col1.value = theme.col1;
+                elements.col2.value = theme.col2;
+                elements.colGold.value = theme.colGold;
+                elements.colBg.value = theme.colBg;
+                update();
+            }
+        }
+
+        // ✨ ثيم عشوائي متناسق ✨
+        function applyRandomTheme() {
+            const themes = Object.keys(colorThemes);
+            const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+            elements.colorTheme.value = randomTheme;
+            applyColorTheme(randomTheme);
+        }
+
+        // ✨ عشوائية الخلفية فقط ✨
+        function randomizeBackground() {
+            const textures = ['solid', 'aged-paper', 'stone-wall', 'fabric', 'marble', 'parchment'];
+            elements.bgTexture.value = textures[Math.floor(Math.random() * textures.length)];
+            elements.colBg.value = getRndHex();
+            elements.textureIntensity.value = Math.floor(Math.random() * 10) + 1;
+            updateBackground();
+            update();
+        }
+
+        // ========= الدالة الرئيسية للتحديث =========
         function update() {
-            // Update Badges
+            // تحديث القيم المعروضة
             Object.keys(elements).forEach(key => {
                 const lb = document.getElementById('val-' + key);
-                if (lb && elements[key] && elements[key].type === 'range') lb.innerText = elements[key].value;
+                if (lb && elements[key] && elements[key].type === 'range') {
+                    if (key === 'rotationSpeed') {
+                        lb.innerText = elements[key].value + 's';
+                    } else {
+                        lb.innerText = elements[key].value;
+                    }
+                }
             });
 
+            // تحديث إعدادات العرض
             const isSingle = elements.patternMode.value === 'single';
             const s = parseInt(elements.sides.value);
             const inn = parseFloat(elements.inner.value);
@@ -388,7 +824,7 @@
             const colGold = elements.colGold.value;
             const colBg = elements.colBg.value;
 
-            // Background & Texture
+            // تحديث الخلفية
             if (elements.transBg.checked) {
                 document.getElementById('bgRect').setAttribute('fill', 'none');
                 document.getElementById('textureOverlay').setAttribute('opacity', '0');
@@ -397,20 +833,16 @@
                 document.getElementById('textureOverlay').setAttribute('opacity', texture > 0 ? (texture/10).toString() : '0');
             }
 
-            // Roughness
             const filterAttr = texture > 5 ? `filter="url(#roughFilter)"` : '';
             document.querySelector('#roughFilter feDisplacementMap').setAttribute('scale', Math.max(1, texture/2));
 
-            // Dimensions
             const pSize = isSingle ? 800 : 400 * (1 / sc);
             document.getElementById('mainPattern').setAttribute('width', pSize);
             document.getElementById('mainPattern').setAttribute('height', pSize);
 
-            // Radius calculation with overlap
             const rad = (pSize / 2) * 0.95 * overlap;
             const center = pSize / 2;
 
-            // Centers to draw (for overlap to work in patterns, we draw in center and 4 corners)
             const drawCenters = isSingle ? [[center, center]] : [
                 [center, center], [0, 0], [pSize, 0], [0, pSize], [pSize, pSize]
             ];
@@ -418,10 +850,7 @@
             const dashStyle = dash > 0 ? `stroke-dasharray="${dash},${dash/2}"` : "";
             let g = `<g ${filterAttr}>`;
 
-            // Draw for each center (Center + Corners) to create seamless overlap
             drawCenters.forEach(([cx, cy]) => {
-                
-                // 1. Layers
                 for(let i = layerCount; i >= 1; i--) {
                     let currentRad = rad * (i / layerCount);
                     let strokeCol = i % 2 === 0 ? col1 : col2;
@@ -432,13 +861,11 @@
                     g += `<path d="${getStarPath(s, inn, cx, cy, currentRad, 0)}" fill="none" stroke="${colGold}" stroke-width="3" ${dashStyle} />`;
                 }
 
-                // 2. Girih Web
                 if (webStep > 0) {
                     g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, webStep)}" fill="none" stroke="${col1}" stroke-width="1.5" opacity="0.6" ${dashStyle} />`;
                     g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, Math.max(1, webStep - 2))}" fill="none" stroke="${col2}" stroke-width="1" opacity="0.4" />`;
                 }
 
-                // 3. Center Medallion
                 if (elements.showCenter.checked) {
                     const medRad = rad * 0.25;
                     g += `<path d="${getStarPath(s > 12 ? 12 : s, 0.6, cx, cy, medRad, 0)}" fill="${col1}" stroke="${colGold}" stroke-width="2" />`;
@@ -446,7 +873,6 @@
                     g += `<circle cx="${cx}" cy="${cy}" r="${medRad * 0.15}" fill="${colGold}" />`;
                 }
 
-                // 4. Mina Dots
                 if (elements.showDots.checked) {
                     for (let i = 0; i < s; i++) {
                         const a = (Math.PI * 2 / s) * i;
@@ -465,9 +891,15 @@
 
             g += `</g>`;
             document.getElementById('patternGroup').innerHTML = g;
+            
+            // تحديث الخلفية والملمس
+            updateBackground();
+            
+            // تحديث التأثيرات البصرية
+            updateVisualEffects();
         }
 
-        // --- Randomization Functions ---
+        // ========= دوال العشوائية =========
         function getRndHex() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
         
         function rndCol(id) { 
@@ -503,21 +935,97 @@
             randomizeSettings();
             randomizeShapes();
             randomizeAllColors();
-            // Forces update implicitly
+            randomizeBackground();
         }
 
+        // ========= دوال الحفظ =========
         function downloadSVG() {
             const svg = document.getElementById('svgCanvas').outerHTML;
             const blob = new Blob(['<?xml version="1.0" encoding="utf-8"?>\r\n', svg], {type: 'image/svg+xml'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `Persian-Masterpiece-${Date.now()}.svg`;
+            a.download = `Pattern-Masterpiece-${Date.now()}.svg`;
             a.click();
         }
 
-        inputs.forEach(el => el.addEventListener('input', update));
-        update(); // Init
+        function downloadPNG() {
+            const svgElement = document.getElementById('svgCanvas');
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgElement);
+
+            const img = new Image();
+            const svgBlob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+            const url = URL.createObjectURL(svgBlob);
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const targetSize = 2000; 
+                canvas.width = targetSize;
+                canvas.height = targetSize;
+                const ctx = canvas.getContext('2d');
+
+                ctx.drawImage(img, 0, 0, targetSize, targetSize);
+
+                const pngData = canvas.toDataURL("image/png");
+                const a = document.createElement('a');
+                a.href = pngData;
+                a.download = `Pattern-Masterpiece-${Date.now()}.png`;
+                a.click();
+
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+
+        // ✨ نسخ كود التصميم ✨
+        function copyToClipboard() {
+            const svgCode = document.getElementById('svgCanvas').outerHTML;
+            navigator.clipboard.writeText(svgCode).then(() => {
+                alert('✅ تم نسخ كود التصميم بنجاح! يمكنك لصقه في أي محرر نصوص أو موقع يدعم SVG');
+            }).catch(err => {
+                console.error('فشل النسخ: ', err);
+                alert('❌ حدث خطأ أثناء النسخ. حاول يدوياً');
+            });
+        }
+
+        // ========= معالجة أحداث الواجهة =========
+        // تحديث القيم عند تغيير المدخلات
+        inputs.forEach(el => {
+            el.addEventListener('input', function() {
+                // إظهار/إخفاء عناصر التحكم للتأثيرات
+                if (el.id === 'enableGlow') {
+                    document.getElementById('glowRow').style.display = el.checked ? 'flex' : 'none';
+                    document.getElementById('glowIntensity').style.display = el.checked ? 'block' : 'none';
+                }
+                if (el.id === 'enableShadow') {
+                    document.getElementById('shadowRow').style.display = el.checked ? 'flex' : 'none';
+                    document.getElementById('shadowDepth').style.display = el.checked ? 'block' : 'none';
+                }
+                if (el.id === 'enableAnimation') {
+                    document.getElementById('animRow').style.display = el.checked ? 'flex' : 'none';
+                    document.getElementById('rotationSpeed').style.display = el.checked ? 'block' : 'none';
+                }
+                
+                // تطبيق ثيم الألوان عند التغيير
+                if (el.id === 'colorTheme') {
+                    applyColorTheme(el.value);
+                }
+                
+                update();
+            });
+            el.addEventListener('change', update);
+        });
+
+        // تحديث أولي
+        update();
+        
+        // ✨ إضافة مؤشر تحميل سريع ✨
+        window.addEventListener('load', () => {
+            document.querySelector('.status-indicator').style.background = '#10b981';
+            setTimeout(() => {
+                document.querySelector('.status-indicator').style.animation = 'none';
+            }, 3000);
+        });
     </script>
 </body>
 </html>
-
