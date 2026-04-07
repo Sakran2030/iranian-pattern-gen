@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>المُولد الشامل للنقوش والزخارف المتقدمة</title>
     <style>
+        /* =========================================
+           المتغيرات الأساسية والإعدادات العامة
+           ========================================= */
         :root { 
             --primary: #1e293b; 
             --accent: #b48608; 
@@ -13,58 +16,91 @@
             --blue: #063970;
             --teal: #178582;
             --glow-color: rgba(180, 134, 8, 0.6);
-            --shadow-intensity: 4px;
+            --border-radius: 15px;
+            --shadow-light: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-heavy: 0 15px 35px rgba(0,0,0,0.15);
         }
         
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body { 
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, 'Noto Sans Arabic', Arial, sans-serif; 
             background: var(--bg); 
-            margin: 0; 
-            padding: 20px; 
             color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
             transition: background 0.5s ease;
         }
-        
+
+        /* =========================================
+           العناوين والهيكل الرئيسي
+           ========================================= */
+        .app-header {
+            text-align: center;
+            margin: 30px auto 20px;
+            padding: 0 20px;
+        }
+
         h1 { 
             color: var(--primary); 
-            text-align: center; 
-            margin-bottom: 25px; 
             font-weight: 800; 
             border-bottom: 3px solid var(--accent); 
-            padding-bottom: 10px; 
-            font-size: 1.8rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            padding-bottom: 12px; 
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.08);
+            display: inline-block;
+            position: relative;
+        }
+
+        .status-indicator { 
+            display: inline-block; 
+            width: 12px; 
+            height: 12px; 
+            border-radius: 50%; 
+            background: #10b981; 
+            margin-right: 10px; 
+            animation: pulse 2s infinite; 
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
         }
 
         .app-container { 
             display: grid;
             grid-template-columns: 480px 1fr; 
-            gap: 25px;
-            max-width: 1700px;
+            gap: 30px;
+            max-width: 1750px;
             margin: 0 auto;
+            padding: 0 20px 40px;
             align-items: start;
         }
 
+        /* =========================================
+           لوحة التحكم الجانبية
+           ========================================= */
         .controls-wrapper { 
             background: var(--panel); 
             padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow-light); 
             height: 88vh; 
             overflow-y: auto;
             border: 1px solid #cbd5e1;
             position: relative; 
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) #e2e8f0;
         }
         
         .controls-wrapper::-webkit-scrollbar { width: 8px; }
         .controls-wrapper::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+        .controls-wrapper::-webkit-scrollbar-track { background: #f1f5f9; }
 
+        /* =========================================
+           منطقة المعاينة
+           ========================================= */
         .preview-card { 
             background: #fff; 
-            padding: 0; 
-            border-radius: 15px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            padding: 10px; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--shadow-heavy); 
             height: 88vh;
             display: flex; 
             justify-content: center; 
@@ -77,18 +113,22 @@
                 linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
                 linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
                 linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            background-size: 24px 24px;
+            background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
             transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
         }
 
+        /* =========================================
+           عناوين الأقسام وعناصر التحكم
+           ========================================= */
         .section-title { 
-            font-size: 1rem; 
+            font-size: 1.05rem; 
             color: white; 
-            background: var(--primary); 
-            padding: 10px 15px; 
-            border-radius: 8px; 
-            margin: 25px 0 15px 0; 
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%); 
+            padding: 12px 15px; 
+            border-radius: 10px; 
+            margin: 28px 0 16px 0; 
             font-weight: bold; 
             border-right: 5px solid var(--accent);
             display: flex; 
@@ -96,241 +136,229 @@
             align-items: center;
             transition: all 0.3s; 
             cursor: pointer;
+            user-select: none;
         }
         
-        .section-title:hover { transform: translateX(-3px); }
+        .section-title:hover { transform: translateX(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
         .control-group { 
             background: #f8fafc; 
-            padding: 15px; 
-            border-radius: 10px; 
+            padding: 16px; 
+            border-radius: 12px; 
             border: 1px solid #e2e8f0; 
-            margin-bottom: 15px; 
+            margin-bottom: 16px; 
             transition: all 0.3s; 
         }
         
-        .control-group:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .control-group:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.04); border-color: #cbd5e1; }
         
         .row { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            gap: 10px; 
+            gap: 12px; 
             margin-bottom: 12px; 
+            flex-wrap: wrap;
         }
         
         label { 
-            font-size: 0.9rem; 
+            font-size: 0.95rem; 
             font-weight: 600; 
             color: #475569; 
             display: flex; 
             align-items: center; 
             gap: 8px;
+            cursor: pointer;
         }
         
         .val-badge { 
             background: var(--primary); 
             color: white; 
-            padding: 3px 10px; 
-            border-radius: 6px; 
-            font-size: 0.8rem; 
+            padding: 4px 12px; 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
             font-family: monospace; 
-            min-width: 45px; 
+            min-width: 50px; 
             text-align: center; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         input[type="range"] { 
             width: 100%; 
             accent-color: var(--teal); 
             cursor: pointer; 
-            margin-top: 5px; 
+            margin-top: 6px; 
             touch-action: manipulation;
+            height: 6px;
+            border-radius: 3px;
         }
         
         input[type="color"] { 
             border: 2px solid #cbd5e1; 
-            width: 45px; 
-            height: 35px; 
-            border-radius: 8px; 
+            width: 50px; 
+            height: 38px; 
+            border-radius: 10px; 
             cursor: pointer; 
             padding: 0; 
+            background: transparent;
+            transition: transform 0.2s;
         }
+        input[type="color"]:hover { transform: scale(1.1); border-color: var(--accent); }
         
         select { 
-            padding: 8px; 
-            border-radius: 6px; 
+            padding: 9px 12px; 
+            border-radius: 8px; 
             border: 1px solid #cbd5e1; 
             font-family: inherit; 
-            font-weight: bold; 
-            font-size: 16px;
+            font-weight: 600; 
+            font-size: 15px;
             background: white;
             cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url("image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23475569%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px top 50%;
+            background-size: 10px auto;
+            padding-left: 30px;
         }
+        select:hover { border-color: var(--teal); }
         
         .btn-rand-mini { 
             background: #e2e8f0; 
             border: 1px solid #cbd5e1; 
-            border-radius: 6px; 
-            padding: 5px 10px; 
+            border-radius: 8px; 
+            padding: 6px 12px; 
             cursor: pointer; 
             transition: 0.2s; 
-            font-size: 1.1rem; 
+            font-size: 1.2rem; 
             touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-rand-mini:hover { 
             background: var(--accent); 
             color: white;
-            transform: scale(1.1);
+            transform: scale(1.15);
+            border-color: var(--accent);
         }
 
         .btn-group { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 10px; 
-            margin-top: 15px; 
+            gap: 12px; 
+            margin-top: 20px; 
             transition: all 0.3s;
         }
         
         button { 
-            padding: 15px; 
+            padding: 16px; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            font-weight: bold; 
+            font-weight: 700; 
             font-size: 0.95rem; 
             transition: all 0.2s ease; 
             width: 100%; 
             text-transform: uppercase; 
             touch-action: manipulation;
+            letter-spacing: 0.5px;
         }
         
-        .btn-shapes { background: var(--teal); color: white; }
-        .btn-colors { background: var(--blue); color: white; }
+        .btn-shapes { background: linear-gradient(135deg, var(--teal) 0%, #0d9488 100%); color: white; box-shadow: 0 4px 10px rgba(23, 133, 130, 0.3); }
+        .btn-colors { background: linear-gradient(135deg, var(--blue) 0%, #044b8a 100%); color: white; box-shadow: 0 4px 10px rgba(6, 57, 112, 0.3); }
         .btn-all { 
-            background: var(--primary); 
+            background: linear-gradient(135deg, var(--primary) 0%, #0f172a 100%); 
             color: white; 
-            margin-top: 15px; 
-            font-size: 1.1rem; 
-            padding: 18px; 
+            margin-top: 16px; 
+            font-size: 1.15rem; 
+            padding: 20px; 
             border: 2px solid var(--accent); 
             transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(30, 41, 59, 0.2);
         }
         
-        /* أزرار الحفظ */
-        .btn-save-group { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-            margin-top: 15px; 
-        }
+        .btn-save-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .btn-save-svg { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+        .btn-save-png { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
+        .btn-save-jpg { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
+        .btn-copy { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: #fff; box-shadow: 0 4px 10px rgba(240, 147, 251, 0.3); }
         
-        .btn-save-svg { background: #10b981; color: #fff; transition: all 0.3s; }
-        .btn-save-png { background: #8b5cf6; color: #fff; transition: all 0.3s; }
-        
-        button:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
-            filter: brightness(1.1); 
-        }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); filter: brightness(1.05); }
+        button:active { transform: translateY(-1px); }
 
-        /* ✨ تأثيرات بصرية جديدة ✨ */
-        .glow-effect {
-            filter: drop-shadow(0 0 8px var(--glow-color)) drop-shadow(0 0 16px var(--glow-color));
-            transition: filter 0.3s ease;
-        }
-        
-        .shadow-3d {
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)) drop-shadow(-1px -1px 2px rgba(255,255,255,0.5));
-        }
-        
-        .animate-rotate {
-            animation: rotatePattern var(--rotation-speed, 30s) linear infinite;
-            transform-origin: center;
-        }
-        
-        @keyframes rotatePattern {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        /* =========================================
+           تأثيرات بصرية متقدمة
+           ========================================= */
+        .glow-effect { filter: drop-shadow(0 0 10px var(--glow-color)) drop-shadow(0 0 18px var(--glow-color)); transition: filter 0.3s ease; }
+        .shadow-3d { filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.35)) drop-shadow(-1px -2px 3px rgba(255,255,255,0.5)); }
+        .animate-rotate { animation: rotatePattern var(--rotation-speed, 30s) linear infinite; transform-origin: center; }
+        @keyframes rotatePattern { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* ✨ خلفيات معتقة وملمس ✨ */
-        .texture-aged-paper {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
-        }
-        
-        .texture-stone-wall {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='brick' x='0' y='0' width='20' height='10' patternUnits='userSpaceOnUse'%3E%3Crect x='0' y='0' width='19' height='9' fill='none' stroke='%23999' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='url(%23brick)'/%3E%3Cfilter id='rough'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='2'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23rough)' opacity='0.3'/%3E%3C/svg%3E");
-        }
-        
-        .texture-fabric {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='weave' x='0' y='0' width='4' height='4' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 2h4M2 0v4' stroke='%23ccc' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='%23f5f5dc'/%3E%3Crect width='100' height='100' fill='url(%23weave)' opacity='0.4'/%3E%3C/svg%3E");
-        }
+        /* خلفيات معتقة وملمس */
+        .texture-aged-paper { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E"); }
+        .texture-stone-wall { background-image: url("image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='brick' x='0' y='0' width='20' height='10' patternUnits='userSpaceOnUse'%3E%3Crect x='0' y='0' width='19' height='9' fill='none' stroke='%23999' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='url(%23brick)'/%3E%3Cfilter id='rough'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='2'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23rough)' opacity='0.3'/%3E%3C/svg%3E"); }
+        .texture-fabric { background-image: url("image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='weave' x='0' y='0' width='4' height='4' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 2h4M2 0v4' stroke='%23ccc' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='%23f5f5dc'/%3E%3Crect width='100' height='100' fill='url(%23weave)' opacity='0.4'/%3E%3C/svg%3E"); }
 
-        svg { width: 100%; height: 100%; }
+        svg { width: 100%; height: 100%; display: block; }
         .texture-layer { pointer-events: none; mix-blend-mode: multiply; }
 
-        /* ========= تنسيقات الجولة التعليمية ========= */
-        .tour-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.7); z-index: 9998;
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            opacity: 0; visibility: hidden; transition: 0.3s;
-        }
+        /* =========================================
+           الجولة التعليمية
+           ========================================= */
+        .tour-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9998; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); opacity: 0; visibility: hidden; transition: 0.4s; }
         .tour-overlay.active { opacity: 1; visibility: visible; }
-        
-        .tour-modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            background: white; padding: 25px; border-radius: 20px; z-index: 9999;
-            width: 90%; max-width: 420px; text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            opacity: 0; visibility: hidden; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .tour-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: white; padding: 28px; border-radius: 20px; z-index: 9999; width: 90%; max-width: 440px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.3); opacity: 0; visibility: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .tour-modal.active { transform: translate(-50%, -50%) scale(1); opacity: 1; visibility: visible; }
-        
-        .tour-title { color: var(--primary); font-size: 1.4rem; margin-bottom: 12px; font-weight: 900; }
-        .tour-text { margin-bottom: 25px; line-height: 1.6; color: #475569; font-size: 1.05rem; }
-        .tour-btn { background: var(--teal); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; width: auto; display: inline-block; margin: 5px;}
+        .tour-title { color: var(--primary); font-size: 1.5rem; margin-bottom: 14px; font-weight: 900; }
+        .tour-text { margin-bottom: 28px; line-height: 1.7; color: #475569; font-size: 1.05rem; }
+        .tour-btn { background: var(--teal); color: white; border: none; padding: 13px 22px; border-radius: 10px; font-size: 1rem; cursor: pointer; font-weight: bold; width: auto; display: inline-block; margin: 6px; transition: all 0.2s; }
+        .tour-btn:hover { background: #14b8a6; transform: translateY(-2px); }
         .tour-btn-skip { background: #e2e8f0; color: #475569; }
-        
-        .highlight-tour {
-            position: relative; z-index: 10000 !important;
-            background: white !important;
-            box-shadow: 0 0 0 5px var(--accent), 0 10px 30px rgba(0,0,0,0.5) !important;
-            border-radius: 12px;
-            pointer-events: none; 
-        }
+        .tour-btn-skip:hover { background: #cbd5e1; color: #1e293b; }
+        .highlight-tour { position: relative; z-index: 10000 !important; background: white !important; box-shadow: 0 0 0 6px var(--accent), 0 12px 35px rgba(0,0,0,0.5) !important; border-radius: 14px; pointer-events: none; transition: all 0.3s; }
 
-        /* ========= توافقية الجوال ========= */
+        /* =========================================
+           الإشعارات المنبثقة
+           ========================================= */
+        .toast-notification { 
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%); 
+            color: white; padding: 15px 30px; border-radius: 12px; 
+            box-shadow: 0 12px 45px rgba(0,0,0,0.35); z-index: 10000; 
+            font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px; 
+            animation: toastSlide 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            backdrop-filter: blur(10px);
+        }
+        @keyframes toastSlide { from { transform: translate(-50%, 100px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+        @keyframes toastSlideOut { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, 100px); opacity: 0; } }
+
+        /* =========================================
+           توافقية الجوال والأجهزة الصغيرة
+           ========================================= */
         @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; gap: 15px; }
-            .controls-wrapper { height: auto; max-height: 55vh; }
-            .preview-card { position: relative; top: 0; height: 50vh; margin-bottom: 20px;}
-            h1 { font-size: 1.4rem; }
-            .btn-all { font-size: 1rem; padding: 15px; }
+            .app-container { grid-template-columns: 1fr; gap: 20px; padding: 0 15px 30px; }
+            .controls-wrapper { height: auto; max-height: 60vh; padding: 20px; }
+            .preview-card { position: relative; top: 0; height: 50vh; margin-bottom: 25px;}
+            h1 { font-size: 1.5rem; }
+            .btn-all { font-size: 1rem; padding: 16px; }
             .tour-modal { position: fixed; top: auto; bottom: 20px; left: 50%; transform: translate(-50%, 20px) scale(0.9); }
             .tour-modal.active { transform: translate(-50%, 0) scale(1); }
+            .app-header { margin-top: 15px; }
         }
-        
-        /* ✨ مؤشرات الحالة ✨ */
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #10b981;
-            margin-left: 8px;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.9); }
+
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 
+            50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 
         }
     </style>
 </head>
 <body>
 
+    <!-- واجهة الجولة التعليمية -->
     <div class="tour-overlay" id="tourOverlay"></div>
     <div class="tour-modal" id="tourModal">
         <div class="tour-title" id="tourTitle">مرحباً بك! ✨</div>
@@ -341,66 +369,54 @@
         </div>
     </div>
 
-    <h1>✨ المُولد الشامل للنقوش والزخارف المتقدمة ✨ <span class="status-indicator" title="نظام جاهز"></span></h1>
+    <div class="app-header">
+        <h1>✨ المُولد الشامل للنقوش والزخارف المتقدمة ✨ <span class="status-indicator" title="نظام جاهز للعمل"></span></h1>
+    </div>
 
     <div class="app-container">
+        <!-- لوحة التحكم -->
         <div class="controls-wrapper" id="controlsWrap">
             
-            <div class="section-title" id="tour-sec-1">
-                ⚙️ إعدادات العرض والنمط
-                <button class="btn-rand-mini" onclick="randomizeSettings()" title="عشوائية الإعدادات">🎲</button>
-            </div>
+            <div class="section-title" id="tour-sec-1">⚙️ إعدادات العرض والنمط <button class="btn-rand-mini" onclick="randomizeSettings()" title="عشوائية الإعدادات">🎲</button></div>
             <div class="control-group" id="tour-group-1">
                 <div class="row">
                     <label>نوع العرض:</label>
-                    <select id="patternMode">
-                        <option value="multi" selected>نمط متكرر (باترن)</option>
-                        <option value="single">شكل مركزي مفرد (لوغو/لوحة)</option>
-                    </select>
+                    <select id="patternMode"><option value="multi" selected>نمط متكرر (باترن)</option><option value="single">شكل مركزي مفرد (لوغو/لوحة)</option></select>
                 </div>
-                <div class="row"><label><input type="checkbox" id="transBg" checked> خلفية شفافة (PNG)</label></div>
-                <div class="row" style="margin-top:10px;"><label>حجم التكرار (Scale):</label><span class="val-badge" id="val-scale">1.5</span></div>
+                <div class="row"><label><input type="checkbox" id="transBg" checked> خلفية شفافة (PNG) / بيضاء (JPG)</label></div>
+                <div class="row" style="margin-top:12px;"><label>حجم التكرار (Scale):</label><span class="val-badge" id="val-scale">1.5</span></div>
                 <input type="range" id="scale" min="0.5" max="3" step="0.1" value="1.5">
             </div>
 
-            <div class="section-title" id="tour-sec-2">
-                📐 الهيكل والتداخل المتقدم
-                <button class="btn-rand-mini" onclick="randomizeShapes()" title="عشوائية الأشكال">🎲</button>
-            </div>
+            <div class="section-title" id="tour-sec-2">📐 الهيكل والتداخل المتقدم <button class="btn-rand-mini" onclick="randomizeShapes()" title="عشوائية الأشكال">🎲</button></div>
             <div class="control-group" id="tour-group-2">
                 <div class="row"><label>عدد الرؤوس الهندسية:</label><span class="val-badge" id="val-sides">12</span></div>
                 <input type="range" id="sides" min="6" max="24" step="2" value="12">
                 
-                <div class="row" style="margin-top:15px;"><label>عمق الزوايا (حدة النجمة):</label><span class="val-badge" id="val-inner">0.35</span></div>
+                <div class="row" style="margin-top:16px;"><label>عمق الزوايا (حدة النجمة):</label><span class="val-badge" id="val-inner">0.35</span></div>
                 <input type="range" id="inner" min="0.1" max="0.9" step="0.05" value="0.35">
 
-                <div class="row" style="margin-top:15px;"><label>نسبة التداخل (Overlap):</label><span class="val-badge" id="val-overlap">1.0</span></div>
+                <div class="row" style="margin-top:16px;"><label>نسبة التداخل (Overlap):</label><span class="val-badge" id="val-overlap">1.0</span></div>
                 <input type="range" id="overlap" min="0.5" max="2.0" step="0.05" value="1.0">
 
-                <div class="row" style="margin-top:15px;"><label>عدد الطبقات (Layers):</label><span class="val-badge" id="val-layers">3</span></div>
+                <div class="row" style="margin-top:16px;"><label>عدد الطبقات (Layers):</label><span class="val-badge" id="val-layers">3</span></div>
                 <input type="range" id="layers" min="1" max="5" step="1" value="3">
                 
-                <div class="row" style="margin-top:15px;"><label>كثافة شبكة التقاطعات (Girih):</label><span class="val-badge" id="val-web">4</span></div>
+                <div class="row" style="margin-top:16px;"><label>كثافة شبكة التقاطعات (Girih):</label><span class="val-badge" id="val-web">4</span></div>
                 <input type="range" id="web" min="0" max="12" step="1" value="4">
             </div>
 
-            <div class="section-title" id="tour-sec-3">
-                ✨ التفاصيل والزخارف
-            </div>
+            <div class="section-title" id="tour-sec-3">✨ التفاصيل والزخارف</div>
             <div class="control-group" id="tour-group-3">
                 <div class="row"><label><input type="checkbox" id="showCenter" checked> إضافة شمسة المركز</label></div>
                 <div class="row"><label><input type="checkbox" id="showDots" checked> إضافة نقاط "المينا" التراثية</label></div>
-                <div class="row" style="margin-top:10px;"><label>تقطيع الخطوط (Dash):</label><span class="val-badge" id="val-dash">0</span></div>
+                <div class="row" style="margin-top:12px;"><label>تقطيع الخطوط (Dash):</label><span class="val-badge" id="val-dash">0</span></div>
                 <input type="range" id="dash" min="0" max="20" step="1" value="0">
-                <div class="row" style="margin-top:15px;"><label>ملمس القدم (تأثير الجدار):</label><span class="val-badge" id="val-texture">0</span></div>
+                <div class="row" style="margin-top:16px;"><label>ملمس القدم (تأثير الجدار):</label><span class="val-badge" id="val-texture">0</span></div>
                 <input type="range" id="texture" min="0" max="10" step="1" value="0">
             </div>
 
-            <!-- ✨ الخلفيات المعتقة والملمس (جديد!) ✨ -->
-            <div class="section-title" id="tour-sec-bg">
-                🎨 الخلفيات المعتقة والملمس
-                <button class="btn-rand-mini" onclick="randomizeBackground()" title="عشوائية الخلفية فقط!">🎲</button>
-            </div>
+            <div class="section-title" id="tour-sec-bg">🎨 الخلفيات المعتقة والملمس <button class="btn-rand-mini" onclick="randomizeBackground()" title="عشوائية الخلفية فقط!">🎲</button></div>
             <div class="control-group" id="tour-group-bg">
                 <div class="row">
                     <label>نوع الخلفية:</label>
@@ -413,58 +429,30 @@
                         <option value="parchment">📜 برشمان فاخر</option>
                     </select>
                 </div>
-                <div class="row">
-                    <label>شدة الملمس:</label>
-                    <span class="val-badge" id="val-textureIntensity">5</span>
-                </div>
+                <div class="row"><label>شدة الملمس:</label><span class="val-badge" id="val-textureIntensity">5</span></div>
                 <input type="range" id="textureIntensity" min="0" max="10" step="1" value="5">
-                <div class="row" style="margin-top:10px;">
-                    <button class="btn-rand-mini" style="width:100%; background: var(--accent); color: white;" onclick="randomizeBackground()">
-                        🎲 عشوائية الخلفية والملمس فقط
-                    </button>
+                <div class="row" style="margin-top:12px;">
+                    <button class="btn-rand-mini" style="width:100%; background: var(--accent); color: white;" onclick="randomizeBackground()">🎲 عشوائية الخلفية والملمس فقط</button>
                 </div>
             </div>
 
-            <!-- ✨ تأثيرات بصرية متقدمة (جديد!) ✨ -->
-            <div class="section-title" id="tour-sec-vfx">
-                💫 تأثيرات بصرية متقدمة (VFX)
-            </div>
+            <div class="section-title" id="tour-sec-vfx">💫 تأثيرات بصرية متقدمة (VFX)</div>
             <div class="control-group" id="tour-group-vfx">
-                <div class="row">
-                    <label><input type="checkbox" id="enableGlow"> ✨ توهج سحري (Glow)</label>
-                </div>
-                <div class="row" id="glowRow" style="display:none;">
-                    <label>شدة التوهج:</label>
-                    <span class="val-badge" id="val-glowIntensity">6</span>
-                </div>
+                <div class="row"><label><input type="checkbox" id="enableGlow"> ✨ توهج سحري (Glow)</label></div>
+                <div class="row" id="glowRow" style="display:none;"><label>شدة التوهج:</label><span class="val-badge" id="val-glowIntensity">6</span></div>
                 <input type="range" id="glowIntensity" min="0" max="20" step="1" value="6" style="display:none;">
                 
-                <div class="row" style="margin-top:12px;">
-                    <label><input type="checkbox" id="enableShadow"> 🌑 ظل ثلاثي الأبعاد (3D Shadow)</label>
-                </div>
-                <div class="row" id="shadowRow" style="display:none;">
-                    <label>عمق الظل:</label>
-                    <span class="val-badge" id="val-shadowDepth">4</span>
-                </div>
+                <div class="row" style="margin-top:14px;"><label><input type="checkbox" id="enableShadow"> 🌑 ظل ثلاثي الأبعاد (3D Shadow)</label></div>
+                <div class="row" id="shadowRow" style="display:none;"><label>عمق الظل:</label><span class="val-badge" id="val-shadowDepth">4</span></div>
                 <input type="range" id="shadowDepth" min="0" max="10" step="1" value="4" style="display:none;">
                 
-                <div class="row" style="margin-top:12px;">
-                    <label><input type="checkbox" id="enableAnimation"> 🔄 دوران وحركة (Animation)</label>
-                </div>
-                <div class="row" id="animRow" style="display:none;">
-                    <label>سرعة الدوران:</label>
-                    <span class="val-badge" id="val-rotationSpeed">30s</span>
-                </div>
+                <div class="row" style="margin-top:14px;"><label><input type="checkbox" id="enableAnimation"> 🔄 دوران وحركة (Animation)</label></div>
+                <div class="row" id="animRow" style="display:none;"><label>سرعة الدوران:</label><span class="val-badge" id="val-rotationSpeed">30s</span></div>
                 <input type="range" id="rotationSpeed" min="5" max="120" step="5" value="30" style="display:none;">
-                <div style="font-size:0.75rem; color:#64748b; margin-top:5px; text-align:center;">
-                    ⏱️ القيمة بالثواني لدورة كاملة
-                </div>
+                <div style="font-size:0.8rem; color:#64748b; margin-top:8px; text-align:center;">⏱️ القيمة بالثواني لدورة كاملة</div>
             </div>
 
-            <!-- ✨ ثيمات ألوان جاهزة (جديد!) ✨ -->
-            <div class="section-title" id="tour-sec-themes">
-                🎨 ثيمات ألوان جاهزة
-            </div>
+            <div class="section-title" id="tour-sec-themes">🎨 ثيمات ألوان جاهزة</div>
             <div class="control-group" id="tour-group-themes">
                 <div class="row">
                     <label>اختر لوحة ألوان تراثية:</label>
@@ -480,45 +468,28 @@
                         <option value="ocean">🌊 محيطي (أزرق-تركواز-لؤلؤي)</option>
                     </select>
                 </div>
-                <div class="row" style="margin-top:10px;">
-                    <button class="btn-rand-mini" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" onclick="applyRandomTheme()">
-                        🎲 ثيم عشوائي متناسق
-                    </button>
+                <div class="row" style="margin-top:12px;">
+                    <button class="btn-rand-mini" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" onclick="applyRandomTheme()">🎲 ثيم عشوائي متناسق</button>
                 </div>
             </div>
 
-            <div class="section-title" id="tour-sec-4">
-                🎨 الألوان المستقلة
-                <button class="btn-rand-mini" onclick="randomizeAllColors()" title="عشوائية كل الألوان">🎲</button>
-            </div>
+            <div class="section-title" id="tour-sec-4">🎨 الألوان المستقلة <button class="btn-rand-mini" onclick="randomizeAllColors()" title="عشوائية كل الألوان">🎲</button></div>
             <div class="control-group" id="tour-group-4">
                 <div class="row">
                     <label>اللون الأساسي (Primary):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="color" id="col1" value="#063970">
-                        <button class="btn-rand-mini" onclick="rndCol('col1')">🎲</button>
-                    </div>
+                    <div style="display:flex; gap:8px;"><input type="color" id="col1" value="#063970"><button class="btn-rand-mini" onclick="rndCol('col1')">🎲</button></div>
                 </div>
                 <div class="row">
                     <label>اللون الثانوي (Secondary):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="color" id="col2" value="#178582">
-                        <button class="btn-rand-mini" onclick="rndCol('col2')">🎲</button>
-                    </div>
+                    <div style="display:flex; gap:8px;"><input type="color" id="col2" value="#178582"><button class="btn-rand-mini" onclick="rndCol('col2')">🎲</button></div>
                 </div>
                 <div class="row">
                     <label>لون التذهيب (Gold):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="color" id="colGold" value="#b48608">
-                        <button class="btn-rand-mini" onclick="rndCol('colGold')">🎲</button>
-                    </div>
+                    <div style="display:flex; gap:8px;"><input type="color" id="colGold" value="#b48608"><button class="btn-rand-mini" onclick="rndCol('colGold')">🎲</button></div>
                 </div>
                 <div class="row">
                     <label>لون الخلفية (Background):</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="color" id="colBg" value="#f4edd8">
-                        <button class="btn-rand-mini" onclick="rndCol('colBg')">🎲</button>
-                    </div>
+                    <div style="display:flex; gap:8px;"><input type="color" id="colBg" value="#f4edd8"><button class="btn-rand-mini" onclick="rndCol('colBg')">🎲</button></div>
                 </div>
             </div>
 
@@ -530,11 +501,13 @@
             
             <div class="btn-save-group" id="tour-sec-7">
                 <button class="btn-save-png" onclick="downloadPNG()">🖼️ حفظ كـ صورة عالية الدقة (PNG)</button>
+                <button class="btn-save-jpg" onclick="downloadJPG()">🌞 حفظ كـ صورة مطابقة للألوان (JPG)</button>
                 <button class="btn-save-svg" onclick="downloadSVG()">💾 حفظ كـ ملف فكتور (SVG)</button>
-                <button class="btn-save-png" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" onclick="copyToClipboard()">📋 نسخ كود التصميم</button>
+                <button class="btn-copy" onclick="copyToClipboard()">📋 نسخ كود التصميم</button>
             </div>
         </div>
 
+        <!-- منطقة المعاينة -->
         <div class="preview-card" id="canvasHolder">
             <svg id="svgCanvas" width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -547,16 +520,10 @@
                         <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.9 0 0 0  0 0.8 0 0 0  0 0 0 0.3 0" in="noise" result="coloredNoise" />
                         <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply" />
                     </filter>
-                    <!-- ✨ فلتر التوهج السحري ✨ -->
                     <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                        <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
+                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
-                    <!-- ✨ فلتر الظل ثلاثي الأبعاد ✨ -->
                     <filter id="shadow3D" x="-20%" y="-20%" width="140%" height="140%">
                         <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.4"/>
                         <feDropShadow dx="-1" dy="-1" stdDeviation="1" flood-color="white" flood-opacity="0.3"/>
@@ -565,7 +532,6 @@
                         <g id="patternGroup"></g>
                     </pattern>
                 </defs>
-
                 <rect id="bgRect" width="100%" height="100%" fill="#f4edd8" />
                 <rect id="patternLayer" width="100%" height="100%" fill="url(#mainPattern)" />
                 <rect id="textureOverlay" class="texture-layer" width="100%" height="100%" fill="#fff" filter="url(#antiquePaper)" opacity="0" />
@@ -574,19 +540,23 @@
     </div>
 
     <script>
-        // ========= نظام الجولة التعليمية =========
+        /**
+         * ==========================================
+         * نظام الجولة التعليمية التفاعلي
+         * ==========================================
+         */
         const tourSteps = [
             { el: null, title: "مرحباً بك! ✨", text: "هل تود أخذ جولة سريعة وممتعة لتعلم كيف تستخدم كل زر في هذا البرنامج؟", btn: "نعم، ابدأ الجولة! 🚀" },
-            { el: "#tour-group-1", title: "إعدادات العرض ⚙️", text: "هنا تختار شكل الزخرفة (نمط متكرر أو شكل مركزي مفرد)، وتتحكم بحجمها. يمكنك أيضاً جعل الخلفية شفافة لتحميل التصميم كـ PNG.", btn: "التالي" },
-            { el: "#tour-group-2", title: "الهيكل والتداخل 📐", text: "مركز الإبداع! غيّر 'عدد الرؤوس' و 'حدة النجمة' لصنع أشكال هندسية إسلامية معقدة. النرد 🎲 في الأعلى يختار أرقاماً عشوائية لك.", btn: "التالي" },
-            { el: "#tour-group-3", title: "التفاصيل والزخارف ✨", text: "أضف شمسة للمركز، أو نقاط المينا التراثية. ميزة 'ملمس القدم' تعطي تصميمك طابعاً قديماً كأنه مرسوم على جدار أثري!", btn: "التالي" },
-            { el: "#tour-group-bg", title: "الخلفيات المعتقة 🎨", text: "اختر من قائمة الخلفيات: ورق معتق، جدار حجري، قماش تاريخي، أو سادة. زر 'عشوائية الخلفية' يغير الملمس واللون فقط!", btn: "التالي" },
-            { el: "#tour-group-vfx", title: "تأثيرات بصرية متقدمة 💫", text: "فعّل التوهج السحري للنيون، الظل ثلاثي الأبعاد للعمق، أو الدوران المتحرك! كل تأثير له شريط تحكم منفصل.", btn: "التالي" },
-            { el: "#tour-group-themes", title: "ثيمات ألوان جاهزة 🎨", text: "اختر من لوحات ألوان تراثية متناسقة: أندلسي، فارسي، ليلي، ملكي... أو اضغط 'ثيم عشوائي' لمفاجأة!", btn: "التالي" },
-            { el: "#tour-group-4", title: "لوحة الألوان 🎨", text: "اختر ألوانك بدقة. يمكنك الضغط على أيقونة النرد 🎲 بجانب أي لون لاختيار لون عشوائي متناسق.", btn: "التالي" },
-            { el: "#tour-sec-5", title: "أزرار الإبداع 🪄", text: "إذا نفدت أفكارك، اضغط هنا لخلط الأشكال فقط أو الألوان فقط لترى خيارات جديدة كلياً.", btn: "التالي" },
-            { el: "#tour-sec-6", title: "المفاجأة! 🔥", text: "هذا الزر السحري يقوم بتغيير كل شيء في اللوحة (أشكال وألوان وإعدادات) بضغطة واحدة!", btn: "التالي" },
-            { el: "#tour-sec-7", title: "حفظ التحفة 💾", text: "اختر الحفظ كـ (صورة PNG) لجوالك بدقة عالية جداً، أو كـ (فكتور SVG) للتصاميم والطباعة الاحترافية، أو انسخ الكود!", btn: "إنهاء الجولة 🎉" }
+            { el: "#tour-group-1", title: "إعدادات العرض ⚙️", text: "هنا تختار شكل الزخرفة (نمط متكرر أو شكل مركزي مفرد)، وتتحكم بحجمها.", btn: "التالي" },
+            { el: "#tour-group-2", title: "الهيكل والتداخل 📐", text: "مركز الإبداع! غيّر 'عدد الرؤوس' و 'حدة النجمة' لصنع أشكال هندسية معقدة.", btn: "التالي" },
+            { el: "#tour-group-3", title: "التفاصيل والزخارف ✨", text: "أضف شمسة للمركز، أو نقاط المينا التراثية، أو تقطيع الخطوط.", btn: "التالي" },
+            { el: "#tour-group-bg", title: "الخلفيات المعتقة 🎨", text: "اختر من قائمة الخلفيات: ورق معتق، جدار حجري، قماش تاريخي، أو سادة.", btn: "التالي" },
+            { el: "#tour-group-vfx", title: "تأثيرات بصرية متقدمة 💫", text: "فعّل التوهج السحري، الظل ثلاثي الأبعاد، أو الدوران المتحرك!", btn: "التالي" },
+            { el: "#tour-group-themes", title: "ثيمات ألوان جاهزة 🎨", text: "اختر من لوحات ألوان تراثية متناسقة أو اضغط ثيم عشوائي!", btn: "التالي" },
+            { el: "#tour-group-4", title: "لوحة الألوان 🎨", text: "اختر ألوانك بدقة أو اضغط 🎲 بجانب أي لون للاختيار العشوائي.", btn: "التالي" },
+            { el: "#tour-sec-5", title: "أزرار الإبداع 🪄", text: "اخلط الأشكال فقط أو الألوان فقط لترى خيارات جديدة.", btn: "التالي" },
+            { el: "#tour-sec-6", title: "المفاجأة! 🔥", text: "زر سحري يغير كل شيء (أشكال وألوان وإعدادات) بضغطة واحدة!", btn: "التالي" },
+            { el: "#tour-sec-7", title: "حفظ التحفة 💾", text: "احفظ كـ PNG أو JPG عالي الدقة، أو SVG فكتور، أو انسخ الكود.", btn: "إنهاء الجولة 🎉" }
         ];
 
         let currentStep = 0;
@@ -600,17 +570,13 @@
 
         function showTourStep(stepIndex) {
             document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+            if (stepIndex >= tourSteps.length) { endTour(); return; }
             
-            if (stepIndex >= tourSteps.length) {
-                endTour();
-                return;
-            }
-
             const step = tourSteps[stepIndex];
-            tourTitle.innerText = step.title;
-            tourText.innerText = step.text;
+            tourTitle.innerText = step.title; 
+            tourText.innerText = step.text; 
             btnTourNext.innerText = step.btn;
-
+            
             if (stepIndex === 0) {
                 btnTourSkip.style.display = "inline-block";
             } else {
@@ -619,43 +585,41 @@
                     const targetEl = document.querySelector(step.el);
                     if(targetEl) {
                         targetEl.classList.add('highlight-tour');
-                        controlsWrap.scrollTo({
-                            top: targetEl.offsetTop - 50,
-                            behavior: 'smooth'
-                        });
+                        controlsWrap.scrollTo({ top: targetEl.offsetTop - 40, behavior: 'smooth' });
                     }
                 }
             }
         }
 
-        function startTour() {
-            tourOverlay.classList.add('active');
-            tourModal.classList.add('active');
-            showTourStep(0);
+        function startTour() { 
+            tourOverlay.classList.add('active'); 
+            tourModal.classList.add('active'); 
+            showTourStep(0); 
         }
 
-        function endTour() {
-            tourOverlay.classList.remove('active');
-            tourModal.classList.remove('active');
-            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
+        function endTour() { 
+            tourOverlay.classList.remove('active'); 
+            tourModal.classList.remove('active'); 
+            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour')); 
         }
 
-        btnTourNext.addEventListener('click', () => {
-            currentStep++;
-            showTourStep(currentStep);
+        btnTourNext.addEventListener('click', () => { currentStep++; showTourStep(currentStep); });
+        btnTourSkip.addEventListener('click', endTour);
+        window.addEventListener('DOMContentLoaded', () => {
+            update();
+            document.querySelector('.status-indicator').style.background = '#10b981';
+            setTimeout(() => { document.querySelector('.status-indicator').style.animation = 'none'; }, 3500);
         });
 
-        btnTourSkip.addEventListener('click', endTour);
-
-        window.addEventListener('DOMContentLoaded', startTour);
-        // ========================================================
-
-        // ========= المتغيرات والعناصر =========
+        /**
+         * ==========================================
+         * إدارة الحالة والبيانات الأساسية
+         * ==========================================
+         */
         const inputs = document.querySelectorAll('input, select');
         const elements = {};
         inputs.forEach(el => elements[el.id] = el);
 
-        // ✨ ثيمات الألوان الجاهزة ✨
         const colorThemes = {
             andalusian: { col1: '#063970', col2: '#178582', colGold: '#b48608', colBg: '#f4edd8' },
             persian: { col1: '#008080', col2: '#d4a5a5', colGold: '#d4af37', colBg: '#fff9f0' },
@@ -667,22 +631,22 @@
             ocean: { col1: '#003366', col2: '#40e0d0', colGold: '#e6e6fa', colBg: '#f0f8ff' }
         };
 
-        // ✨ خلفيات الملمس ✨
         const texturePatterns = {
-            'solid': '',
-            'aged-paper': 'texture-aged-paper',
-            'stone-wall': 'texture-stone-wall',
-            'fabric': 'texture-fabric',
-            'marble': 'texture-aged-paper',
-            'parchment': 'texture-fabric'
+            'solid': '', 'aged-paper': 'texture-aged-paper', 'stone-wall': 'texture-stone-wall',
+            'fabric': 'texture-fabric', 'marble': 'texture-aged-paper', 'parchment': 'texture-fabric'
         };
 
-        // ========= دوال التحكم الأساسية =========
+        /**
+         * ==========================================
+         * الدوال الهندسية وحساب المسارات
+         * ==========================================
+         */
         function getStarPath(sides, inner, cx, cy, radius, rot) {
             let d = "";
+            const step = (Math.PI * 2) / (sides * 2);
             for (let i = 0; i < sides * 2; i++) {
                 const r = i % 2 === 0 ? radius : radius * inner;
-                const a = (Math.PI / sides) * i + (rot * Math.PI / 180);
+                const a = step * i + (rot * Math.PI / 180);
                 d += (i === 0 ? "M" : "L") + (cx + r * Math.cos(a)).toFixed(2) + "," + (cy + r * Math.sin(a)).toFixed(2);
             }
             return d + "Z";
@@ -691,39 +655,38 @@
         function getWebPath(sides, cx, cy, radius, step) {
             if (step == 0) return "";
             let d = "";
+            const angleStep = (Math.PI * 2) / sides;
             for (let i = 0; i < sides; i++) {
-                const a1 = (Math.PI * 2 / sides) * i;
-                const a2 = (Math.PI * 2 / sides) * (i + step);
+                const a1 = angleStep * i;
+                const a2 = angleStep * (i + step);
                 d += `M${(cx + radius * Math.cos(a1)).toFixed(2)},${(cy + radius * Math.sin(a1)).toFixed(2)} L${(cx + radius * Math.cos(a2)).toFixed(2)},${(cy + radius * Math.sin(a2)).toFixed(2)} `;
             }
             return d;
         }
 
-        // ✨ تحديث التأثيرات البصرية ✨
+        /**
+         * ==========================================
+         * إدارة التأثيرات البصرية والخلفيات
+         * ==========================================
+         */
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '180, 134, 8';
+        }
+
         function updateVisualEffects() {
-            const patternLayer = document.getElementById('patternLayer');
             const patternGroup = document.getElementById('patternGroup');
             const canvasHolder = document.getElementById('canvasHolder');
-            
-            // إزالة الفلاتر السابقة
             patternGroup.classList.remove('glow-effect', 'shadow-3d', 'animate-rotate');
             canvasHolder.style.setProperty('--rotation-speed', '30s');
             document.documentElement.style.setProperty('--glow-color', 'rgba(180, 134, 8, 0.6)');
             
-            // تطبيق التوهج
             if (elements.enableGlow.checked) {
                 const intensity = parseInt(elements.glowIntensity.value);
                 document.documentElement.style.setProperty('--glow-color', `rgba(${hexToRgb(elements.colGold.value)}, ${intensity/20})`);
                 patternGroup.classList.add('glow-effect');
             }
-            
-            // تطبيق الظل ثلاثي الأبعاد
-            if (elements.enableShadow.checked) {
-                const depth = parseInt(elements.shadowDepth.value);
-                patternGroup.classList.add('shadow-3d');
-            }
-            
-            // تطبيق الحركة
+            if (elements.enableShadow.checked) patternGroup.classList.add('shadow-3d');
             if (elements.enableAnimation.checked) {
                 const speed = parseInt(elements.rotationSpeed.value);
                 canvasHolder.style.setProperty('--rotation-speed', `${speed}s`);
@@ -731,13 +694,6 @@
             }
         }
 
-        // ✨ تحويل HEX إلى RGB ✨
-        function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '180, 134, 8';
-        }
-
-        // ✨ تحديث الخلفية والملمس ✨
         function updateBackground() {
             const bgType = elements.bgTexture.value;
             const intensity = parseInt(elements.textureIntensity.value) / 10;
@@ -745,38 +701,26 @@
             const bgRect = document.getElementById('bgRect');
             const canvasHolder = document.getElementById('canvasHolder');
             
-            // إزالة جميع كلاسات الملمس
             canvasHolder.className = 'preview-card';
-            
-            // تطبيق الملمس المختار
             if (texturePatterns[bgType]) {
                 canvasHolder.classList.add(texturePatterns[bgType]);
                 textureOverlay.setAttribute('opacity', elements.transBg.checked ? '0' : intensity);
             } else {
                 textureOverlay.setAttribute('opacity', '0');
             }
-            
-            // تحديث لون الخلفية
-            if (!elements.transBg.checked) {
-                bgRect.setAttribute('fill', elements.colBg.value);
-            }
+            if (!elements.transBg.checked) bgRect.setAttribute('fill', elements.colBg.value);
         }
 
-        // ✨ تطبيق ثيم الألوان ✨
         function applyColorTheme(themeName) {
             if (themeName === 'custom') return;
-            
             const theme = colorThemes[themeName];
             if (theme) {
-                elements.col1.value = theme.col1;
-                elements.col2.value = theme.col2;
-                elements.colGold.value = theme.colGold;
-                elements.colBg.value = theme.colBg;
+                elements.col1.value = theme.col1; elements.col2.value = theme.col2;
+                elements.colGold.value = theme.colGold; elements.colBg.value = theme.colBg;
                 update();
             }
         }
 
-        // ✨ ثيم عشوائي متناسق ✨
         function applyRandomTheme() {
             const themes = Object.keys(colorThemes);
             const randomTheme = themes[Math.floor(Math.random() * themes.length)];
@@ -784,31 +728,28 @@
             applyColorTheme(randomTheme);
         }
 
-        // ✨ عشوائية الخلفية فقط ✨
         function randomizeBackground() {
             const textures = ['solid', 'aged-paper', 'stone-wall', 'fabric', 'marble', 'parchment'];
             elements.bgTexture.value = textures[Math.floor(Math.random() * textures.length)];
             elements.colBg.value = getRndHex();
             elements.textureIntensity.value = Math.floor(Math.random() * 10) + 1;
-            updateBackground();
+            updateBackground(); 
             update();
         }
 
-        // ========= الدالة الرئيسية للتحديث =========
+        /**
+         * ==========================================
+         * الدالة الرئيسية لتحديث الواجهة
+         * ==========================================
+         */
         function update() {
-            // تحديث القيم المعروضة
             Object.keys(elements).forEach(key => {
                 const lb = document.getElementById('val-' + key);
                 if (lb && elements[key] && elements[key].type === 'range') {
-                    if (key === 'rotationSpeed') {
-                        lb.innerText = elements[key].value + 's';
-                    } else {
-                        lb.innerText = elements[key].value;
-                    }
+                    lb.innerText = key === 'rotationSpeed' ? elements[key].value + 's' : elements[key].value;
                 }
             });
 
-            // تحديث إعدادات العرض
             const isSingle = elements.patternMode.value === 'single';
             const s = parseInt(elements.sides.value);
             const inn = parseFloat(elements.inner.value);
@@ -819,12 +760,11 @@
             const dash = parseInt(elements.dash.value);
             const texture = parseInt(elements.texture.value);
             
-            const col1 = elements.col1.value;
+            const col1 = elements.col1.value; 
             const col2 = elements.col2.value;
-            const colGold = elements.colGold.value;
+            const colGold = elements.colGold.value; 
             const colBg = elements.colBg.value;
 
-            // تحديث الخلفية
             if (elements.transBg.checked) {
                 document.getElementById('bgRect').setAttribute('fill', 'none');
                 document.getElementById('textureOverlay').setAttribute('opacity', '0');
@@ -834,22 +774,20 @@
             }
 
             const filterAttr = texture > 5 ? `filter="url(#roughFilter)"` : '';
-            document.querySelector('#roughFilter feDisplacementMap').setAttribute('scale', Math.max(1, texture/2));
+            const dispMap = document.querySelector('#roughFilter feDisplacementMap');
+            if(dispMap) dispMap.setAttribute('scale', Math.max(1, texture/2));
 
             const pSize = isSingle ? 800 : 400 * (1 / sc);
-            document.getElementById('mainPattern').setAttribute('width', pSize);
-            document.getElementById('mainPattern').setAttribute('height', pSize);
+            const pattern = document.getElementById('mainPattern');
+            pattern.setAttribute('width', pSize);
+            pattern.setAttribute('height', pSize);
 
             const rad = (pSize / 2) * 0.95 * overlap;
             const center = pSize / 2;
-
-            const drawCenters = isSingle ? [[center, center]] : [
-                [center, center], [0, 0], [pSize, 0], [0, pSize], [pSize, pSize]
-            ];
-
+            const drawCenters = isSingle ? [[center, center]] : [[center, center], [0, 0], [pSize, 0], [0, pSize], [pSize, pSize]];
             const dashStyle = dash > 0 ? `stroke-dasharray="${dash},${dash/2}"` : "";
+            
             let g = `<g ${filterAttr}>`;
-
             drawCenters.forEach(([cx, cy]) => {
                 for(let i = layerCount; i >= 1; i--) {
                     let currentRad = rad * (i / layerCount);
@@ -860,251 +798,326 @@
                     g += `<path d="${getStarPath(s, inn + 0.1, cx, cy, currentRad, (180/s))}" fill="${fillCol}" fill-opacity="${fillOpacity}" stroke="${strokeCol}" stroke-width="2" />`;
                     g += `<path d="${getStarPath(s, inn, cx, cy, currentRad, 0)}" fill="none" stroke="${colGold}" stroke-width="3" ${dashStyle} />`;
                 }
-
                 if (webStep > 0) {
                     g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, webStep)}" fill="none" stroke="${col1}" stroke-width="1.5" opacity="0.6" ${dashStyle} />`;
                     g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, Math.max(1, webStep - 2))}" fill="none" stroke="${col2}" stroke-width="1" opacity="0.4" />`;
                 }
-
                 if (elements.showCenter.checked) {
                     const medRad = rad * 0.25;
                     g += `<path d="${getStarPath(s > 12 ? 12 : s, 0.6, cx, cy, medRad, 0)}" fill="${col1}" stroke="${colGold}" stroke-width="2" />`;
                     g += `<circle cx="${cx}" cy="${cy}" r="${medRad * 0.4}" fill="${col2}" stroke="${colGold}" stroke-width="1" />`;
                     g += `<circle cx="${cx}" cy="${cy}" r="${medRad * 0.15}" fill="${colGold}" />`;
                 }
-
                 if (elements.showDots.checked) {
                     for (let i = 0; i < s; i++) {
-                        const a = (Math.PI * 2 / s) * i;
+                        const a = (Math.PI * 2 / s) * i; 
                         const aMid = a + (Math.PI / s);
-                        
-                        let dx = cx + (rad * 0.95) * Math.cos(a);
+                        let dx = cx + (rad * 0.95) * Math.cos(a); 
                         let dy = cy + (rad * 0.95) * Math.sin(a);
                         g += `<circle cx="${dx}" cy="${dy}" r="${2 * overlap}" fill="${colGold}" />`;
-
-                        dx = cx + (rad * inn * 0.85) * Math.cos(aMid);
+                        dx = cx + (rad * inn * 0.85) * Math.cos(aMid); 
                         dy = cy + (rad * inn * 0.85) * Math.sin(aMid);
                         g += `<circle cx="${dx}" cy="${dy}" r="${3 * overlap}" fill="${col2}" stroke="${col1}" stroke-width="1"/>`;
                     }
                 }
             });
-
             g += `</g>`;
+            
             document.getElementById('patternGroup').innerHTML = g;
-            
-            // تحديث الخلفية والملمس
             updateBackground();
-            
-            // تحديث التأثيرات البصرية
             updateVisualEffects();
         }
 
-        // ========= دوال العشوائية =========
-        function getRndHex() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
-        
+        /**
+         * ==========================================
+         * دوال العشوائية والحفظ
+         * ==========================================
+         */
+        function getRndHex() { 
+            return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); 
+        }
+
         function rndCol(id) { 
             elements[id].value = getRndHex(); 
             update(); 
         }
 
-        function randomizeAllColors() {
-            elements.col1.value = getRndHex();
-            elements.col2.value = getRndHex();
-            elements.colGold.value = getRndHex();
-            elements.colBg.value = getRndHex();
-            update();
+        function randomizeAllColors() { 
+            elements.col1.value = getRndHex(); 
+            elements.col2.value = getRndHex(); 
+            elements.colGold.value = getRndHex(); 
+            elements.colBg.value = getRndHex(); 
+            update(); 
         }
 
-        function randomizeShapes() {
-            elements.sides.value = [6, 8, 10, 12, 16][Math.floor(Math.random()*5)];
-            elements.inner.value = (Math.random() * 0.6 + 0.15).toFixed(2);
-            elements.overlap.value = (Math.random() * 1.0 + 0.5).toFixed(2);
-            elements.layers.value = Math.floor(Math.random() * 4) + 1;
-            elements.web.value = Math.floor(Math.random() * 8);
-            update();
+        function randomizeShapes() { 
+            elements.sides.value = [6, 8, 10, 12, 16][Math.floor(Math.random()*5)]; 
+            elements.inner.value = (Math.random() * 0.6 + 0.15).toFixed(2); 
+            elements.overlap.value = (Math.random() * 1.0 + 0.5).toFixed(2); 
+            elements.layers.value = Math.floor(Math.random() * 4) + 1; 
+            elements.web.value = Math.floor(Math.random() * 8); 
+            update(); 
         }
 
-        function randomizeSettings() {
-            elements.patternMode.value = Math.random() > 0.5 ? 'single' : 'multi';
-            elements.scale.value = (Math.random() * 2 + 0.5).toFixed(1);
-            elements.dash.value = Math.random() > 0.7 ? Math.floor(Math.random() * 15) + 5 : 0;
-            update();
+        function randomizeSettings() { 
+            elements.patternMode.value = Math.random() > 0.5 ? 'single' : 'multi'; 
+            elements.scale.value = (Math.random() * 2 + 0.5).toFixed(1); 
+            elements.dash.value = Math.random() > 0.7 ? Math.floor(Math.random() * 15) + 5 : 0; 
+            update(); 
         }
 
-        function randomizeAll() {
-            randomizeSettings();
-            randomizeShapes();
-            randomizeAllColors();
-            randomizeBackground();
+        function randomizeAll() { 
+            randomizeSettings(); 
+            randomizeShapes(); 
+            randomizeAllColors(); 
+            randomizeBackground(); 
         }
 
-        // ========= دوال الحفظ =========
+        // نظام الإشعارات المنبثقة
+        function showToast(msg) {
+            const existing = document.querySelector('.toast-notification'); 
+            if(existing) existing.remove();
+            
+            const t = document.createElement('div'); 
+            t.className = 'toast-notification'; 
+            t.innerHTML = `<span>✨</span> ${msg}`;
+            document.body.appendChild(t);
+            
+            setTimeout(() => { 
+                t.style.animation = 'toastSlideOut 0.3s ease forwards'; 
+                setTimeout(() => t.remove(), 300); 
+            }, 2800);
+        }
+
+        // دالة مساعدة موحدة وآمنة للتحميل
+        function triggerDownload(dataUrl, filename) {
+            const a = document.createElement('a');
+            a.href = dataUrl; 
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                if (document.body.contains(a)) document.body.removeChild(a);
+            }, 100);
+        }
+
+        // حفظ SVG
         function downloadSVG() {
             const svg = document.getElementById('svgCanvas').outerHTML;
-            const blob = new Blob(['<?xml version="1.0" encoding="utf-8"?>\r\n', svg], {type: 'image/svg+xml'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Pattern-Masterpiece-${Date.now()}.svg`;
-            a.click();
+            const blob = new Blob(['<?xml version="1.0" encoding="utf-8"?>\r\n', svg], {type: 'image/svg+xml;charset=utf-8'});
+            const a = document.createElement('a'); 
+            a.href = URL.createObjectURL(blob); 
+            a.download = `Pattern-Masterpiece-${Date.now()}.svg`; 
+            document.body.appendChild(a);
+            a.click(); 
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            showToast('✅ تم حفظ ملف الفكتور SVG بنجاح!');
         }
 
-        // ✅ ✅ ✅ الدالة المُصلحة لحفظ PNG مع الخلفية ✅ ✅ ✅
+        // نسخ كود التصميم
+        function copyToClipboard() {
+            const svgCode = document.getElementById('svgCanvas').outerHTML;
+            if (!navigator.clipboard) {
+                showToast('❌ المتصفح لا يدعم النسخ المباشر');
+                return;
+            }
+            navigator.clipboard.writeText(svgCode)
+                .then(() => showToast('✅ تم نسخ كود SVG بنجاح!'))
+                .catch(() => showToast('❌ فشل النسخ، يرجى التحديد يدوياً'));
+        }
+
+        /**
+         * ==========================================
+         * ✅✅✅ دالة حفظ PNG عالية الدقة (مُصلحة بـ Blob) ✅✅✅
+         * ==========================================
+         */
         function downloadPNG() {
+            showToast('⏳ جاري تجهيز الصورة PNG...');
             const svgElement = document.getElementById('svgCanvas');
-            const serializer = new XMLSerializer();
-            
-            // إنشاء نسخة مؤقتة من الـ SVG للحفظ
             const svgClone = svgElement.cloneNode(true);
             
-            // ✅ ضمان أن الخلفية موجودة في النسخة المُصدَّرة
-            const bgRect = svgClone.querySelector('#bgRect');
-            const textureOverlay = svgClone.querySelector('#textureOverlay');
-            
-            // إذا لم تكن الخلفية شفافة، نضمن أن لون الخلفية موجود
-            if (!elements.transBg.checked) {
-                bgRect.setAttribute('fill', elements.colBg.value);
-                
-                // ✅ إضافة الملمس كـ SVG مضمّن إذا كان مفعلًا
-                const textureIntensity = parseInt(elements.textureIntensity.value) / 10;
-                const bgType = elements.bgTexture.value;
-                
-                if (bgType !== 'solid' && textureIntensity > 0) {
-                    // نضمن أن طبقة الملمس مرئية في الصورة المحفوظة
-                    textureOverlay.setAttribute('opacity', textureIntensity);
-                    textureOverlay.setAttribute('fill', '#fff');
-                    textureOverlay.setAttribute('filter', 'url(#antiquePaper)');
-                }
-            } else {
-                // إذا كانت شفافة، نجعل الخلفية none
-                bgRect.setAttribute('fill', 'none');
-                textureOverlay.setAttribute('opacity', '0');
-            }
-            
-            // ✅ إزالة الأنيميشن مؤقتاً للحفظ (لأن الـ canvas لا يدعم CSS animation)
             const patternGroup = svgClone.querySelector('#patternGroup');
             if (patternGroup) {
                 patternGroup.style.animation = 'none';
                 patternGroup.style.transform = 'none';
+                patternGroup.classList.remove('glow-effect', 'shadow-3d');
             }
             
-            let svgString = serializer.serializeToString(svgClone);
+            const bgRect = svgClone.querySelector('#bgRect');
+            const textureOverlay = svgClone.querySelector('#textureOverlay');
+            const isTransparent = elements.transBg.checked;
             
-            // ✅ ترميز الـ SVG بشكل صحيح للـ Blob
-            svgString = `<?xml version="1.0" encoding="UTF-8"?>\n${svgString}`;
+            if (isTransparent) {
+                bgRect.setAttribute('fill', 'none');
+                if (textureOverlay) textureOverlay.remove();
+            } else {
+                bgRect.setAttribute('fill', elements.colBg.value);
+                const textureIntensity = parseInt(elements.textureIntensity.value) / 10;
+                const bgType = elements.bgTexture.value;
+                
+                if (bgType !== 'solid' && textureIntensity > 0 && textureOverlay) {
+                    textureOverlay.setAttribute('opacity', textureIntensity);
+                    textureOverlay.setAttribute('fill', '#fff');
+                    textureOverlay.setAttribute('filter', 'url(#antiquePaper)');
+                } else if (textureOverlay) {
+                    textureOverlay.remove();
+                }
+            }
+
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgClone);
+            const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
             
             const img = new Image();
-            const svgBlob = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-            const url = URL.createObjectURL(svgBlob);
-
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                const targetSize = 2000; 
-                canvas.width = targetSize;
-                canvas.height = targetSize;
+                const targetSize = 3000;
+                canvas.width = targetSize; canvas.height = targetSize;
                 const ctx = canvas.getContext('2d');
-
-                // ✅ رسم الصورة على الـ Canvas مع ضمان جودة عالية
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
-                ctx.drawImage(img, 0, 0, targetSize, targetSize);
-
-                const pngData = canvas.toDataURL("image/png", 1.0); // ✅ جودة 100%
-                const a = document.createElement('a');
-                a.href = pngData;
-                a.download = `Pattern-Masterpiece-${Date.now()}.png`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-
-                URL.revokeObjectURL(url);
                 
-                // ✅ إشعار نجاح
-                showToast('✅ تم حفظ الصورة بنجاح مع الخلفية!');
+                if (isTransparent) ctx.clearRect(0, 0, targetSize, targetSize);
+                ctx.drawImage(img, 0, 0, targetSize, targetSize);
+                
+                if (!isTransparent) {
+                    const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
+                    const data = imageData.data;
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, data[i] * 1.04);
+                        data[i+1] = Math.min(255, data[i+1] * 1.04);
+                        data[i+2] = Math.min(255, data[i+2] * 1.04);
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                
+                triggerDownload(canvas.toDataURL('image/png', 1.0), `Pattern-Masterpiece-${Date.now()}.png`);
+                canvas.remove();
+                URL.revokeObjectURL(url);
+                showToast('✅ تم حفظ الصورة PNG بدقة عالية وألوان محسّنة!');
             };
             
-            img.onerror = function() {
-                console.error('فشل تحميل صورة SVG');
-                showToast('❌ حدث خطأ أثناء الحفظ، حاول مرة أخرى');
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                showToast('❌ تعذر تحميل بيانات الصورة PNG');
             };
             
             img.src = url;
         }
 
-        // ✨ دالة إشعار صغير
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed; bottom: 20px; right: 20px;
-                background: #1e293b; color: white; padding: 12px 24px;
-                border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                z-index: 10000; font-weight: 500; animation: slideIn 0.3s ease;
-            `;
-            toast.innerText = message;
-            document.body.appendChild(toast);
+        /**
+         * ==========================================
+         * ✅✅✅ دالة حفظ JPG المطابقة للألوان (مُصلحة تماماً) ✅✅✅
+         * ==========================================
+         */
+        function downloadJPG() {
+            showToast('⏳ جاري تحويل التصميم لـ JPG عالي الجودة...');
+            const svgElement = document.getElementById('svgCanvas');
+            const svgClone = svgElement.cloneNode(true);
             
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 2500);
+            const patternGroup = svgClone.querySelector('#patternGroup');
+            if (patternGroup) {
+                patternGroup.style.animation = 'none';
+                patternGroup.style.transform = 'none';
+                patternGroup.classList.remove('glow-effect', 'shadow-3d');
+            }
+            
+            const bgRect = svgClone.querySelector('#bgRect');
+            const textureOverlay = svgClone.querySelector('#textureOverlay');
+            
+            // JPG لا يدعم الشفافية، لذا نضع خلفية بيضاء إذا كان الخيار مفعلاً
+            const bgColor = elements.transBg.checked ? '#ffffff' : elements.colBg.value;
+            bgRect.setAttribute('fill', bgColor);
+            
+            const textureIntensity = parseInt(elements.textureIntensity.value) / 10;
+            const bgType = elements.bgTexture.value;
+            
+            if (bgType !== 'solid' && textureIntensity > 0 && textureOverlay) {
+                textureOverlay.setAttribute('opacity', textureIntensity);
+                textureOverlay.setAttribute('fill', bgColor);
+                textureOverlay.setAttribute('filter', 'url(#antiquePaper)');
+            } else if (textureOverlay) {
+                textureOverlay.remove();
+            }
+
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgClone);
+            
+            // ✅ استخدام Blob بدلاً من DataURI لتجنب أخطاء التحميل وحجم النص الكبير
+            const blob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const targetSize = 4000; // دقة فائقة
+                canvas.width = targetSize;
+                canvas.height = targetSize;
+                const ctx = canvas.getContext('2d');
+                
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                
+                // رسم الخلفية أولاً لضمان عدم وجود مناطق شفافة في JPG
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, targetSize, targetSize);
+                
+                ctx.drawImage(img, 0, 0, targetSize, targetSize);
+                
+                // ✅ تصحيح ذكي للألوان ليطابق شاشة العرض تماماً
+                const imageData = ctx.getImageData(0, 0, targetSize, targetSize);
+                const data = imageData.data;
+                for (let i = 0; i < data.length; i += 4) {
+                    // تعزيز طفيف ومتعادل يعوض فقدان التشبع عند التحويل لـ Raster
+                    data[i]   = Math.min(255, data[i]   * 1.025);
+                    data[i+1] = Math.min(255, data[i+1] * 1.025);
+                    data[i+2] = Math.min(255, data[i+2] * 1.025);
+                }
+                ctx.putImageData(imageData, 0, 0);
+                
+                triggerDownload(canvas.toDataURL('image/jpeg', 0.98), `Pattern-Masterpiece-HQ-${Date.now()}.jpg`);
+                canvas.remove();
+                URL.revokeObjectURL(url);
+                showToast('🌞 تم حفظ الصورة JPG بجودة مطابقة للشاشة تماماً!');
+            };
+            
+            img.onerror = (e) => {
+                console.error("JPG Export Error:", e);
+                URL.revokeObjectURL(url);
+                showToast('❌ تعذر تحميل بيانات الصورة JPG');
+            };
+            
+            img.src = url;
         }
 
-        // إضافة أنيميشن للإشعارات
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100px); opacity: 0; } }
-        `;
-        document.head.appendChild(style);
-
-        // ✨ نسخ كود التصميم ✨
-        function copyToClipboard() {
-            const svgCode = document.getElementById('svgCanvas').outerHTML;
-            navigator.clipboard.writeText(svgCode).then(() => {
-                showToast('✅ تم نسخ كود التصميم بنجاح!');
-            }).catch(err => {
-                console.error('فشل النسخ: ', err);
-                showToast('❌ حدث خطأ أثناء النسخ');
-            });
-        }
-
-        // ========= معالجة أحداث الواجهة =========
-        // تحديث القيم عند تغيير المدخلات
+        /**
+         * ==========================================
+         * ربط الأحداث وتهيئة التطبيق
+         * ==========================================
+         */
         inputs.forEach(el => {
             el.addEventListener('input', function() {
-                // إظهار/إخفاء عناصر التحكم للتأثيرات
-                if (el.id === 'enableGlow') {
-                    document.getElementById('glowRow').style.display = el.checked ? 'flex' : 'none';
-                    document.getElementById('glowIntensity').style.display = el.checked ? 'block' : 'none';
+                if (el.id === 'enableGlow') { 
+                    document.getElementById('glowRow').style.display = el.checked ? 'flex' : 'none'; 
+                    document.getElementById('glowIntensity').style.display = el.checked ? 'block' : 'none'; 
                 }
-                if (el.id === 'enableShadow') {
-                    document.getElementById('shadowRow').style.display = el.checked ? 'flex' : 'none';
-                    document.getElementById('shadowDepth').style.display = el.checked ? 'block' : 'none';
+                if (el.id === 'enableShadow') { 
+                    document.getElementById('shadowRow').style.display = el.checked ? 'flex' : 'none'; 
+                    document.getElementById('shadowDepth').style.display = el.checked ? 'block' : 'none'; 
                 }
-                if (el.id === 'enableAnimation') {
-                    document.getElementById('animRow').style.display = el.checked ? 'flex' : 'none';
-                    document.getElementById('rotationSpeed').style.display = el.checked ? 'block' : 'none';
+                if (el.id === 'enableAnimation') { 
+                    document.getElementById('animRow').style.display = el.checked ? 'flex' : 'none'; 
+                    document.getElementById('rotationSpeed').style.display = el.checked ? 'block' : 'none'; 
                 }
-                
-                // تطبيق ثيم الألوان عند التغيير
-                if (el.id === 'colorTheme') {
-                    applyColorTheme(el.value);
-                }
-                
+                if (el.id === 'colorTheme') applyColorTheme(el.value);
                 update();
             });
             el.addEventListener('change', update);
         });
 
-        // تحديث أولي
-        update();
-        
-        // ✨ إضافة مؤشر تحميل سريع ✨
-        window.addEventListener('load', () => {
-            document.querySelector('.status-indicator').style.background = '#10b981';
-            setTimeout(() => {
-                document.querySelector('.status-indicator').style.animation = 'none';
-            }, 3000);
-        });
     </script>
 </body>
 </html>
