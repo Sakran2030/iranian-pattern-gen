@@ -3,1522 +3,2181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المُولد الشامل للنقوش والزخارف الإسلامية المتقدمة</title>
+    <title>مولد النقوش الإسلامية | Islamic Pattern Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ============================================
-           المتغيرات الأساسية والإعدادات العامة
-           ============================================ */
         :root {
-            --primary: #1e293b;
-            --accent: #b48608;
-            --bg: #f1f5f9;
+            --primary: #1a1a2e;
+            --primary-light: #16213e;
+            --accent: #e6b422;
+            --accent-light: #f4c842;
+            --accent-dark: #c9a020;
+            --bg: #f0f4f8;
+            --bg-dark: #e2e8f0;
             --panel: #ffffff;
-            --blue: #063970;
-            --teal: #178582;
-            --purple: #7c3aed;
-            --red: #dc2626;
-            --glow-color: rgba(180, 134, 8, 0.4); /* تخفيف التوهج */
-            --radius: 15px;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --panel-dark: #f8fafc;
+            --teal: #0d9488;
+            --teal-light: #14b8a6;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="dark"] {
+            --primary: #f1f5f9;
+            --primary-light: #e2e8f0;
+            --bg: #0f172a;
+            --bg-dark: #1e293b;
+            --panel: #1e293b;
+            --panel-dark: #334155;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, 'Noto Sans Arabic', Arial, sans-serif;
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
-            color: #333;
+            color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
-            transition: background 0.5s ease;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* ============================================
-           العناوين والهيكل الرئيسي للتطبيق
-           ============================================ */
-        .app-header {
-            text-align: center;
-            margin: 30px auto 20px;
-            padding: 0 20px;
-        }
-
-        h1 {
-            color: var(--primary);
-            font-weight: 900;
-            border-bottom: 4px solid var(--accent);
-            padding-bottom: 15px;
-            font-size: 2.2rem;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-            display: inline-block;
-            position: relative;
-            letter-spacing: 1px;
-        }
-
-        h1::after {
-            content: '✨';
-            position: absolute;
-            left: -40px;
-            top: 0;
-            animation: sparkle 2s infinite;
-        }
-
-        h1::before {
-            content: '✨';
-            position: absolute;
-            right: -40px;
-            top: 0;
-            animation: sparkle 2s infinite 1s;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.7); }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
+        /* ===== الهيدر المحسّن ===== */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 15px 20px;
             color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #a7f3d0;
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .app-container {
-            display: grid;
-            grid-template-columns: 500px 1fr;
-            gap: 30px;
-            max-width: 1800px;
-            margin: 0 auto;
-            padding: 0 25px 50px;
-            align-items: start;
-        }
-
-        /* ============================================
-           لوحة التحكم الجانبية الرئيسية
-           ============================================ */
-        .controls-wrapper {
-            background: var(--panel);
-            padding: 25px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            height: 88vh;
-            overflow-y: auto;
-            border: 1px solid #cbd5e1;
-            position: relative;
-        }
-
-        .controls-wrapper::-webkit-scrollbar { width: 7px; }
-        .controls-wrapper::-webkit-scrollbar-track { background: #f8fafc; }
-        .controls-wrapper::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), #92700a); border-radius: 4px; }
-
-        /* ============================================
-           بطاقة المعاينة الرئيسية
-           ============================================ */
-        .preview-card {
-            background: #fff;
-            padding: 15px;
-            border-radius: var(--radius);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); /* تخفيف ظل بطاقة المعاينة */
-            height: 88vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: sticky;
-            top: 20px;
-            overflow: hidden;
-            background-image:
-                linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
-                linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
-                linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
-            background-size: 24px 24px;
-            background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s ease;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
         }
 
-        /* ============================================
-           عناوين الأقسام داخل لوحة التحكم
-           ============================================ */
-        .section-title {
-            font-size: 1.05rem;
-            color: white;
-            background: linear-gradient(135deg, var(--primary) 0%, #334155 100%);
-            padding: 12px 18px;
-            border-radius: 10px;
-            margin: 28px 0 16px 0;
-            font-weight: 700;
-            border-right: 5px solid var(--accent);
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 12px;
         }
 
-        .section-title::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .section-title:hover::before { transform: translateX(100%); }
-        .section-title:hover { transform: translateX(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-
-        .control-group {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 18px;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 16px;
-            transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px rgba(230, 180, 34, 0.4);
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .logo-text small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .h-btn {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .h-btn:active {
+            transform: scale(0.95);
+            background: var(--accent);
+        }
+
+        .h-btn.accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border: none;
+            font-weight: 600;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .quick-btn:active {
+            background: var(--accent);
+            transform: scale(0.95);
+        }
+
+        /* ===== المعاينة المحسّنة ===== */
+        .preview-section {
+            padding: 12px;
+            margin: 12px;
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-title span {
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+        }
+
+        .preview-box {
+            width: 100%;
+            aspect-ratio: 1;
+            max-height: 42vh;
+            margin: 0 auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+        }
+
+        .preview-box.checker {
+            background-image: 
+                linear-gradient(45deg, #d1d5db 25%, transparent 25%),
+                linear-gradient(-45deg, #d1d5db 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #d1d5db 75%),
+                linear-gradient(-45deg, transparent 75%, #d1d5db 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+        }
+
+        [data-theme="dark"] .preview-box.checker {
+            background-image: 
+                linear-gradient(45deg, #475569 25%, transparent 25%),
+                linear-gradient(-45deg, #475569 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #475569 75%),
+                linear-gradient(-45deg, transparent 75%, #475569 75%);
+        }
+
+        .preview-box svg { width: 100%; height: 100%; display: block; }
+
+        .preview-box.fullscreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            z-index: 500;
+            border-radius: 0;
+            border: none;
+        }
+
+        .preview-box.mask-circle { border-radius: 50%; }
+        .preview-box.mask-octagon { clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); }
+        .preview-box.mask-hexagon { clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+        .preview-box.mask-star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+
+        .zoom-bar {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            background: rgba(0,0,0,0.75);
+            padding: 6px 12px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-btn {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .zoom-btn:active { background: var(--accent); color: white; }
+
+        .zoom-val {
+            color: white;
+            min-width: 45px;
+            text-align: center;
+            line-height: 28px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .preview-btns {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== التبويبات المحسّنة ===== */
+        .tabs-wrap {
+            margin: 0 12px;
+            background: var(--panel);
+            border-radius: var(--radius) var(--radius) 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
             overflow: hidden;
         }
 
-        .control-group:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            border-color: var(--accent);
-            transform: translateY(-2px);
+        .tabs {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            padding: 0;
+            background: var(--bg-dark);
+        }
+
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            flex: 1;
+            min-width: fit-content;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .tab:hover { background: var(--panel); }
+
+        .tab.active {
+            background: var(--panel);
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* ===== لوحة التحكم المحسّنة ===== */
+        .controls {
+            background: var(--panel);
+            margin: 0 12px 12px;
+            padding: 15px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            border: 1px solid var(--border);
+            border-top: none;
+            max-height: 38vh;
+            overflow-y: auto;
+        }
+
+        .controls::-webkit-scrollbar { width: 4px; }
+        .controls::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: slideUp 0.3s ease; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: var(--bg);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .section:last-child { margin-bottom: 0; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .section h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section h3 .icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
         }
 
         .row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
+            margin-bottom: 10px;
+            gap: 10px;
         }
 
-        label {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: #475569;
+        .row:last-child { margin-bottom: 0; }
+
+        .row label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-light);
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
+            gap: 6px;
         }
 
-        .val-badge {
-            background: linear-gradient(135deg, var(--primary), #334155);
+        .row .val {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-family: 'Courier New', monospace;
-            min-width: 50px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 40px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] .row .val {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
         }
 
         input[type="range"] {
             width: 100%;
-            accent-color: var(--teal);
-            cursor: pointer;
-            margin-top: 6px;
-            touch-action: manipulation;
             height: 6px;
             border-radius: 3px;
-            background: #e2e8f0;
+            background: var(--border);
             appearance: none;
+            margin-top: 8px;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, var(--teal), #0d9488);
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(23, 133, 130, 0.4);
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.4);
             transition: transform 0.2s;
         }
 
-        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+        }
 
         input[type="color"] {
-            border: 2px solid #cbd5e1;
-            width: 50px;
+            width: 42px;
             height: 38px;
-            border-radius: 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
             cursor: pointer;
-            padding: 0;
-            background: transparent;
-            transition: all 0.2s;
+            padding: 3px;
+            background: var(--panel);
         }
 
-        input[type="color"]:hover { transform: scale(1.15); border-color: var(--accent); box-shadow: 0 0 10px rgba(180, 134, 8, 0.2); }
+        input[type="color"]:hover { border-color: var(--accent); }
 
         select {
-            padding: 9px 12px;
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
+            background: var(--panel);
+            color: var(--text);
+            font-size: 0.9rem;
             font-family: inherit;
-            font-weight: 600;
-            font-size: 15px;
-            background: white;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
         }
 
-        select:hover { border-color: var(--teal); }
+        select:focus { outline: none; border-color: var(--accent); }
 
-        .btn-rand-mini {
-            background: #e2e8f0;
-            border: 1px solid #cbd5e1;
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--teal);
+            cursor: pointer;
+        }
+
+        input[type="text"], input[type="number"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 1.2rem;
-            touch-action: manipulation;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            background: var(--panel);
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
         }
 
-        .btn-rand-mini:hover {
-            background: var(--accent);
-            color: white;
-            transform: scale(1.15) rotate(15deg);
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
             border-color: var(--accent);
         }
 
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
+        input[type="file"] {
+            font-size: 0.8rem;
+            color: var(--text-light);
         }
 
-        button {
-            padding: 16px;
+        /* ===== الأزرار المحسّنة ===== */
+        .btn {
+            padding: 12px 18px;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
             font-weight: 700;
-            font-size: 0.92rem;
-            transition: all 0.25s ease;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
-            touch-action: manipulation;
-            letter-spacing: 0.5px;
+            font-family: inherit;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
         }
 
-        button::after {
+        .btn::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.2);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.4s, height 0.4s;
+            transition: width 0.3s, height 0.3s;
         }
 
-        button:active::after { width: 300px; height: 300px; }
+        .btn:active::after { width: 200px; height: 200px; }
+        .btn:active { transform: scale(0.98); }
 
-        .btn-shapes { background: linear-gradient(135deg, #178582, #0d9488); color: white; box-shadow: 0 4px 10px rgba(23, 133, 130, 0.2); }
-        .btn-colors { background: linear-gradient(135deg, #063970, #044b8a); color: white; box-shadow: 0 4px 10px rgba(6, 57, 112, 0.2); }
-        .btn-all { background: linear-gradient(135deg, var(--primary), #0f172a); color: white; margin-top: 16px; font-size: 1.12rem; padding: 20px; border: 2px solid var(--accent); box-shadow: 0 6px 15px rgba(30, 41, 59, 0.15); }
+        .btn-teal { background: linear-gradient(135deg, var(--teal), var(--teal-light)); }
+        .btn-accent { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: var(--primary); }
+        .btn-success { background: linear-gradient(135deg, var(--success), #059669); }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); }
+        .btn-purple { background: linear-gradient(135deg, var(--purple), #7c3aed); }
+        .btn-pink { background: linear-gradient(135deg, var(--pink), #db2777); }
+        .btn-blue { background: linear-gradient(135deg, var(--blue), #2563eb); }
+        .btn-dark { background: linear-gradient(135deg, #1e293b, #0f172a); }
 
-        .btn-save-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .btn-save-svg { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
-        .btn-save-png { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2); }
-        .btn-save-jpg { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
-        .btn-copy { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; box-shadow: 0 4px 10px rgba(240, 147, 251, 0.2); }
+        .btn-sm { padding: 8px 14px; font-size: 0.8rem; }
 
-        button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); filter: brightness(1.08); }
-        button:active { transform: translateY(-1px); }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .btn-full { grid-column: span 2; }
 
-        /* ============================================
-           تأثيرات الانميشن والحركات البصرية
-           ============================================ */
-        .glow-effect { filter: drop-shadow(0 0 8px var(--glow-color)) drop-shadow(0 0 12px var(--glow-color)); transition: filter 0.3s ease; }
-        .shadow-3d { filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.25)) drop-shadow(-1px -1px 2px rgba(255,255,255,0.4)); }
-
-        .anim-rotate { animation: rotatePattern var(--anim-speed, 30s) linear infinite; transform-origin: center; }
-        .anim-pulse { animation: pulsePattern var(--anim-speed, 3s) ease-in-out infinite; transform-origin: center; }
-        .anim-breathe { animation: breathePattern var(--anim-speed, 4s) ease-in-out infinite; transform-origin: center; }
-        .anim-wave { animation: wavePattern var(--anim-speed, 5s) ease-in-out infinite; transform-origin: center; }
-        .anim-spiral { animation: spiralPattern var(--anim-speed, 8s) ease-in-out infinite; transform-origin: center; }
-        .anim-float { animation: floatPattern var(--anim-speed, 6s) ease-in-out infinite; transform-origin: center; }
-        .anim-bounce { animation: bouncePattern var(--anim-speed, 2s) cubic-bezier(0.36, 0, 0.66, -0.56) infinite alternate; transform-origin: center; }
-        .anim-morph { animation: morphPattern var(--anim-speed, 6s) ease-in-out infinite; transform-origin: center; }
-        .anim-glitch { animation: glitchPattern var(--anim-speed, 0.5s) steps(2) infinite; transform-origin: center; }
-        .anim-zoom { animation: zoomPattern var(--anim-speed, 4s) ease-in-out infinite; transform-origin: center; }
-        .anim-kaleidoscope { animation: kaleidoPattern var(--anim-speed, 10s) linear infinite; transform-origin: center; }
-        .anim-wobble { animation: wobblePattern var(--anim-speed, 3s) ease-in-out infinite; transform-origin: center; }
-        .anim-shake { animation: shakePattern var(--anim-speed, 0.8s) ease-in-out infinite; transform-origin: center; }
-        .anim-fade { animation: fadePattern var(--anim-speed, 4s) ease-in-out infinite; transform-origin: center; }
-
-        @keyframes rotatePattern { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes pulsePattern { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.85; } }
-        @keyframes breathePattern { 0%, 100% { transform: scale(0.95); opacity: 0.9; } 50% { transform: scale(1.05); opacity: 1; } }
-        @keyframes wavePattern { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-10px) rotate(2deg); } 50% { transform: translateY(0) rotate(0deg); } 75% { transform: translateY(10px) rotate(-2deg); } }
-        @keyframes spiralPattern { 0% { transform: rotate(0deg) scale(0.8); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(0.8); } }
-        @keyframes floatPattern { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 25% { transform: translate(8px, -12px) rotate(3deg); } 50% { transform: translate(-5px, -5px) rotate(-2deg); } 75% { transform: translate(-10px, 8px) rotate(1deg); } }
-        @keyframes bouncePattern { 0% { transform: scale(0.9) translateY(10px); } 100% { transform: scale(1.1) translateY(-10px); } }
-        @keyframes morphPattern { 0%, 100% { transform: rotate(0deg) scale(1); border-radius: 0; } 25% { transform: rotate(90deg) scale(1.1); border-radius: 20px; } 50% { transform: rotate(180deg) scale(0.9); border-radius: 50px; } 75% { transform: rotate(270deg) scale(1.05); border-radius: 20px; } }
-        @keyframes glitchPattern { 0% { transform: translate(0); filter: hue-rotate(0deg); } 20% { transform: translate(-3px, 3px); filter: hue-rotate(90deg); } 40% { transform: translate(3px, -3px); filter: hue-rotate(180deg); } 60% { transform: translate(-3px, -3px); filter: hue-rotate(270deg); } 80% { transform: translate(3px, 3px); filter: hue-rotate(360deg); } 100% { transform: translate(0); filter: hue-rotate(0deg); } }
-        @keyframes zoomPattern { 0%, 100% { transform: scale(0.85); } 50% { transform: scale(1.15); } }
-        @keyframes kaleidoPattern { 0% { transform: rotate(0deg) scale(1); filter: hue-rotate(0deg); } 50% { transform: rotate(180deg) scale(0.9); filter: hue-rotate(180deg); } 100% { transform: rotate(360deg) scale(1); filter: hue-rotate(360deg); } }
-        @keyframes wobblePattern { 0% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } 100% { transform: rotate(-3deg); } }
-        @keyframes shakePattern { 0%, 100% { transform: translateX(0); } 10% { transform: translateX(-5px) rotate(-1deg); } 30% { transform: translateX(5px) rotate(1deg); } 50% { transform: translateX(-5px); } 70% { transform: translateX(5px) rotate(-1deg); } 90% { transform: translateX(-3px); } }
-        @keyframes fadePattern { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-        /* خلفيات معتقة وملمس */
-        .texture-aged-paper { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E"); }
-        .texture-stone-wall { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='brick' x='0' y='0' width='20' height='10' patternUnits='userSpaceOnUse'%3E%3Crect x='0' y='0' width='19' height='9' fill='none' stroke='%23999' stroke-width='0.5'/%3E%3C/pattern%3E%3Crect width='100' height='100' fill='url(%23brick)'/%3E%3C/svg%3E"); }
-        .texture-fabric { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpattern id='weave' x='0' y='0' width='4' height='4' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 2h4M2 0v4' stroke='%23ccc' stroke-width='0.5'/%3E%3C/pattern%3E%3C/svg%3E"); }
-
-        svg { width: 100%; height: 100%; display: block; }
-        .texture-layer { pointer-events: none; mix-blend-mode: multiply; }
-
-        /* ============================================
-           الجولة التعليمية التفاعلية - مُحسّنة
-           ============================================ */
-        .tour-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 9998; backdrop-filter: blur(8px); opacity: 0; visibility: hidden; transition: all 0.4s ease; display: flex; align-items: center; justify-content: center; }
-        .tour-overlay.active { opacity: 1; visibility: visible; }
-        
-        .tour-modal { 
-            position: relative; 
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); 
-            padding: 35px 30px; 
-            border-radius: 24px; 
-            z-index: 9999; 
-            width: 92%; 
-            max-width: 520px; 
-            text-align: center; 
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 0 3px var(--accent); 
-            opacity: 0; 
-            visibility: hidden; 
-            transform: translateY(30px) scale(0.95);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid rgba(180, 134, 8, 0.3);
+        .mini-btn {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text);
+            transition: all 0.2s;
         }
-        .tour-modal.active { transform: translateY(0) scale(1); opacity: 1; visibility: visible; }
-        
-        .tour-title { 
-            color: var(--primary); 
-            font-size: 1.7rem; 
-            margin-bottom: 18px; 
-            font-weight: 900; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+
+        .mini-btn:active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        /* ===== التأثيرات ===== */
+        .glow { filter: drop-shadow(0 0 10px rgba(230, 180, 34, 0.6)); }
+        .shadow-3d { filter: drop-shadow(3px 5px 8px rgba(0,0,0,0.35)); }
+        .emboss { filter: drop-shadow(1px 1px 0 rgba(255,255,255,0.6)) drop-shadow(-1px -1px 0 rgba(0,0,0,0.25)); }
+
+        .anim-rotate { animation: aRotate var(--spd, 20s) linear infinite; transform-origin: center; }
+        .anim-pulse { animation: aPulse var(--spd, 3s) ease-in-out infinite; transform-origin: center; }
+        .anim-breathe { animation: aBreathe var(--spd, 4s) ease-in-out infinite; transform-origin: center; }
+        .anim-float { animation: aFloat var(--spd, 5s) ease-in-out infinite; transform-origin: center; }
+        .anim-bounce { animation: aBounce var(--spd, 2s) ease-in-out infinite; transform-origin: center; }
+        .anim-wave { animation: aWave var(--spd, 4s) ease-in-out infinite; transform-origin: center; }
+        .anim-spin { animation: aSpin var(--spd, 8s) linear infinite; transform-origin: center; }
+        .anim-glow { animation: aGlow var(--spd, 3s) ease-in-out infinite; transform-origin: center; }
+        .anim-shake { animation: aShake var(--spd, 0.5s) ease-in-out infinite; transform-origin: center; }
+        .anim-zoom { animation: aZoom var(--spd, 4s) ease-in-out infinite; transform-origin: center; }
+
+        @keyframes aRotate { to { transform: rotate(360deg); } }
+        @keyframes aPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        @keyframes aBreathe { 0%,100% { transform: scale(0.96); opacity: 0.9; } 50% { transform: scale(1.04); opacity: 1; } }
+        @keyframes aFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes aBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+        @keyframes aWave { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+        @keyframes aSpin { to { transform: rotate(-360deg); } }
+        @keyframes aGlow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.4) drop-shadow(0 0 20px gold); } }
+        @keyframes aShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        @keyframes aZoom { 0%,100% { transform: scale(0.88); } 50% { transform: scale(1.12); } }
+
+        /* ===== النوافذ المنبثقة المحسّنة ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: var(--panel);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--accent);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .modal-head {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-head h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
-        
-        .tour-text { 
-            margin-bottom: 28px; 
-            line-height: 1.8; 
-            color: #475569; 
-            font-size: 1.1rem;
-            text-align: right;
-        }
-        
-        .tour-steps-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 25px;
-        }
-        
-        .tour-step-dot {
-            width: 10px;
-            height: 10px;
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: #cbd5e1;
-            transition: all 0.3s;
-        }
-        
-        .tour-step-dot.active {
-            background: var(--accent);
-            transform: scale(1.3);
-            box-shadow: 0 0 10px rgba(180, 134, 8, 0.4);
-        }
-        
-        .tour-btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .tour-btn { 
-            background: var(--teal); 
-            color: white; 
-            border: none; 
-            padding: 14px 28px; 
-            border-radius: 12px; 
-            font-size: 1rem; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: all 0.25s;
-            min-width: 120px;
-            box-shadow: 0 4px 12px rgba(23, 133, 130, 0.2);
-        }
-        .tour-btn:hover { 
-            background: #14b8a6; 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(23, 133, 130, 0.3);
-        }
-        .tour-btn-skip { 
-            background: #e2e8f0; 
-            color: #475569; 
-            box-shadow: none;
-        }
-        .tour-btn-skip:hover { 
-            background: #cbd5e1; 
-            transform: translateY(-1px);
-        }
-        
-        .tour-progress {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-top: 15px;
-            font-weight: 500;
-        }
-        
-        .highlight-tour { 
-            position: relative; 
-            z-index: 10000 !important; 
-            background: white !important; 
-            box-shadow: 0 0 0 4px var(--accent), 0 0 0 8px rgba(180, 134, 8, 0.15), 0 15px 40px rgba(0,0,0,0.3) !important; 
-            border-radius: 14px; 
-            pointer-events: none;
-            animation: pulse-highlight 2s infinite;
-        }
-        
-        @keyframes pulse-highlight {
-            0%, 100% { box-shadow: 0 0 0 4px var(--accent), 0 0 0 8px rgba(180, 134, 8, 0.15), 0 15px 40px rgba(0,0,0,0.3); }
-            50% { box-shadow: 0 0 0 6px var(--accent), 0 0 0 12px rgba(180, 134, 8, 0.25), 0 20px 50px rgba(0,0,0,0.4); }
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        /* ============================================
-           نافذة التعليمات السريعة
-           ============================================ */
-        .intro-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-            padding: 40px 35px;
-            border-radius: 24px;
-            z-index: 10001;
-            width: 95%;
-            max-width: 600px;
+        .modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* ===== نافذة الترحيب والتعليمات ===== */
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(230, 180, 34, 0.4);
+            animation: bounceIn 1s ease infinite alternate;
+        }
+
+        @keyframes bounceIn {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        .welcome-title {
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3), 0 0 0 4px var(--accent);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px solid var(--accent);
-        }
-        
-        .intro-modal.active {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .intro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            z-index: 10000;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .intro-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .intro-logo {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        .intro-title {
+            font-size: 1.4rem;
+            font-weight: 800;
             color: var(--primary);
-            font-size: 1.9rem;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.95rem;
             margin-bottom: 20px;
-            font-weight: 900;
-            line-height: 1.4;
         }
-        
-        .intro-desc {
-            color: #475569;
-            font-size: 1.15rem;
-            line-height: 1.9;
-            margin-bottom: 30px;
-            text-align: right;
-            padding: 0 10px;
-        }
-        
-        .intro-features {
+
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 25px 0;
-            text-align: right;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
         }
-        
-        .intro-feature {
+
+        .feature-item {
+            background: var(--bg);
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.95rem;
-            color: #334155;
-            font-weight: 500;
+            border: 1px solid var(--border);
         }
-        
-        .intro-feature::before {
-            content: '✓';
-            color: var(--teal);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .intro-btn-group {
+
+        .feature-item .icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--teal), var(--teal-light));
+            border-radius: 8px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .intro-btn-start {
-            background: linear-gradient(135deg, var(--teal), #0d9488);
+            font-size: 0.85rem;
             color: white;
-            border: none;
-            padding: 16px 35px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 6px 20px rgba(23, 133, 130, 0.3);
-            min-width: 180px;
-        }
-        
-        .intro-btn-start:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(23, 133, 130, 0.5);
-            filter: brightness(1.05);
-        }
-        
-        .intro-btn-skip {
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: white;
-            border: none;
-            padding: 16px 35px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 180px;
-        }
-        
-        .intro-btn-skip:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
         }
 
-        /* ============================================
-           الإشعارات المنبثقة المتقدمة - تم الإصلاح
-           ============================================ */
-        .toast-notification {
-            position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%);
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white; padding: 16px 32px; border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* تخفيف الظل القوي */
-            z-index: 10000;
-            font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 12px;
-            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            max-width: 90%;
+        .tip-box {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid var(--warning);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tip-box h4 {
+            color: #92400e;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-box p {
+            color: #78350f;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        [data-theme="dark"] .tip-box {
+            background: linear-gradient(135deg, #422006, #713f12);
+        }
+
+        [data-theme="dark"] .tip-box h4,
+        [data-theme="dark"] .tip-box p {
+            color: #fde68a;
+        }
+
+        /* ===== دليل الأزرار ===== */
+        .guide-section {
+            margin-bottom: 20px;
+        }
+
+        .guide-section h4 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .guide-item .icon {
+            width: 40px;
+            height: 40px;
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .guide-item .content h5 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .guide-item .content p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* ===== المعرض ===== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .gallery-item:active {
+            transform: scale(0.95);
+            border-color: var(--accent);
+        }
+
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        .gallery-item-actions {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            display: flex;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding-top: 20px;
+        }
+
+        .gallery-item-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* ===== القوالب ===== */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .template-card {
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 12px;
             text-align: center;
-            pointer-events: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
         }
-        @keyframes toastIn { from { transform: translate(-50%, 120px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
-        @keyframes toastOut { from { transform: translate(-50%, 0); opacity: 1; } to { transform: translate(-50%, 120px); opacity: 0; } }
 
-        /* ============================================
-           توافقية الجوال والأجهزة الصغيرة
-           ============================================ */
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; gap: 20px; padding: 0 15px 30px; }
-            .controls-wrapper { height: auto; max-height: 60vh; padding: 20px; }
-            .preview-card { position: relative; top: 0; height: 50vh; margin-bottom: 25px; }
-            h1 { font-size: 1.5rem; }
-            h1::before, h1::after { display: none; }
-            .btn-all { font-size: 1rem; padding: 16px; }
-            .tour-modal { position: fixed; top: auto; bottom: 20px; left: 50%; transform: translate(-50%, 20px) scale(0.9); }
-            .tour-modal.active { transform: translate(-50%, 0) scale(1); }
-            .app-header { margin-top: 15px; }
-            .intro-features { grid-template-columns: 1fr; }
-            .intro-modal { padding: 30px 25px; }
-            .intro-title { font-size: 1.6rem; }
-            .intro-desc { font-size: 1.05rem; }
+        .template-card:active { transform: scale(0.97); }
+        .template-card.selected { border-color: var(--accent); background: rgba(230, 180, 34, 0.1); }
+
+        .template-card svg { width: 100%; height: 70px; margin-bottom: 8px; }
+        .template-card span { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+
+        /* ===== الإشعارات ===== */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            z-index: 800;
+            box-shadow: var(--shadow-lg);
+            animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.success { background: linear-gradient(135deg, var(--success), #059669); }
+        .toast.error { background: linear-gradient(135deg, var(--danger), #dc2626); }
+        .toast.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
+
+        @keyframes toastIn {
+            from { transform: translate(-50%, 100px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+
+        /* ===== التحميل ===== */
+        .loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 900;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .loader.show { display: flex; }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 5px solid rgba(255,255,255,0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: aRotate 1s linear infinite;
+        }
+
+        .loader p { color: white; font-size: 1.1rem; font-weight: 600; }
+
+        /* ===== زر المساعدة العائم ===== */
+        .help-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 90;
+            box-shadow: 0 4px 20px rgba(230, 180, 34, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
-            50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            0%, 100% { box-shadow: 0 4px 20px rgba(230, 180, 34, 0.5); }
+            50% { box-shadow: 0 4px 30px rgba(230, 180, 34, 0.8); }
         }
-        
-        .no-animation * {
-            animation: none !important;
-            transition: none !important;
+
+        .help-fab:active { transform: scale(0.9); }
+
+        /* ===== رسالة فارغة ===== */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-light);
         }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state p { font-size: 0.95rem; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="intro-overlay" id="introOverlay"></div>
-    <div class="intro-modal" id="introModal">
-        <div class="intro-logo">🎨✨</div>
-        <h2 class="intro-title">مرحباً بك في المُولد الشامل للنقوش الإسلامية!</h2>
-        <p class="intro-desc">
-            أداة احترافية لتصميم الزخارف والنقوش الإسلامية بنمط متكرر أو شكل مركزي، 
-            مع تأثيرات بصرية متقدمة وخيارات تصدير متعددة.
-        </p>
-        
-        <div class="intro-features">
-            <div class="intro-feature">14 نوع حركة وانميشن</div>
-            <div class="intro-feature">10 ثيمات ألوان تراثية</div>
-            <div class="intro-feature">خلفيات معتقة وملمس</div>
-            <div class="intro-feature">تصدير PNG, JPG, SVG</div>
-            <div class="intro-feature">تأثيرات توهج وظل 3D</div>
-            <div class="intro-feature">تحكم دقيق بكل تفصيلة</div>
-        </div>
-        
-        <p style="color: #64748b; font-size: 0.95rem; margin: 15px 0;">
-            💡 هل ترغب في جولة تعليمية سريعة لتتعرف على جميع المميزات؟
-        </p>
-        
-        <div class="intro-btn-group">
-            <button class="intro-btn-start" id="btnIntroTour">نعم، ابدأ الجولة 🚀</button>
-            <button class="intro-btn-skip" id="btnIntroSkip">لا شكراً، ابدأ مباشرة</button>
+    <!-- التحميل -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p id="loaderTxt">جاري التحميل...</p>
+    </div>
+
+    <!-- زر المساعدة العائم -->
+    <button class="help-fab" onclick="openHelp()" title="المساعدة">❓</button>
+
+    <!-- نافذة الترحيب -->
+    <div class="modal-overlay" id="welcomeModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>🎨 مرحباً بك!</h3>
+                <button class="modal-close" onclick="closeWelcome()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="welcome-icon">🕌</div>
+                <h2 class="welcome-title">مولد النقوش الإسلامية</h2>
+                <p class="welcome-subtitle">أداة احترافية لإنشاء زخارف وأنماط هندسية إسلامية مذهلة</p>
+
+                <div class="feature-grid">
+                    <div class="feature-item"><span class="icon">🎨</span> 10 ثيمات</div>
+                    <div class="feature-item"><span class="icon">✨</span> 10 انميشن</div>
+                    <div class="feature-item"><span class="icon">📚</span> 8 قوالب</div>
+                    <div class="feature-item"><span class="icon">🎭</span> 4 أقنعة</div>
+                    <div class="feature-item"><span class="icon">💾</span> حفظ ومشاركة</div>
+                    <div class="feature-item"><span class="icon">📝</span> نص عربي</div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>💡 نصيحة مهمة</h4>
+                    <p>جرّب التبويبات المختلفة وعدّل الإعدادات كما تشاء! كل تغيير يظهر مباشرة في المعاينة. الخلفيات المعتقة لا تظهر عند تفعيل "الخلفية الشفافة".</p>
+                </div>
+
+                <button class="btn btn-accent btn-full" onclick="closeWelcome()">فهمت، ابدأ الآن! 🚀</button>
+            </div>
         </div>
     </div>
 
-    <div class="tour-overlay" id="tourOverlay">
-        <div class="tour-modal" id="tourModal">
-            <div class="tour-title" id="tourTitle">مرحباً بك! ✨</div>
-            <div class="tour-steps-indicator" id="tourStepsIndicator"></div>
-            <div class="tour-text" id="tourText">هل تود أخذ جولة سريعة لتتعرف على جميع المميزات؟</div>
-            <div class="tour-progress" id="tourProgress">خطوة 1 من 10</div>
-            <div class="tour-btn-group">
-                <button class="tour-btn tour-btn-skip" id="btnTourSkip">إنهاء الجولة</button>
-                <button class="tour-btn" id="btnTourNext">التالي →</button>
+    <!-- نافذة المساعدة -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>📖 دليل الاستخدام</h3>
+                <button class="modal-close" onclick="closeHelp()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="guide-section">
+                    <h4>🔘 الأزرار الرئيسية</h4>
+                    
+                    <div class="guide-item">
+                        <div class="icon">💾</div>
+                        <div class="content">
+                            <h5>حفظ التصميم</h5>
+                            <p>يحفظ تصميمك الحالي في المعرض (حتى 15 تصميم)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">🖼️</div>
+                        <div class="content">
+                            <h5>المعرض</h5>
+                            <p>عرض التصاميم المحفوظة، تحميلها أو حذفها</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">📚</div>
+                        <div class="content">
+                            <h5>القوالب</h5>
+                            <p>8 تصاميم جاهزة يمكنك البدء منها وتعديلها</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">🔗</div>
+                        <div class="content">
+                            <h5>مشاركة</h5>
+                            <p>إنشاء رابط يحتوي تصميمك لمشاركته مع الآخرين</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">🎲</div>
+                        <div class="content">
+                            <h5>عشوائي</h5>
+                            <p>توليد تصميم عشوائي كامل بضغطة واحدة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h4>📑 التبويبات</h4>
+                    
+                    <div class="guide-item">
+                        <div class="icon">⚙️</div>
+                        <div class="content">
+                            <h5>أساسي</h5>
+                            <p>الحجم، الدوران، الخلفية، القناع، الإطار</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">📐</div>
+                        <div class="content">
+                            <h5>الشكل</h5>
+                            <p>عدد الرؤوس، الطبقات، سُمك الخطوط، التفاصيل</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">🎨</div>
+                        <div class="content">
+                            <h5>الألوان</h5>
+                            <p>الثيمات الجاهزة، الألوان المخصصة، التدرج</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">✨</div>
+                        <div class="content">
+                            <h5>التأثيرات</h5>
+                            <p>التوهج، الظل، النقش البارز، الحركات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">📝</div>
+                        <div class="content">
+                            <h5>النص</h5>
+                            <p>إضافة نص عربي مزخرف في المنتصف</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guide-item">
+                        <div class="icon">💾</div>
+                        <div class="content">
+                            <h5>تصدير</h5>
+                            <p>تحميل بصيغ PNG, JPG, SVG مع أبعاد مخصصة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>🎯 كيف تحصل على أفضل نتيجة؟</h4>
+                    <p>ابدأ بقالب جاهز أو ثيم ألوان، ثم عدّل الإعدادات حسب ذوقك. جرّب مختلف القيم حتى تصل للشكل المثالي. كل تغيير يظهر فوراً!</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="app-header">
-        <h1>المُولد الشامل للنقوش والزخارف</h1>
-        <br>
-        <div class="status-badge">
-            <span class="status-dot"></span>
-            النظام جاهز للعمل بكامل المميزات
-        </div>
-    </div>
-
-    <div class="app-container">
-        <div class="controls-wrapper" id="controlsWrap">
-
-            <div class="section-title" id="tour-sec-1">⚙️ إعدادات العرض والنمط <button class="btn-rand-mini" onclick="randomizeSettings()" title="عشوائية الإعدادات">🎲</button></div>
-            <div class="control-group" id="tour-group-1">
-                <div class="row">
-                    <label>نوع العرض:</label>
-                    <select id="patternMode"><option value="multi" selected>نمط متكرر (باترن)</option><option value="single">شكل مركزي مفرد</option></select>
-                </div>
-                <div class="row"><label><input type="checkbox" id="transBg" checked> خلفية شفافة (PNG)</label></div>
-                <div class="row" style="margin-top:12px;"><label>حجم التكرار (Scale):</label><span class="val-badge" id="val-scale">1.5</span></div>
-                <input type="range" id="scale" min="0.5" max="3" step="0.1" value="1.5">
-                <div class="row" style="margin-top:12px;"><label>زاوية الدوران الأولية:</label><span class="val-badge" id="val-initRot">0°</span></div>
-                <input type="range" id="initRot" min="0" max="360" step="5" value="0">
-                <div class="row" style="margin-top:12px;"><label>اتجاه الدوران:</label><span class="val-badge" id="val-rotDir">⏱️</span></div>
-                <select id="rotDir"><option value="1">عكس عقارب الساعة ↺</option><option value="-1">مع عقارب الساعة ↻</option></select>
-            </div>
-
-            <div class="section-title" id="tour-sec-2">📐 الهيكل والتداخل المتقدم <button class="btn-rand-mini" onclick="randomizeShapes()" title="عشوائية الأشكال">🎲</button></div>
-            <div class="control-group" id="tour-group-2">
-                <div class="row"><label>عدد الرؤوس:</label><span class="val-badge" id="val-sides">12</span></div>
-                <input type="range" id="sides" min="6" max="24" step="2" value="12">
-                <div class="row" style="margin-top:16px;"><label>حدة النجمة:</label><span class="val-badge" id="val-inner">0.35</span></div>
-                <input type="range" id="inner" min="0.1" max="0.9" step="0.05" value="0.35">
-                <div class="row" style="margin-top:16px;"><label>التداخل:</label><span class="val-badge" id="val-overlap">1.0</span></div>
-                <input type="range" id="overlap" min="0.5" max="2.0" step="0.05" value="1.0">
-                <div class="row" style="margin-top:16px;"><label>الطبقات:</label><span class="val-badge" id="val-layers">3</span></div>
-                <input type="range" id="layers" min="1" max="6" step="1" value="3">
-                <div class="row" style="margin-top:16px;"><label>شبكة التقاطعات:</label><span class="val-badge" id="val-web">4</span></div>
-                <input type="range" id="web" min="0" max="12" step="1" value="4">
-                <div class="row" style="margin-top:16px;"><label>سُمك الخط الرئيسي:</label><span class="val-badge" id="val-strokeW">3</span></div>
-                <input type="range" id="strokeW" min="1" max="10" step="0.5" value="3">
-                <div class="row" style="margin-top:16px;"><label>شفافية التعبئة:</label><span class="val-badge" id="val-fillOp">0.3</span></div>
-                <input type="range" id="fillOp" min="0" max="1" step="0.05" value="0.3">
-            </div>
-
-            <div class="section-title" id="tour-sec-3">✨ التفاصيل والزخارف</div>
-            <div class="control-group" id="tour-group-3">
-                <div class="row"><label><input type="checkbox" id="showCenter" checked> شمسة المركز</label></div>
-                <div class="row"><label><input type="checkbox" id="showDots" checked> نقاط المينا</label></div>
-                <div class="row"><label><input type="checkbox" id="showBorder"> إطار خارجي</label></div>
-                <div class="row"><label><input type="checkbox" id="showCircles"> دوائر متحدة المركز</label></div>
-                <div class="row" style="margin-top:12px;"><label>تقطيع الخطوط:</label><span class="val-badge" id="val-dash">0</span></div>
-                <input type="range" id="dash" min="0" max="20" step="1" value="0">
-                <div class="row" style="margin-top:16px;"><label>ملمس القدم:</label><span class="val-badge" id="val-texture">0</span></div>
-                <input type="range" id="texture" min="0" max="10" step="1" value="0">
-                <div class="row" style="margin-top:16px;"><label>حجم النقاط:</label><span class="val-badge" id="val-dotSize">3</span></div>
-                <input type="range" id="dotSize" min="1" max="8" step="0.5" value="3">
-            </div>
-
-            <div class="section-title" id="tour-sec-bg">🎨 الخلفيات المعتقة والملمس <button class="btn-rand-mini" onclick="randomizeBackground()" title="عشوائية الخلفية">🎲</button></div>
-            <div class="control-group" id="tour-group-bg">
-                <div class="row"><label>نوع الخلفية:</label></div>
-                <select id="bgTexture">
-                    <option value="solid" selected>سادة (لون مصمت)</option>
-                    <option value="aged-paper">📜 ورق معتق</option>
-                    <option value="stone-wall">🧱 جدار حجري</option>
-                    <option value="fabric">🧵 قماش تاريخي</option>
-                    <option value="marble">✨ رخام ملكي</option>
-                    <option value="parchment">📜 برشمان فاخر</option>
-                </select>
-                <div class="row" style="margin-top:12px;"><label>شدة الملمس:</label><span class="val-badge" id="val-textureIntensity">5</span></div>
-                <input type="range" id="textureIntensity" min="0" max="10" step="1" value="5">
-                <div class="row" style="margin-top:12px;">
-                    <button class="btn-rand-mini" style="width:100%; background: var(--accent); color: white;" onclick="randomizeBackground()">🎲 عشوائية الخلفية</button>
+    <!-- الهيدر -->
+    <header class="header">
+        <div class="header-top">
+            <div class="logo">
+                <div class="logo-icon">🕌</div>
+                <div class="logo-text">
+                    مولد النقوش
+                    <small>Islamic Patterns</small>
                 </div>
             </div>
-
-            <div class="section-title" id="tour-sec-vfx">💫 تأثيرات بصرية متقدمة (VFX)</div>
-            <div class="control-group" id="tour-group-vfx">
-                <div class="row"><label><input type="checkbox" id="enableGlow"> ✨ توهج سحري</label></div>
-                <div class="row" id="glowRow" style="display:none;"><label>شدة التوهج:</label><span class="val-badge" id="val-glowIntensity">6</span></div>
-                <input type="range" id="glowIntensity" min="0" max="20" step="1" value="6" style="display:none;">
-
-                <div class="row" style="margin-top:12px;"><label><input type="checkbox" id="enableShadow"> 🌑 ظل ثلاثي الأبعاد</label></div>
-                <div class="row" id="shadowRow" style="display:none;"><label>عمق الظل:</label><span class="val-badge" id="val-shadowDepth">4</span></div>
-                <input type="range" id="shadowDepth" min="0" max="10" step="1" value="4" style="display:none;">
-
-                <div class="row" style="margin-top:12px;"><label><input type="checkbox" id="enableGradient"> 🌈 تعبئة متدرجة</label></div>
-                <div class="row" id="gradRow" style="display:none;"><label>زاوية التدرج:</label><span class="val-badge" id="val-gradAngle">45°</span></div>
-                <input type="range" id="gradAngle" min="0" max="360" step="15" value="45" style="display:none;">
-            </div>
-
-            <div class="section-title" id="tour-sec-anim">🎬 نظام الانميشن المتقدم</div>
-            <div class="control-group" id="tour-group-anim">
-                <div class="row"><label><input type="checkbox" id="enableAnimation"> تفعيل الحركة</label></div>
-                <div class="row" id="animTypeRow" style="display:none;">
-                    <label>نوع الحركة:</label>
-                    <select id="animType">
-                        <option value="anim-rotate">🔄 دوران مستمر</option>
-                        <option value="anim-pulse">💓 نبض (Pulse)</option>
-                        <option value="anim-breathe">🌬️ تنفس (Breathe)</option>
-                        <option value="anim-wave">🌊 موجة (Wave)</option>
-                        <option value="anim-spiral">🌀 حلزوني (Spiral)</option>
-                        <option value="anim-float">🎈 طفو (Float)</option>
-                        <option value="anim-bounce">🏀 ارتداد (Bounce)</option>
-                        <option value="anim-morph">🔮 تحويل (Morph)</option>
-                        <option value="anim-glitch">⚡ خلل رقمي (Glitch)</option>
-                        <option value="anim-zoom">🔍 تكبير/تصغير</option>
-                        <option value="anim-kaleidoscope">🪞 كاليدوسكوب</option>
-                        <option value="anim-wobble">🫠 تمايل (Wobble)</option>
-                        <option value="anim-shake">📳 اهتزاز (Shake)</option>
-                        <option value="anim-fade">🌅 تلاشي (Fade)</option>
-                    </select>
-                </div>
-                <div class="row" id="animSpeedRow" style="display:none;"><label>السرعة:</label><span class="val-badge" id="val-animSpeed">30</span></div>
-                <input type="range" id="animSpeed" min="1" max="120" step="1" value="30" style="display:none;">
-                <div style="font-size:0.8rem; color:#64748b; margin-top:8px; text-align:center;" id="animInfo">⏱️ القيمة بالثواني للدورة الكاملة</div>
-            </div>
-
-            <div class="section-title" id="tour-sec-themes">🎨 ثيمات ألوان جاهزة</div>
-            <div class="control-group" id="tour-group-themes">
-                <div class="row"><label>لوحة ألوان تراثية:</label></div>
-                <select id="colorTheme">
-                    <option value="custom" selected>🎨 ألوان مخصصة</option>
-                    <option value="andalusian">🕌 أندلسي (أزرق-ذهبي)</option>
-                    <option value="persian">🌹 فارسي (فيروزي-وردي)</option>
-                    <option value="nightly">🌙 ليلي (كحلي-فضي)</option>
-                    <option value="royal">👑 ملكي (أحمر-ذهبي)</option>
-                    <option value="ottoman">☪️ عثماني (أخضر-ذهبي)</option>
-                    <option value="mamluk">⚔️ مملوكي (نحاسي-أزرق)</option>
-                    <option value="desert">🏜️ صحراوي (رملي-ترابي)</option>
-                    <option value="ocean">🌊 محيطي (أزرق-تركواز)</option>
-                    <option value="sunset">🌅 غروب (برتقالي-بنفسجي)</option>
-                    <option value="forest">🌲 غابة (أخضر-بني)</option>
-                </select>
-                <div class="row" style="margin-top:12px;">
-                    <button class="btn-rand-mini" style="width:100%; background: linear-gradient(135deg, #667eea, #764ba2); color: white;" onclick="applyRandomTheme()">🎲 ثيم عشوائي</button>
-                </div>
-            </div>
-
-            <div class="section-title" id="tour-sec-4">🎨 الألوان المستقلة <button class="btn-rand-mini" onclick="randomizeAllColors()" title="عشوائية الألوان">🎲</button></div>
-            <div class="control-group" id="tour-group-4">
-                <div class="row"><label>اللون الأساسي:</label><div style="display:flex;gap:5px;"><input type="color" id="col1" value="#063970"><button class="btn-rand-mini" onclick="rndCol('col1')">🎲</button></div></div>
-                <div class="row"><label>اللون الثانوي:</label><div style="display:flex;gap:5px;"><input type="color" id="col2" value="#178582"><button class="btn-rand-mini" onclick="rndCol('col2')">🎲</button></div></div>
-                <div class="row"><label>لون التذهيب:</label><div style="display:flex;gap:5px;"><input type="color" id="colGold" value="#b48608"><button class="btn-rand-mini" onclick="rndCol('colGold')">🎲</button></div></div>
-                <div class="row"><label>لون الخلفية:</label><div style="display:flex;gap:5px;"><input type="color" id="colBg" value="#f4edd8"><button class="btn-rand-mini" onclick="rndCol('colBg')">🎲</button></div></div>
-            </div>
-
-            <div class="btn-group" id="tour-sec-5">
-                <button class="btn-shapes" onclick="randomizeShapes()">🎲 عشوائية الأشكال</button>
-                <button class="btn-colors" onclick="randomizeAllColors()">🎨 عشوائية الألوان</button>
-            </div>
-            <button class="btn-all" id="tour-sec-6" onclick="randomizeAll()">🔥 عشوائية كل شيء</button>
-
-            <div class="btn-save-group" id="tour-sec-7">
-                <button class="btn-save-png" onclick="downloadPNG()">🖼️ حفظ PNG عالي الدقة</button>
-                <button class="btn-save-jpg" onclick="downloadJPG()">🌞 حفظ JPG مطابق للألوان</button>
-                <button class="btn-save-svg" onclick="downloadSVG()">💾 حفظ SVG فكتور</button>
-                <button class="btn-copy" onclick="copyToClipboard()">📋 نسخ كود التصميم</button>
+            <div class="header-actions">
+                <button class="h-btn" onclick="toggleTheme()">🌙</button>
+                <button class="h-btn accent" onclick="randomAll()">🎲 عشوائي</button>
             </div>
         </div>
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="saveDesign()">💾 حفظ</button>
+            <button class="quick-btn" onclick="openGallery()">🖼️ المعرض</button>
+            <button class="quick-btn" onclick="openTemplates()">📚 القوالب</button>
+            <button class="quick-btn" onclick="shareDesign()">🔗 مشاركة</button>
+        </div>
+    </header>
 
-        <div class="preview-card" id="canvasHolder">
-            <svg id="svgCanvas" width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- المعاينة -->
+    <section class="preview-section">
+        <div class="preview-header">
+            <div class="preview-title">
+                👁️ المعاينة المباشرة
+                <span>تحديث تلقائي</span>
+            </div>
+            <button class="h-btn" onclick="toggleFS()" style="padding: 5px 10px; font-size: 0.8rem;">⛶ ملء الشاشة</button>
+        </div>
+        
+        <div class="preview-box checker" id="preview">
+            <svg id="svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <filter id="roughFilter">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" result="noise"/>
-                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
-                    </filter>
-                    <filter id="antiquePaper" x="0" y="0" width="100%" height="100%">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="4" result="noise"/>
-                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.9 0 0 0  0 0.8 0 0 0  0 0 0 0.3 0" in="noise" result="coloredNoise"/>
-                        <feBlend in="SourceGraphic" in2="coloredNoise" mode="multiply"/>
-                    </filter>
-                    <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                    </filter>
-                    <filter id="shadow3D" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.4"/>
-                        <feDropShadow dx="-1" dy="-1" stdDeviation="1" flood-color="white" flood-opacity="0.3"/>
-                    </filter>
-                    <linearGradient id="gradFill" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" id="gradStop1" stop-color="#063970"/>
-                        <stop offset="100%" id="gradStop2" stop-color="#178582"/>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" id="gs1" stop-color="#063970"/>
+                        <stop offset="50%" id="gs2" stop-color="#178582"/>
+                        <stop offset="100%" id="gs3" stop-color="#8b5cf6"/>
                     </linearGradient>
-                    <pattern id="mainPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse" overflow="visible">
-                        <g id="patternGroup"></g>
+                    <pattern id="pat" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                        <g id="pg"></g>
                     </pattern>
                 </defs>
                 <rect id="bgRect" width="100%" height="100%" fill="#f4edd8"/>
-                <rect id="patternLayer" width="100%" height="100%" fill="url(#mainPattern)"/>
-                <rect id="textureOverlay" class="texture-layer" width="100%" height="100%" fill="#fff" filter="url(#antiquePaper)" opacity="0"/>
+                <image id="bgImg" width="100%" height="100%" style="display:none"/>
+                <rect id="patRect" width="100%" height="100%" fill="url(#pat)"/>
+                <circle id="circle1" cx="400" cy="400" r="350" fill="none" stroke="#e6b422" stroke-width="2" style="display:none"/>
+                <circle id="circle2" cx="400" cy="400" r="300" fill="none" stroke="#e6b422" stroke-width="2" style="display:none"/>
+                <circle id="circle3" cx="400" cy="400" r="250" fill="none" stroke="#e6b422" stroke-width="2" style="display:none"/>
+                <text id="txt" x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="'Tajawal','Amiri',serif" font-weight="bold" style="display:none"></text>
+                <rect id="border" x="10" y="10" width="780" height="780" fill="none" stroke="#e6b422" stroke-width="8" style="display:none"/>
             </svg>
+            <div class="zoom-bar">
+                <button class="zoom-btn" onclick="zoomOut()">−</button>
+                <span class="zoom-val" id="zoomLvl">100%</span>
+                <button class="zoom-btn" onclick="zoomIn()">+</button>
+                <button class="zoom-btn" onclick="zoomReset()">⟲</button>
+            </div>
+        </div>
+        
+        <div class="preview-btns">
+            <button class="btn btn-sm btn-success" onclick="downloadPNG()">📥 PNG</button>
+            <button class="btn btn-sm btn-warning" onclick="downloadJPG()">📥 JPG</button>
+            <button class="btn btn-sm btn-purple" onclick="downloadSVG()">📥 SVG</button>
+            <button class="btn btn-sm btn-pink" onclick="toggleAnim()" id="animBtn">⏸️ إيقاف</button>
+        </div>
+    </section>
+
+    <!-- التبويبات -->
+    <div class="tabs-wrap">
+        <div class="tabs">
+            <button class="tab active" data-t="basic">⚙️ أساسي</button>
+            <button class="tab" data-t="shape">📐 الشكل</button>
+            <button class="tab" data-t="color">🎨 الألوان</button>
+            <button class="tab" data-t="fx">✨ التأثيرات</button>
+            <button class="tab" data-t="text">📝 النص</button>
+            <button class="tab" data-t="export">💾 تصدير</button>
         </div>
     </div>
 
-    <script>
-        /**
-         * ============================================
-         * إدارة الحالة والتخزين المحلي
-         * ============================================
-         */
-        const APP_STORAGE_KEY = 'islamic_pattern_generator_v2';
-        
-        function getAppData() {
-            try {
-                const data = localStorage.getItem(APP_STORAGE_KEY);
-                return data ? JSON.parse(data) : { hasSeenIntro: false, hasSeenTour: false };
-            } catch(e) {
-                return { hasSeenIntro: false, hasSeenTour: false };
+    <!-- لوحة التحكم -->
+    <div class="controls">
+
+        <!-- أساسي -->
+        <div class="tab-panel active" id="p-basic">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">⚙️</span> إعدادات العرض</h3>
+                </div>
+                <div class="row">
+                    <label>نوع النمط:</label>
+                    <select id="mode">
+                        <option value="multi">🔄 متكرر (باترن)</option>
+                        <option value="single">⭐ شكل مفرد</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>طريقة التكرار:</label>
+                    <select id="repeat">
+                        <option value="normal">عادي</option>
+                        <option value="mirror-h">مرآة أفقي</option>
+                        <option value="mirror-v">مرآة عمودي</option>
+                        <option value="rotate">دوراني</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label><input type="checkbox" id="transBg" checked> خلفية شفافة (PNG)</label>
+                </div>
+                <div class="row">
+                    <label>حجم النمط:</label>
+                    <span class="val" id="v-scale">1.5</span>
+                </div>
+                <input type="range" id="scale" min="0.5" max="3" step="0.1" value="1.5">
+                <div class="row">
+                    <label>زاوية الدوران:</label>
+                    <span class="val" id="v-rot">0°</span>
+                </div>
+                <input type="range" id="rot" min="0" max="360" step="5" value="0">
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🖼️</span> الخلفية</h3>
+                </div>
+                <div class="row">
+                    <label>نوع الخلفية:</label>
+                    <select id="bgType">
+                        <option value="solid">سادة</option>
+                        <option value="aged">📜 ورق معتق</option>
+                        <option value="marble">✨ رخام</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>لون الخلفية:</label>
+                    <input type="color" id="bgColor" value="#f4edd8">
+                </div>
+                <div class="row">
+                    <label>صورة مخصصة:</label>
+                    <input type="file" id="bgFile" accept="image/*">
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🎭</span> القناع والإطار</h3>
+                </div>
+                <div class="row">
+                    <label>شكل القناع:</label>
+                    <select id="mask">
+                        <option value="none">بدون قناع</option>
+                        <option value="circle">⭕ دائرة</option>
+                        <option value="octagon">🔷 مثمن</option>
+                        <option value="hexagon">⬡ سداسي</option>
+                        <option value="star">⭐ نجمة</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label><input type="checkbox" id="showBorder"> إطار خارجي</label>
+                </div>
+                <div class="row">
+                    <label>نوع الإطار:</label>
+                    <select id="borderType">
+                        <option value="solid">مصمت</option>
+                        <option value="double">مزدوج</option>
+                        <option value="dashed">متقطع</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>سُمك الإطار:</label>
+                    <span class="val" id="v-borderW">8</span>
+                </div>
+                <input type="range" id="borderW" min="2" max="25" step="1" value="8">
+            </div>
+
+            <div class="btn-grid">
+                <button class="btn btn-teal" onclick="randomShape()">🎲 شكل عشوائي</button>
+                <button class="btn btn-accent" onclick="randomColors()">🎨 ألوان عشوائية</button>
+                <button class="btn btn-dark btn-full" onclick="randomAll()">🔥 عشوائية كاملة</button>
+            </div>
+        </div>
+
+        <!-- الشكل -->
+        <div class="tab-panel" id="p-shape">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">📐</span> الهيكل الهندسي</h3>
+                </div>
+                <div class="row"><label>عدد الرؤوس:</label><span class="val" id="v-sides">12</span></div>
+                <input type="range" id="sides" min="3" max="24" value="12">
+                <div class="row"><label>حدة النجمة:</label><span class="val" id="v-inner">0.35</span></div>
+                <input type="range" id="inner" min="0.1" max="0.9" step="0.05" value="0.35">
+                <div class="row"><label>معامل التداخل:</label><span class="val" id="v-overlap">1</span></div>
+                <input type="range" id="overlap" min="0.5" max="2" step="0.1" value="1">
+                <div class="row"><label>عدد الطبقات:</label><span class="val" id="v-layers">3</span></div>
+                <input type="range" id="layers" min="1" max="8" value="3">
+                <div class="row"><label>شبكة التقاطعات:</label><span class="val" id="v-web">4</span></div>
+                <input type="range" id="web" min="0" max="12" value="4">
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">✏️</span> الخطوط والتعبئة</h3>
+                </div>
+                <div class="row"><label>سُمك الخط:</label><span class="val" id="v-stroke">3</span></div>
+                <input type="range" id="stroke" min="0.5" max="10" step="0.5" value="3">
+                <div class="row"><label>شفافية التعبئة:</label><span class="val" id="v-fillOp">0.3</span></div>
+                <input type="range" id="fillOp" min="0" max="1" step="0.05" value="0.3">
+                <div class="row"><label>تقطيع الخط:</label><span class="val" id="v-dash">0</span></div>
+                <input type="range" id="dash" min="0" max="20" value="0">
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">✨</span> التفاصيل الزخرفية</h3>
+                </div>
+                <div class="row"><label><input type="checkbox" id="showCenter" checked> شمسة المركز</label></div>
+                <div class="row"><label><input type="checkbox" id="showDots" checked> نقاط المينا</label></div>
+                <div class="row"><label><input type="checkbox" id="showCircles"> دوائر متحدة المركز</label></div>
+                <div class="row"><label>حجم النقاط:</label><span class="val" id="v-dotSize">3</span></div>
+                <input type="range" id="dotSize" min="1" max="10" step="0.5" value="3">
+            </div>
+        </div>
+
+        <!-- الألوان -->
+        <div class="tab-panel" id="p-color">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🎨</span> ثيمات الألوان</h3>
+                </div>
+                <div class="row">
+                    <label>اختر ثيم:</label>
+                    <select id="theme">
+                        <option value="">🎨 مخصص</option>
+                        <option value="andalusian">🕌 أندلسي</option>
+                        <option value="persian">🌹 فارسي</option>
+                        <option value="royal">👑 ملكي</option>
+                        <option value="ottoman">☪️ عثماني</option>
+                        <option value="nightly">🌙 ليلي</option>
+                        <option value="ocean">🌊 محيطي</option>
+                        <option value="sunset">🌅 غروب</option>
+                        <option value="desert">🏜️ صحراوي</option>
+                        <option value="forest">🌲 غابة</option>
+                    </select>
+                </div>
+                <div class="btn-grid">
+                    <button class="btn btn-purple" onclick="randomTheme()">🎲 ثيم عشوائي</button>
+                    <button class="btn btn-pink" onclick="smartColors()">🧠 ألوان ذكية</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🖌️</span> ألوان مخصصة</h3>
+                </div>
+                <div class="row">
+                    <label>اللون الأساسي:</label>
+                    <div style="display:flex;gap:5px">
+                        <input type="color" id="c1" value="#063970">
+                        <button class="mini-btn" onclick="rc('c1')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>اللون الثانوي:</label>
+                    <div style="display:flex;gap:5px">
+                        <input type="color" id="c2" value="#178582">
+                        <button class="mini-btn" onclick="rc('c2')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>اللون الثالث:</label>
+                    <div style="display:flex;gap:5px">
+                        <input type="color" id="c3" value="#8b5cf6">
+                        <button class="mini-btn" onclick="rc('c3')">🎲</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>لون التذهيب:</label>
+                    <div style="display:flex;gap:5px">
+                        <input type="color" id="cGold" value="#e6b422">
+                        <button class="mini-btn" onclick="rc('cGold')">🎲</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🌈</span> التدرج اللوني</h3>
+                </div>
+                <div class="row"><label><input type="checkbox" id="useGrad"> تفعيل التدرج</label></div>
+                <div class="row">
+                    <label>نوع التدرج:</label>
+                    <select id="gradType">
+                        <option value="linear">خطي</option>
+                        <option value="radial">دائري</option>
+                    </select>
+                </div>
+                <div class="row"><label>زاوية التدرج:</label><span class="val" id="v-gradAng">45°</span></div>
+                <input type="range" id="gradAng" min="0" max="360" step="15" value="45">
+            </div>
+        </div>
+
+        <!-- التأثيرات -->
+        <div class="tab-panel" id="p-fx">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">✨</span> التأثيرات البصرية</h3>
+                </div>
+                <div class="row"><label><input type="checkbox" id="fxGlow"> 🌟 توهج سحري</label></div>
+                <div class="row"><label><input type="checkbox" id="fxShadow"> 🌑 ظل ثلاثي الأبعاد</label></div>
+                <div class="row"><label><input type="checkbox" id="fxEmboss"> 💎 نقش بارز</label></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">🎬</span> الحركة والانميشن</h3>
+                </div>
+                <div class="row"><label><input type="checkbox" id="fxAnim"> تفعيل الحركة</label></div>
+                <div class="row">
+                    <label>نوع الحركة:</label>
+                    <select id="animType">
+                        <option value="rotate">🔄 دوران</option>
+                        <option value="pulse">💓 نبض</option>
+                        <option value="breathe">🌬️ تنفس</option>
+                        <option value="float">🎈 طفو</option>
+                        <option value="bounce">🏀 ارتداد</option>
+                        <option value="wave">🌊 تمايل</option>
+                        <option value="spin">🌀 دوران عكسي</option>
+                        <option value="glow">✨ توهج متذبذب</option>
+                        <option value="shake">📳 اهتزاز</option>
+                        <option value="zoom">🔍 تكبير/تصغير</option>
+                    </select>
+                </div>
+                <div class="row"><label>السرعة (ثانية):</label><span class="val" id="v-animSpd">20s</span></div>
+                <input type="range" id="animSpd" min="1" max="60" value="20">
+            </div>
+        </div>
+
+        <!-- النص -->
+        <div class="tab-panel" id="p-text">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">📝</span> نص عربي مزخرف</h3>
+                </div>
+                <div class="row"><label><input type="checkbox" id="showTxt"> إضافة نص في المنتصف</label></div>
+                <div class="row">
+                    <input type="text" id="txtVal" value="الله" placeholder="اكتب النص هنا..." style="text-align: center; font-size: 1.1rem;">
+                </div>
+                <div class="row">
+                    <label>نصوص جاهزة:</label>
+                    <select id="txtPreset">
+                        <option value="">اختر نص...</option>
+                        <option value="الله">الله</option>
+                        <option value="محمد">محمد ﷺ</option>
+                        <option value="بسم الله">بسم الله</option>
+                        <option value="الحمد لله">الحمد لله</option>
+                        <option value="ما شاء الله">ما شاء الله</option>
+                        <option value="سبحان الله">سبحان الله</option>
+                    </select>
+                </div>
+                <div class="row"><label>حجم النص:</label><span class="val" id="v-txtSize">50</span></div>
+                <input type="range" id="txtSize" min="20" max="150" step="5" value="50">
+                <div class="row">
+                    <label>لون النص:</label>
+                    <input type="color" id="txtColor" value="#e6b422">
+                </div>
+            </div>
+        </div>
+
+        <!-- تصدير -->
+        <div class="tab-panel" id="p-export">
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">📐</span> أبعاد التصدير</h3>
+                </div>
+                <div class="row">
+                    <label>أبعاد جاهزة:</label>
+                    <select id="expPreset">
+                        <option value="">مخصص</option>
+                        <option value="1080,1080">📱 Instagram 1080×1080</option>
+                        <option value="1920,1080">🖥️ Desktop 1920×1080</option>
+                        <option value="1080,1920">📱 Phone 1080×1920</option>
+                        <option value="2048,2732">📱 iPad 2048×2732</option>
+                        <option value="4096,4096">🎬 4K 4096×4096</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>العرض (px):</label>
+                    <input type="number" id="expW" value="2000" min="500" max="6000" style="width:90px">
+                </div>
+                <div class="row">
+                    <label>الارتفاع (px):</label>
+                    <input type="number" id="expH" value="2000" min="500" max="6000" style="width:90px">
+                </div>
+                <div class="row"><label>جودة JPG:</label><span class="val" id="v-expQ">95%</span></div>
+                <input type="range" id="expQ" min="50" max="100" step="5" value="95">
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h3><span class="icon">💾</span> تحميل الملفات</h3>
+                </div>
+                <div class="btn-grid">
+                    <button class="btn btn-purple" onclick="downloadPNG()">🖼️ PNG شفاف</button>
+                    <button class="btn btn-warning" onclick="downloadJPG()">🌞 JPG ملون</button>
+                    <button class="btn btn-success" onclick="downloadSVG()">💾 SVG فكتور</button>
+                    <button class="btn btn-pink" onclick="copyCode()">📋 نسخ الكود</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المعرض -->
+    <div class="modal-overlay" id="galleryModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>🖼️ التصاميم المحفوظة</h3>
+                <button class="modal-close" onclick="closeGallery()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="gallery" id="galleryGrid"></div>
+                <button class="btn btn-danger" onclick="clearGallery()" style="margin-top:15px">🗑️ مسح جميع التصاميم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة القوالب -->
+    <div class="modal-overlay" id="templatesModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>📚 قوالب جاهزة</h3>
+                <button class="modal-close" onclick="closeTemplates()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:15px;color:var(--text-light);font-size:0.9rem;text-align:center;">اختر قالب كنقطة بداية ثم عدّله كما تشاء</p>
+                <div class="templates-grid" id="templatesGrid"></div>
+                <button class="btn btn-teal" onclick="applyTemplate()" style="margin-top:15px">✅ تطبيق القالب</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة المشاركة -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal">
+            <div class="modal-head">
+                <h3>🔗 مشاركة التصميم</h3>
+                <button class="modal-close" onclick="closeShare()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:12px;color:var(--text-light);font-size:0.9rem;">انسخ الرابط وشاركه مع أي شخص لعرض نفس التصميم:</p>
+                <input type="text" id="shareUrl" readonly style="margin-bottom:12px;font-size:0.85rem;">
+                <button class="btn btn-teal" onclick="copyShare()">📋 نسخ الرابط</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ========== المتغيرات ==========
+const KEY = 'ipattern_v5';
+let zoom = 100;
+let paused = false;
+let selTemplate = null;
+
+const $ = id => document.getElementById(id);
+const el = {};
+document.querySelectorAll('input,select').forEach(e => { if(e.id) el[e.id] = e; });
+
+const themes = {
+    andalusian: {c1:'#063970',c2:'#178582',c3:'#7c3aed',cGold:'#e6b422',bgColor:'#f4edd8'},
+    persian: {c1:'#008080',c2:'#d4a5a5',c3:'#6b5b95',cGold:'#d4af37',bgColor:'#fff9f0'},
+    royal: {c1:'#8b0000',c2:'#4a0404',c3:'#1a0000',cGold:'#ffd700',bgColor:'#f5f5dc'},
+    ottoman: {c1:'#006400',c2:'#228b22',c3:'#2e8b57',cGold:'#daa520',bgColor:'#f0e6d2'},
+    nightly: {c1:'#1a1a40',c2:'#4a4e69',c3:'#22223b',cGold:'#e6d3a7',bgColor:'#2d1b4d'},
+    ocean: {c1:'#003366',c2:'#40e0d0',c3:'#20b2aa',cGold:'#e6e6fa',bgColor:'#f0f8ff'},
+    sunset: {c1:'#ff6b35',c2:'#7b2d8e',c3:'#f7931e',cGold:'#f9a825',bgColor:'#fff3e0'},
+    desert: {c1:'#c19a6b',c2:'#8b7355',c3:'#a0522d',cGold:'#d4af37',bgColor:'#f4e4c1'},
+    forest: {c1:'#1b5e20',c2:'#8d6e63',c3:'#33691e',cGold:'#a1887f',bgColor:'#f1f8e9'}
+};
+
+const templates = [
+    {name:'نجمة 6',sides:6,inner:0.35,layers:3,web:3},
+    {name:'نجمة 8',sides:8,inner:0.4,layers:3,web:4},
+    {name:'نجمة 12',sides:12,inner:0.35,layers:4,web:6},
+    {name:'نجمة 16',sides:16,inner:0.3,layers:5,web:8},
+    {name:'زهرة',sides:6,inner:0.6,layers:4,web:2},
+    {name:'شمس',sides:24,inner:0.2,layers:2,web:12},
+    {name:'بسيط',sides:8,inner:0.5,layers:2,web:2},
+    {name:'معقد',sides:20,inner:0.45,layers:6,web:10}
+];
+
+const anims = ['rotate','pulse','breathe','float','bounce','wave','spin','glow','shake','zoom'];
+
+// ========== التخزين ==========
+function getData() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {seen:false,designs:[]}; }
+    catch { return {seen:false,designs:[]}; }
+}
+function saveData(d) { try { localStorage.setItem(KEY,JSON.stringify(d)); } catch{} }
+
+// ========== الإشعارات ==========
+function toast(msg, type='') {
+    document.querySelectorAll('.toast').forEach(t=>t.remove());
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'✨'}</span> ${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(()=>t.remove(), 300); }, 2800);
+}
+
+function loader(show, txt='جاري المعالجة...') {
+    $('loaderTxt').textContent = txt;
+    $('loader').classList.toggle('show', show);
+}
+
+// ========== الرسم ==========
+function starPath(n, inner, cx, cy, r, rot) {
+    let d = '';
+    const step = Math.PI * 2 / (n * 2);
+    for (let i = 0; i < n * 2; i++) {
+        const radius = i % 2 === 0 ? r : r * inner;
+        const a = step * i + rot * Math.PI / 180;
+        d += (i === 0 ? 'M' : 'L') + (cx + radius * Math.cos(a)).toFixed(2) + ',' + (cy + radius * Math.sin(a)).toFixed(2);
+    }
+    return d + 'Z';
+}
+
+function webPath(n, cx, cy, r, step) {
+    if (!step) return '';
+    let d = '';
+    const a = Math.PI * 2 / n;
+    for (let i = 0; i < n; i++) {
+        const a1 = a * i, a2 = a * ((i + step) % n);
+        d += `M${(cx + r * Math.cos(a1)).toFixed(2)},${(cy + r * Math.sin(a1)).toFixed(2)} L${(cx + r * Math.cos(a2)).toFixed(2)},${(cy + r * Math.sin(a2)).toFixed(2)} `;
+    }
+    return d;
+}
+
+// ========== التحديث ==========
+function update() {
+    const vals = {
+        scale: v => v, rot: v => v + '°', sides: v => v, inner: v => v, overlap: v => v,
+        layers: v => v, web: v => v, stroke: v => v, fillOp: v => v, dash: v => v,
+        dotSize: v => v, gradAng: v => v + '°', animSpd: v => v + 's', txtSize: v => v,
+        borderW: v => v, expQ: v => v + '%'
+    };
+    Object.keys(el).forEach(k => {
+        const b = $('v-' + k);
+        if (b) b.textContent = (vals[k] || (v => v))(el[k].value);
+    });
+
+    const single = el.mode.value === 'single';
+    const n = +el.sides.value;
+    const inn = +el.inner.value;
+    const sc = +el.scale.value;
+    const ov = +el.overlap.value;
+    const lay = +el.layers.value;
+    const wb = +el.web.value;
+    const sw = +el.stroke.value;
+    const fo = +el.fillOp.value;
+    const ds = +el.dash.value;
+    const rt = +el.rot.value;
+    const dts = +el.dotSize.value;
+    const c1 = el.c1.value;
+    const c2 = el.c2.value;
+    const c3 = el.c3.value;
+    const gold = el.cGold.value;
+    const bg = el.bgColor.value;
+    const trans = el.transBg.checked;
+    const grad = el.useGrad.checked;
+
+    $('bgRect').setAttribute('fill', trans ? 'none' : bg);
+
+    const pSize = single ? 800 : 400 / sc;
+    const pat = document.getElementById('pat');
+    pat.setAttribute('width', pSize);
+    pat.setAttribute('height', pSize);
+
+    const rad = pSize / 2 * 0.95 * ov;
+    const cx = pSize / 2;
+    const centers = single ? [[cx, cx]] : [[cx,cx],[0,0],[pSize,0],[0,pSize],[pSize,pSize]];
+
+    const dashAttr = ds > 0 ? `stroke-dasharray="${ds} ${ds/2}"` : '';
+    const fill = grad ? 'url(#grad)' : null;
+
+    let g = '<g>';
+    centers.forEach(([x, y]) => {
+        for (let i = lay; i >= 1; i--) {
+            const r = rad * i / lay;
+            const sc = i % 2 === 0 ? c1 : c2;
+            const fc = fill || (i % 2 === 0 ? c2 : 'none');
+            const op = fill ? fo : (i === lay ? fo : fo * 0.5);
+            g += `<path d="${starPath(n, inn + 0.1, x, y, r, 180/n + rt)}" fill="${fc}" fill-opacity="${op}" stroke="${sc}" stroke-width="${sw * 0.8}"/>`;
+            g += `<path d="${starPath(n, inn, x, y, r, rt)}" fill="none" stroke="${gold}" stroke-width="${sw}" ${dashAttr}/>`;
+        }
+        if (wb > 0) g += `<path d="${webPath(n, x, y, rad * 0.8, wb)}" fill="none" stroke="${c1}" stroke-width="${sw * 0.5}" opacity="0.6" ${dashAttr}/>`;
+        if (el.showCenter.checked) g += `<path d="${starPath(Math.min(n, 12), 0.6, x, y, rad * 0.25, rt)}" fill="${fill || c1}" fill-opacity="${fill ? fo : 1}" stroke="${gold}" stroke-width="${sw * 0.7}"/>`;
+        if (el.showDots.checked) {
+            for (let i = 0; i < n; i++) {
+                const a = Math.PI * 2 / n * i;
+                g += `<circle cx="${x + rad * 0.95 * Math.cos(a)}" cy="${y + rad * 0.95 * Math.sin(a)}" r="${dts * ov}" fill="${gold}"/>`;
             }
         }
-        
-        function saveAppData(data) {
-            try {
-                localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(data));
-            } catch(e) {
-                console.warn('تعذر حفظ البيانات في localStorage');
-            }
-        }
+    });
+    g += '</g>';
+    $('pg').innerHTML = g;
 
-        /**
-         * ============================================
-         * نظام التعليمات الأولية
-         * ============================================ */
-        const introOverlay = document.getElementById('introOverlay');
-        const introModal = document.getElementById('introModal');
-        const btnIntroTour = document.getElementById('btnIntroTour');
-        const btnIntroSkip = document.getElementById('btnIntroSkip');
-        
-        function showIntroModal() {
-            const appData = getAppData();
-            if (!appData.hasSeenIntro) {
-                introOverlay.classList.add('active');
-                introModal.classList.add('active');
-            }
-        }
-        
-        function hideIntroModal(startTour = false) {
-            introOverlay.classList.remove('active');
-            introModal.classList.remove('active');
-            
-            const appData = getAppData();
-            appData.hasSeenIntro = true;
-            saveAppData(appData);
-            
-            if (startTour) {
-                setTimeout(() => window.startTour(), 400);
-            }
-        }
-        
-        btnIntroTour.addEventListener('click', () => hideIntroModal(true));
-        btnIntroSkip.addEventListener('click', () => hideIntroModal(false));
+    const showC = el.showCircles.checked;
+    [$('circle1'), $('circle2'), $('circle3')].forEach(c => {
+        c.style.display = showC ? 'block' : 'none';
+        c.setAttribute('stroke', gold);
+    });
 
-        /**
-         * ============================================
-         * نظام الجولة التعليمية التفاعلي
-         * ============================================ */
-        const tourSteps = [
-            { el: null, title: "مرحباً بك! ✨", text: "أهلاً بك في المُولد الشامل للنقوش الإسلامية. هذا التطبيق يتيح لك تصميم زخارف احترافية بتحكم كامل في كل تفصيلة. هل أنت مستعد للبدء؟", btn: "ابدأ 🚀" },
-            { el: "#tour-group-1", title: "⚙️ إعدادات العرض", text: "اختر بين النمط المتكرر أو الشكل المفرد. تحكم في الحجم والزاوية واتجاه الدوران.", btn: "التالي →" },
-            { el: "#tour-group-2", title: "📐 الهيكل الهندسي", text: "غيّر عدد رؤوس النجمة، حدة الزوايا، درجة التداخل، وعدد الطبقات لصنع أشكال هندسية فريدة.", btn: "التالي →" },
-            { el: "#tour-group-3", title: "✨ التفاصيل الدقيقة", text: "أضف لمسات فنية: شمسة مركزية، نقاط مينا ملونة، أو إطار خارجي مزخرف.", btn: "التالي →" },
-            { el: "#tour-group-bg", title: "🎨 الخلفيات والملمس", text: "اختر من خلفيات معتقة وتحكم في شدة الملمس لمظهر أصيل.", btn: "التالي →" },
-            { el: "#tour-group-vfx", title: "💫 التأثيرات البصرية", text: "أضف توهجاً سحرياً، ظلاً ثلاثي الأبعاد، أو تعبئة متدرجة للألوان.", btn: "التالي →" },
-            { el: "#tour-group-anim", title: "🎬 نظام الانميشن", text: "14 نوع حركة احترافية: دوران، نبض، تنفس، موجة، والمزيد.", btn: "التالي →" },
-            { el: "#tour-group-themes", title: "🎨 ثيمات ألوان جاهزة", text: "لوحات ألوان مستوحاة من التراث: أندلسي، فارسي، ملكي، عثماني.", btn: "التالي →" },
-            { el: "#tour-group-4", title: "🎨 تحكم دقيق بالألوان", text: "حدد كل لون على حدة: الأساسي، الثانوي، التذهيب، والخلفية.", btn: "التالي →" },
-            { el: "#tour-sec-7", title: "💾 حفظ وتصدير", text: "احفظ تصميمك كـ PNG عالي الدقة، JPG، SVG، أو انسخ الكود مباشرة.", btn: "إنهاء 🎉" }
-        ];
+    const b = $('border');
+    b.style.display = el.showBorder.checked ? 'block' : 'none';
+    b.setAttribute('stroke', gold);
+    b.setAttribute('stroke-width', el.borderW.value);
+    b.setAttribute('stroke-dasharray', el.borderType.value === 'dashed' ? '20 10' : '');
 
-        let currentStep = 0;
-        const tourTitle = document.getElementById('tourTitle');
-        const tourText = document.getElementById('tourText');
-        const btnTourNext = document.getElementById('btnTourNext');
-        const btnTourSkip = document.getElementById('btnTourSkip');
-        const tourStepsIndicator = document.getElementById('tourStepsIndicator');
-        const tourProgress = document.getElementById('tourProgress');
-        const controlsWrap = document.getElementById('controlsWrap');
+    updateFX();
+    updateText();
+    updateGrad();
+    updateMask();
+}
 
-        function initTourIndicators() {
-            tourStepsIndicator.innerHTML = '';
-            tourSteps.forEach((_, idx) => {
-                const dot = document.createElement('div');
-                dot.className = 'tour-step-dot' + (idx === 0 ? ' active' : '');
-                dot.dataset.step = idx;
-                dot.addEventListener('click', () => {
-                    if (idx <= currentStep) {
-                        currentStep = idx;
-                        showTourStep(currentStep);
-                    }
-                });
-                tourStepsIndicator.appendChild(dot);
-            });
+function updateFX() {
+    const pg = $('pg');
+    anims.forEach(a => pg.classList.remove('anim-' + a));
+    pg.classList.remove('glow', 'shadow-3d', 'emboss');
+    if (el.fxGlow.checked) pg.classList.add('glow');
+    if (el.fxShadow.checked) pg.classList.add('shadow-3d');
+    if (el.fxEmboss.checked) pg.classList.add('emboss');
+    if (el.fxAnim.checked && !paused) pg.classList.add('anim-' + el.animType.value);
+    $('preview').style.setProperty('--spd', el.animSpd.value + 's');
+}
+
+function updateText() {
+    const t = $('txt');
+    if (el.showTxt.checked) {
+        t.style.display = 'block';
+        t.textContent = el.txtVal.value;
+        t.setAttribute('font-size', el.txtSize.value);
+        t.setAttribute('fill', el.txtColor.value);
+    } else t.style.display = 'none';
+}
+
+function updateGrad() {
+    if (el.useGrad.checked) {
+        const ang = +el.gradAng.value * Math.PI / 180;
+        const g = document.getElementById('grad');
+        g.setAttribute('x1', (50 - 50 * Math.cos(ang)) + '%');
+        g.setAttribute('y1', (50 - 50 * Math.sin(ang)) + '%');
+        g.setAttribute('x2', (50 + 50 * Math.cos(ang)) + '%');
+        g.setAttribute('y2', (50 + 50 * Math.sin(ang)) + '%');
+        $('gs1').setAttribute('stop-color', el.c1.value);
+        $('gs2').setAttribute('stop-color', el.c2.value);
+        $('gs3').setAttribute('stop-color', el.c3.value);
+    }
+}
+
+function updateMask() {
+    const p = $('preview');
+    ['mask-circle','mask-octagon','mask-hexagon','mask-star'].forEach(c => p.classList.remove(c));
+    if (el.mask.value !== 'none') p.classList.add('mask-' + el.mask.value);
+}
+
+// ========== الزوم ==========
+function zoomIn() { zoom = Math.min(200, zoom + 10); applyZoom(); }
+function zoomOut() { zoom = Math.max(50, zoom - 10); applyZoom(); }
+function zoomReset() { zoom = 100; applyZoom(); }
+function applyZoom() {
+    $('zoomLvl').textContent = zoom + '%';
+    $('svg').style.transform = `scale(${zoom / 100})`;
+}
+
+function toggleFS() {
+    $('preview').classList.toggle('fullscreen');
+    toast($('preview').classList.contains('fullscreen') ? '⛶ ملء الشاشة - اضغط مرة أخرى للخروج' : '⛶ الوضع العادي');
+}
+
+function toggleAnim() {
+    paused = !paused;
+    $('animBtn').innerHTML = paused ? '▶️ تشغيل' : '⏸️ إيقاف';
+    update();
+    toast(paused ? 'تم إيقاف الحركة' : 'تم تشغيل الحركة');
+}
+
+// ========== العشوائية ==========
+function rh() { return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'); }
+function rc(id) { el[id].value = rh(); update(); }
+
+function randomColors() {
+    ['c1','c2','c3','cGold','bgColor'].forEach(id => el[id].value = rh());
+    update();
+    toast('🎨 ألوان جديدة عشوائية!');
+}
+
+function randomShape() {
+    el.sides.value = [6,8,10,12,16,20][Math.floor(Math.random() * 6)];
+    el.inner.value = (Math.random() * 0.6 + 0.2).toFixed(2);
+    el.layers.value = Math.floor(Math.random() * 6) + 1;
+    el.overlap.value = (Math.random() * 1.2 + 0.6).toFixed(1);
+    el.web.value = Math.floor(Math.random() * 10);
+    update();
+    toast('📐 شكل جديد عشوائي!');
+}
+
+function randomAll() {
+    randomShape();
+    randomColors();
+    el.scale.value = (Math.random() * 2 + 0.5).toFixed(1);
+    el.rot.value = Math.floor(Math.random() * 360);
+    toast('🔥 تم توليد تصميم عشوائي كامل!');
+}
+
+function randomTheme() {
+    const names = Object.keys(themes);
+    const name = names[Math.floor(Math.random() * names.length)];
+    applyTheme(name);
+    el.theme.value = name;
+    toast('🎨 تم تطبيق ثيم: ' + name);
+}
+
+function applyTheme(name) {
+    const t = themes[name];
+    if (t) {
+        Object.keys(t).forEach(k => { if (el[k]) el[k].value = t[k]; });
+        update();
+    }
+}
+
+function smartColors() {
+    const h = Math.random() * 360;
+    const hsl = (hue, s, l) => {
+        s /= 100; l /= 100;
+        const c = (1 - Math.abs(2 * l - 1)) * s;
+        const x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+        const m = l - c / 2;
+        let r = 0, g = 0, b = 0;
+        if (hue < 60) { r = c; g = x; }
+        else if (hue < 120) { r = x; g = c; }
+        else if (hue < 180) { g = c; b = x; }
+        else if (hue < 240) { g = x; b = c; }
+        else if (hue < 300) { r = x; b = c; }
+        else { r = c; b = x; }
+        const hex = v => Math.round((v + m) * 255).toString(16).padStart(2, '0');
+        return '#' + hex(r) + hex(g) + hex(b);
+    };
+    el.c1.value = hsl(h, 70, 35);
+    el.c2.value = hsl((h + 120) % 360, 60, 45);
+    el.c3.value = hsl((h + 240) % 360, 50, 40);
+    el.cGold.value = hsl((h + 60) % 360, 80, 50);
+    el.bgColor.value = hsl(h, 15, 92);
+    update();
+    toast('🧠 تم توليد ألوان متناسقة ذكياً!');
+}
+
+// ========== الحفظ والتصدير ==========
+function getSettings() {
+    const s = {};
+    Object.keys(el).forEach(k => {
+        const e = el[k];
+        s[k] = e.type === 'checkbox' ? e.checked : e.value;
+    });
+    return s;
+}
+
+function loadSettings(s) {
+    Object.keys(s).forEach(k => {
+        const e = el[k];
+        if (e) {
+            if (e.type === 'checkbox') e.checked = s[k];
+            else e.value = s[k];
         }
+    });
+    update();
+}
 
-        function updateTourIndicators() {
-            document.querySelectorAll('.tour-step-dot').forEach((dot, idx) => {
-                dot.classList.toggle('active', idx === currentStep);
-            });
-            tourProgress.textContent = `خطوة ${currentStep + 1} من ${tourSteps.length}`;
-        }
+function saveDesign() {
+    const data = getData();
+    const svg = $('svg');
+    const str = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    canvas.width = 200; canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0, 200, 200);
+        data.designs.unshift({ id: Date.now(), thumb: canvas.toDataURL('image/jpeg', 0.6), settings: getSettings() });
+        if (data.designs.length > 15) data.designs.pop();
+        saveData(data);
+        toast('تم حفظ التصميم بنجاح!', 'success');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(str)));
+}
 
-        function showTourStep(idx) {
-            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
-            
-            if (idx >= tourSteps.length) { 
-                endTour(); 
-                return; 
-            }
-            
-            const s = tourSteps[idx];
-            tourTitle.innerHTML = s.title;
-            tourText.textContent = s.text;
-            btnTourNext.textContent = s.btn;
-            btnTourSkip.style.display = idx === 0 ? 'inline-block' : 'none';
-            btnTourNext.textContent = idx === tourSteps.length - 1 ? 'إنهاء 🎉' : 'التالي →';
-            
-            updateTourIndicators();
-            
-            if (idx > 0 && s.el) {
-                const target = document.querySelector(s.el);
-                if (target) {
-                    const titleElem = target.previousElementSibling;
-                    if (titleElem && target.classList.contains('control-group') && (target.style.maxHeight === '0px' || !target.style.maxHeight)) {
-                        titleElem.click();
-                    }
-                    target.classList.add('highlight-tour');
-                    const targetTop = target.getBoundingClientRect().top + controlsWrap.scrollTop - 80;
-                    controlsWrap.scrollTo({ top: targetTop, behavior: 'smooth' });
-                }
-            }
-        }
+function downloadPNG() {
+    loader(true, 'جاري تصدير PNG...');
+    const w = +el.expW.value, h = +el.expH.value;
+    const svg = $('svg');
+    const str = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0, w, h);
+        const a = document.createElement('a');
+        a.download = 'islamic-pattern-' + Date.now() + '.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        loader(false);
+        toast('تم تحميل PNG بنجاح!', 'success');
+    };
+    img.onerror = () => { loader(false); toast('حدث خطأ في التصدير', 'error'); };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(str)));
+}
 
-        window.startTour = function() { 
-            const appData = getAppData();
-            if (appData.hasSeenTour) return;
-            document.getElementById('tourOverlay').classList.add('active'); 
-            document.getElementById('tourModal').classList.add('active'); 
-            initTourIndicators();
-            showTourStep(0); 
-        }
-        
-        function endTour() { 
-            document.getElementById('tourOverlay').classList.remove('active'); 
-            document.getElementById('tourModal').classList.remove('active'); 
-            document.querySelectorAll('.highlight-tour').forEach(el => el.classList.remove('highlight-tour'));
-            const appData = getAppData();
-            appData.hasSeenTour = true;
-            saveAppData(appData);
-        }
+function downloadJPG() {
+    loader(true, 'جاري تصدير JPG...');
+    const w = +el.expW.value, h = +el.expH.value, q = +el.expQ.value / 100;
+    const svg = $('svg');
+    const str = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = el.bgColor.value;
+    ctx.fillRect(0, 0, w, h);
+    const img = new Image();
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0, w, h);
+        const a = document.createElement('a');
+        a.download = 'islamic-pattern-' + Date.now() + '.jpg';
+        a.href = canvas.toDataURL('image/jpeg', q);
+        a.click();
+        loader(false);
+        toast('تم تحميل JPG بنجاح!', 'success');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(str)));
+}
 
-        btnTourNext.addEventListener('click', () => { 
-            currentStep++; 
-            showTourStep(currentStep); 
+function downloadSVG() {
+    const blob = new Blob([$('svg').outerHTML], { type: 'image/svg+xml' });
+    const a = document.createElement('a');
+    a.download = 'islamic-pattern-' + Date.now() + '.svg';
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    toast('تم تحميل SVG بنجاح!', 'success');
+}
+
+function copyCode() {
+    navigator.clipboard.writeText($('svg').outerHTML)
+        .then(() => toast('تم نسخ كود SVG!', 'success'))
+        .catch(() => toast('فشل النسخ', 'error'));
+}
+
+// ========== المعرض ==========
+function openGallery() {
+    const data = getData();
+    const g = $('galleryGrid');
+    if (data.designs.length === 0) {
+        g.innerHTML = '<div class="empty-state" style="grid-column:span 3"><div class="icon">🖼️</div><p>لا توجد تصاميم محفوظة بعد<br>اضغط "💾 حفظ" لحفظ تصميمك</p></div>';
+    } else {
+        g.innerHTML = data.designs.map((d, i) => `
+            <div class="gallery-item">
+                <img src="${d.thumb}">
+                <div class="gallery-item-actions">
+                    <button onclick="loadDesign(${i})">📥</button>
+                    <button onclick="deleteDesign(${i})">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+    $('galleryModal').classList.add('show');
+}
+
+function closeGallery() { $('galleryModal').classList.remove('show'); }
+
+function loadDesign(i) {
+    const data = getData();
+    if (data.designs[i]) {
+        loadSettings(data.designs[i].settings);
+        closeGallery();
+        toast('تم تحميل التصميم!', 'success');
+    }
+}
+
+function deleteDesign(i) {
+    if (confirm('هل تريد حذف هذا التصميم؟')) {
+        const data = getData();
+        data.designs.splice(i, 1);
+        saveData(data);
+        openGallery();
+        toast('تم حذف التصميم');
+    }
+}
+
+function clearGallery() {
+    if (confirm('هل تريد حذف جميع التصاميم المحفوظة؟')) {
+        const data = getData();
+        data.designs = [];
+        saveData(data);
+        openGallery();
+        toast('تم مسح جميع التصاميم');
+    }
+}
+
+// ========== القوالب ==========
+function openTemplates() {
+    const g = $('templatesGrid');
+    g.innerHTML = templates.map((t, i) => `
+        <div class="template-card ${selTemplate === i ? 'selected' : ''}" onclick="selectTemplate(${i})">
+            <svg viewBox="0 0 100 100"><path d="${starPath(t.sides, t.inner, 50, 50, 40, 0)}" fill="none" stroke="#e6b422" stroke-width="2"/></svg>
+            <span>${t.name}</span>
+        </div>
+    `).join('');
+    $('templatesModal').classList.add('show');
+}
+
+function closeTemplates() { $('templatesModal').classList.remove('show'); }
+
+function selectTemplate(i) {
+    selTemplate = i;
+    openTemplates();
+}
+
+function applyTemplate() {
+    if (selTemplate !== null) {
+        const t = templates[selTemplate];
+        el.sides.value = t.sides;
+        el.inner.value = t.inner;
+        el.layers.value = t.layers;
+        el.web.value = t.web;
+        update();
+        closeTemplates();
+        toast('تم تطبيق قالب: ' + t.name, 'success');
+    } else {
+        toast('اختر قالب أولاً', 'warning');
+    }
+}
+
+// ========== المشاركة ==========
+function shareDesign() {
+    const s = btoa(JSON.stringify(getSettings()));
+    const url = location.origin + location.pathname + '?d=' + s;
+    $('shareUrl').value = url;
+    $('shareModal').classList.add('show');
+}
+
+function closeShare() { $('shareModal').classList.remove('show'); }
+
+function copyShare() {
+    navigator.clipboard.writeText($('shareUrl').value)
+        .then(() => toast('تم نسخ رابط المشاركة!', 'success'))
+        .catch(() => toast('فشل النسخ', 'error'));
+}
+
+function loadFromUrl() {
+    const p = new URLSearchParams(location.search);
+    const d = p.get('d');
+    if (d) {
+        try {
+            loadSettings(JSON.parse(atob(d)));
+            toast('تم تحميل التصميم من الرابط!', 'success');
+        } catch {}
+    }
+}
+
+// ========== الوضع الليلي ==========
+function toggleTheme() {
+    const dark = document.body.getAttribute('data-theme') === 'dark';
+    document.body.setAttribute('data-theme', dark ? 'light' : 'dark');
+    toast(dark ? '☀️ الوضع الفاتح' : '🌙 الوضع الداكن');
+}
+
+// ========== المساعدة ==========
+function openHelp() { $('helpModal').classList.add('show'); }
+function closeHelp() { $('helpModal').classList.remove('show'); }
+
+function closeWelcome() {
+    $('welcomeModal').classList.remove('show');
+    const data = getData();
+    data.seen = true;
+    saveData(data);
+}
+
+// ========== التهيئة ==========
+function init() {
+    // التبويبات
+    document.querySelectorAll('.tab').forEach(t => {
+        t.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            $('p-' + this.dataset.t).classList.add('active');
         });
-        
-        btnTourSkip.addEventListener('click', endTour);
+    });
 
-        /**
-         * ============================================
-         * إدارة الحالة والبيانات
-         * ============================================
-         */
-        const inputs = document.querySelectorAll('input, select');
-        const elements = {};
-        inputs.forEach(el => {
-            if (el.id) elements[el.id] = el;
+    // المدخلات
+    Object.keys(el).forEach(k => {
+        el[k].addEventListener('input', update);
+        el[k].addEventListener('change', function() {
+            if (k === 'theme' && this.value) applyTheme(this.value);
+            if (k === 'txtPreset' && this.value) { el.txtVal.value = this.value; update(); }
+            if (k === 'expPreset' && this.value) {
+                const [w, h] = this.value.split(',');
+                el.expW.value = w;
+                el.expH.value = h;
+            }
         });
+    });
 
-        const colorThemes = {
-            andalusian: { col1: '#063970', col2: '#178582', colGold: '#b48608', colBg: '#f4edd8' },
-            persian: { col1: '#008080', col2: '#d4a5a5', colGold: '#d4af37', colBg: '#fff9f0' },
-            nightly: { col1: '#1a1a40', col2: '#c0c0c0', colGold: '#e6d3a7', colBg: '#2d1b4d' },
-            royal: { col1: '#8b0000', col2: '#000000', colGold: '#ffd700', colBg: '#f5f5dc' },
-            ottoman: { col1: '#006400', col2: '#ffffff', colGold: '#daa520', colBg: '#f0e6d2' },
-            mamluk: { col1: '#b87333', col2: '#4682b4', colGold: '#cd7f32', colBg: '#f5deb3' },
-            desert: { col1: '#c19a6b', col2: '#8b7355', colGold: '#d4af37', colBg: '#f4e4c1' },
-            ocean: { col1: '#003366', col2: '#40e0d0', colGold: '#e6e6fa', colBg: '#f0f8ff' },
-            sunset: { col1: '#ff6b35', col2: '#7b2d8e', colGold: '#f9a825', colBg: '#fff3e0' },
-            forest: { col1: '#1b5e20', col2: '#8d6e63', colGold: '#a1887f', colBg: '#f1f8e9' }
-        };
-
-        const texturePatterns = {
-            'solid': '', 'aged-paper': 'texture-aged-paper', 'stone-wall': 'texture-stone-wall',
-            'fabric': 'texture-fabric', 'marble': 'texture-aged-paper', 'parchment': 'texture-fabric'
-        };
-
-        const animClassNames = [
-            'anim-rotate', 'anim-pulse', 'anim-breathe', 'anim-wave', 'anim-spiral',
-            'anim-float', 'anim-bounce', 'anim-morph', 'anim-glitch', 'anim-zoom',
-            'anim-kaleidoscope', 'anim-wobble', 'anim-shake', 'anim-fade'
-        ];
-
-        /**
-         * ============================================
-         * الدوال الهندسية لحساب المسارات
-         * ============================================
-         */
-        function getStarPath(sides, inner, cx, cy, radius, rot) {
-            let d = "";
-            const step = (Math.PI * 2) / (sides * 2);
-            for (let i = 0; i < sides * 2; i++) {
-                const r = i % 2 === 0 ? radius : radius * inner;
-                const a = step * i + (rot * Math.PI / 180);
-                const x = (cx + r * Math.cos(a)).toFixed(2);
-                const y = (cy + r * Math.sin(a)).toFixed(2);
-                d += (i === 0 ? "M" : "L") + x + "," + y;
-            }
-            return d + "Z";
-        }
-
-        function getWebPath(sides, cx, cy, radius, step) {
-            if (step == 0) return "";
-            let d = "";
-            const angleStep = (Math.PI * 2) / sides;
-            for (let i = 0; i < sides; i++) {
-                const a1 = angleStep * i;
-                const a2 = angleStep * ((i + step) % sides);
-                const x1 = (cx + radius * Math.cos(a1)).toFixed(2);
-                const y1 = (cy + radius * Math.sin(a1)).toFixed(2);
-                const x2 = (cx + radius * Math.cos(a2)).toFixed(2);
-                const y2 = (cy + radius * Math.sin(a2)).toFixed(2);
-                d += `M${x1},${y1} L${x2},${y2} `;
-            }
-            return d;
-        }
-
-        function getCirclePath(cx, cy, r) {
-            return `M${(cx - r).toFixed(2)},${cy.toFixed(2)} A${r.toFixed(2)},${r.toFixed(2)} 0 1,1 ${(cx + r).toFixed(2)},${cy.toFixed(2)} A${r.toFixed(2)},${r.toFixed(2)} 0 1,1 ${(cx - r).toFixed(2)},${cy.toFixed(2)} Z`;
-        }
-
-        /**
-         * ============================================
-         * إدارة التأثيرات البصرية والخلفيات
-         * ============================================
-         */
-        function hexToRgb(hex) {
-            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '180, 134, 8';
-        }
-
-        function updateVisualEffects() {
-            const patternGroup = document.getElementById('patternGroup');
-            if (!patternGroup) return;
-            const canvasHolder = document.getElementById('canvasHolder');
-            animClassNames.forEach(cls => patternGroup.classList.remove(cls));
-            patternGroup.classList.remove('glow-effect', 'shadow-3d');
-            const animSpeed = elements.animSpeed ? parseInt(elements.animSpeed.value) : 30;
-            canvasHolder.style.setProperty('--anim-speed', `${animSpeed}s`);
-            const goldColor = elements.colGold ? elements.colGold.value : '#b48608';
-            document.documentElement.style.setProperty('--glow-color', `rgba(${hexToRgb(goldColor)}, 0.4)`);
-            if (elements.enableGlow && elements.enableGlow.checked) {
-                const intensity = parseInt(elements.glowIntensity ? elements.glowIntensity.value : 6);
-                const glowOpacity = Math.min(0.7, intensity / 25);
-                document.documentElement.style.setProperty('--glow-color', `rgba(${hexToRgb(goldColor)}, ${glowOpacity})`);
-                patternGroup.classList.add('glow-effect');
-            }
-            if (elements.enableShadow && elements.enableShadow.checked) patternGroup.classList.add('shadow-3d');
-            if (elements.enableGradient && elements.enableGradient.checked) {
-                const grad = document.getElementById('gradFill');
-                if (grad) {
-                    const angle = parseInt(elements.gradAngle ? elements.gradAngle.value : 45);
-                    const rad = (angle * Math.PI) / 180;
-                    const x2 = 50 + 50 * Math.cos(rad);
-                    const y2 = 50 + 50 * Math.sin(rad);
-                    const x1 = 100 - x2;
-                    const y1 = 100 - y2;
-                    grad.setAttribute('x1', x1 + '%'); grad.setAttribute('y1', y1 + '%');
-                    grad.setAttribute('x2', x2 + '%'); grad.setAttribute('y2', y2 + '%');
-                    const stop1 = document.getElementById('gradStop1');
-                    const stop2 = document.getElementById('gradStop2');
-                    if (stop1 && elements.col1) stop1.setAttribute('stop-color', elements.col1.value);
-                    if (stop2 && elements.col2) stop2.setAttribute('stop-color', elements.col2.value);
-                }
-            }
-            if (elements.enableAnimation && elements.enableAnimation.checked) {
-                const animType = elements.animType ? elements.animType.value : 'anim-rotate';
-                if (animClassNames.includes(animType)) patternGroup.classList.add(animType);
-            }
-        }
-
-        function updateBackground() {
-            const bgType = elements.bgTexture ? elements.bgTexture.value : 'solid';
-            const intensity = elements.textureIntensity ? parseInt(elements.textureIntensity.value) / 10 : 0.5;
-            const textureOverlay = document.getElementById('textureOverlay');
-            const bgRect = document.getElementById('bgRect');
-            const canvasHolder = document.getElementById('canvasHolder');
-            if (!canvasHolder) return;
-            Object.values(texturePatterns).forEach(cls => { if (cls) canvasHolder.classList.remove(cls); });
-            if (texturePatterns[bgType]) {
-                canvasHolder.classList.add(texturePatterns[bgType]);
-                if (textureOverlay) textureOverlay.setAttribute('opacity', (elements.transBg && elements.transBg.checked) ? '0' : intensity);
-            } else { if (textureOverlay) textureOverlay.setAttribute('opacity', '0'); }
-            if (bgRect && elements.colBg) {
-                if (!(elements.transBg && elements.transBg.checked)) bgRect.setAttribute('fill', elements.colBg.value);
-            }
-        }
-
-        function applyColorTheme(name) {
-            if (!name || name === 'custom') return;
-            const theme = colorThemes[name];
-            if (theme) {
-                if (elements.col1) elements.col1.value = theme.col1;
-                if (elements.col2) elements.col2.value = theme.col2;
-                if (elements.colGold) elements.colGold.value = theme.colGold;
-                if (elements.colBg) elements.colBg.value = theme.colBg;
-                update();
-            }
-        }
-
-        function applyRandomTheme() {
-            const names = Object.keys(colorThemes);
-            const name = names[Math.floor(Math.random() * names.length)];
-            if (elements.colorTheme) elements.colorTheme.value = name;
-            applyColorTheme(name);
-            showToast('🎨 تم تطبيق ثيم عشوائي: ' + name);
-        }
-
-        function randomizeBackground() {
-            const types = ['solid', 'aged-paper', 'stone-wall', 'fabric', 'marble', 'parchment'];
-            if (elements.bgTexture) elements.bgTexture.value = types[Math.floor(Math.random() * types.length)];
-            if (elements.colBg) elements.colBg.value = getRndHex();
-            if (elements.textureIntensity) elements.textureIntensity.value = Math.floor(Math.random() * 10) + 1;
-            updateBackground();
-            update();
-            showToast('🎨 تم تغيير الخلفية عشوائياً');
-        }
-
-        /**
-         * ============================================
-         * الدالة الرئيسية لتحديث التصميم
-         * ============================================
-         */
-        function update() {
-            const valueMappings = {
-                'scale': v => v, 'initRot': v => v + '°', 'rotDir': v => v == 1 ? '↺' : '↻',
-                'sides': v => v, 'inner': v => v, 'overlap': v => v, 'layers': v => v,
-                'web': v => v, 'strokeW': v => v, 'fillOp': v => v, 'dash': v => v,
-                'texture': v => v, 'dotSize': v => v, 'textureIntensity': v => v,
-                'glowIntensity': v => v, 'shadowDepth': v => v, 'gradAngle': v => v + '°',
-                'animSpeed': v => v + 's'
+    // صورة الخلفية
+    el.bgFile.addEventListener('change', function(e) {
+        const f = e.target.files[0];
+        if (f) {
+            const r = new FileReader();
+            r.onload = e => {
+                $('bgImg').setAttribute('href', e.target.result);
+                $('bgImg').style.display = 'block';
+                toast('تم إضافة صورة الخلفية!', 'success');
             };
-
-            Object.keys(elements).forEach(key => {
-                const lb = document.getElementById('val-' + key);
-                if (lb && elements[key]) {
-                    const val = elements[key].value;
-                    lb.textContent = (valueMappings[key] || (v => v))(val);
-                }
-            });
-
-            const isSingle = elements.patternMode ? elements.patternMode.value === 'single' : false;
-            const s = parseInt(elements.sides?.value || 12);
-            const inn = parseFloat(elements.inner?.value || 0.35);
-            const sc = parseFloat(elements.scale?.value || 1.5);
-            const overlap = parseFloat(elements.overlap?.value || 1.0);
-            const webStep = parseInt(elements.web?.value || 4);
-            const layerCount = parseInt(elements.layers?.value || 3);
-            const dash = parseInt(elements.dash?.value || 0);
-            const texture = parseInt(elements.texture?.value || 0);
-            const initRot = parseInt(elements.initRot?.value || 0);
-            const strokeW = parseFloat(elements.strokeW?.value || 3);
-            const fillOp = parseFloat(elements.fillOp?.value || 0.3);
-            const dotSz = parseFloat(elements.dotSize?.value || 3);
-            const col1 = elements.col1?.value || '#063970';
-            const col2 = elements.col2?.value || '#178582';
-            const colGold = elements.colGold?.value || '#b48608';
-            const colBg = elements.colBg?.value || '#f4edd8';
-
-            const bgRect = document.getElementById('bgRect');
-            if (bgRect) bgRect.setAttribute('fill', (elements.transBg && elements.transBg.checked) ? 'none' : colBg);
-            
-            const pSize = isSingle ? 800 : 400 * (1 / sc);
-            const mainPattern = document.getElementById('mainPattern');
-            if (mainPattern) { mainPattern.setAttribute('width', pSize); mainPattern.setAttribute('height', pSize); }
-
-            const rad = (pSize / 2) * 0.95 * overlap;
-            const center = pSize / 2;
-            const drawCenters = isSingle ? [[center, center]] : [[center, center], [0, 0], [pSize, 0], [0, pSize], [pSize, pSize]];
-            const dashStyle = dash > 0 ? `stroke-dasharray="${dash},${dash / 2}"` : "";
-            const fillType = (elements.enableGradient && elements.enableGradient.checked) ? 'url(#gradFill)' : null;
-
-            let g = `<g ${texture > 5 ? 'filter="url(#roughFilter)"' : ''}>`;
-            drawCenters.forEach(([cx, cy]) => {
-                for (let i = layerCount; i >= 1; i--) {
-                    const currentRad = rad * (i / layerCount);
-                    const strokeCol = i % 2 === 0 ? col1 : col2;
-                    const fillColor = fillType || (i % 2 === 0 ? col2 : "none");
-                    const fillOpacity = fillType ? fillOp : (i === layerCount ? fillOp : fillOp * 0.5);
-                    g += `<path d="${getStarPath(s, inn + 0.1, cx, cy, currentRad, (180 / s) + initRot)}" fill="${fillColor}" fill-opacity="${fillOpacity}" stroke="${strokeCol}" stroke-width="${strokeW * 0.8}"/>`;
-                    g += `<path d="${getStarPath(s, inn, cx, cy, currentRad, initRot)}" fill="none" stroke="${colGold}" stroke-width="${strokeW}" ${dashStyle}/>`;
-                }
-                if (webStep > 0) {
-                    g += `<path d="${getWebPath(s, cx, cy, rad * 0.8, webStep)}" fill="none" stroke="${col1}" stroke-width="${strokeW * 0.5}" opacity="0.6" ${dashStyle}/>`;
-                }
-                if (elements.showCenter?.checked) {
-                    const medRad = rad * 0.25;
-                    g += `<path d="${getStarPath(s > 12 ? 12 : s, 0.6, cx, cy, medRad, initRot)}" fill="${fillType || col1}" fill-opacity="${fillType ? fillOp : 1}" stroke="${colGold}" stroke-width="${strokeW * 0.7}"/>`;
-                }
-                if (elements.showDots?.checked) {
-                    for (let i = 0; i < s; i++) {
-                        const a = (Math.PI * 2 / s) * i;
-                        let dx = cx + (rad * 0.95) * Math.cos(a);
-                        let dy = cy + (rad * 0.95) * Math.sin(a);
-                        g += `<circle cx="${dx}" cy="${dy}" r="${dotSz * overlap}" fill="${colGold}"/>`;
-                    }
-                }
-            });
-            g += `</g>`;
-            const patternGroup = document.getElementById('patternGroup');
-            if (patternGroup) patternGroup.innerHTML = g;
-            updateBackground();
-            updateVisualEffects();
+            r.readAsDataURL(f);
         }
+    });
 
-        /**
-         * ============================================
-         * دوال العشوائية والحفظ
-         * ============================================
-         */
-        function getRndHex() { return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'); }
-        window.rndCol = function(id) { if (elements[id]) { elements[id].value = getRndHex(); update(); } }
-        window.randomizeAllColors = function() {
-            ['col1', 'col2', 'colGold', 'colBg'].forEach(id => { if (elements[id]) elements[id].value = getRndHex(); });
-            update(); showToast('🎨 تم تغيير الألوان عشوائياً');
-        }
-        window.randomizeShapes = function() {
-            if (elements.sides) elements.sides.value = [6, 8, 10, 12, 16][Math.floor(Math.random() * 5)];
-            if (elements.inner) elements.inner.value = (Math.random() * 0.6 + 0.15).toFixed(2);
-            if (elements.layers) elements.layers.value = Math.floor(Math.random() * 5) + 1;
-            update(); showToast('📐 تم تغيير الأشكال عشوائياً');
-        }
-        window.randomizeSettings = function() {
-            if (elements.scale) elements.scale.value = (Math.random() * 2 + 0.5).toFixed(1);
-            update(); showToast('⚙️ تم تغيير الإعدادات عشوائياً');
-        }
-        window.randomizeAll = function() {
-            window.randomizeSettings(); window.randomizeShapes(); window.randomizeAllColors(); randomizeBackground();
-            showToast('🔥 تم تغيير كل شيء عشوائياً!');
-        }
+    loadFromUrl();
 
-        // --- إصلاح نظام الإشعارات (منع التداخل وتحسين الظل) ---
-        let toastTimeout = null;
-        function showToast(msg) {
-            // حذف التنبيه الموجود فوراً لمنع التراكم
-            const oldToast = document.querySelector('.toast-notification');
-            if (oldToast) oldToast.remove();
-            
-            const t = document.createElement('div');
-            t.className = 'toast-notification';
-            t.innerHTML = `<span>✨</span> ${msg}`;
-            document.body.appendChild(t);
-            
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                t.style.animation = 'toastOut 0.3s ease forwards';
-                setTimeout(() => { if (t.parentNode) t.remove(); }, 300);
-            }, 3000);
-        }
+    // الترحيب
+    if (!getData().seen) $('welcomeModal').classList.add('show');
 
-        function triggerDownload(dataUrl, filename) {
-            const a = document.createElement('a'); a.href = dataUrl; a.download = filename;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        }
+    update();
+}
 
-        window.downloadSVG = function() {
-            const svg = document.getElementById('svgCanvas').outerHTML;
-            const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-            triggerDownload(URL.createObjectURL(blob), `Islamic-Pattern-${Date.now()}.svg`);
-            showToast('✅ تم حفظ ملف SVG بنجاح!');
-        }
-
-        window.copyToClipboard = function() {
-            const code = document.getElementById('svgCanvas').outerHTML;
-            navigator.clipboard.writeText(code).then(() => showToast('✅ تم نسخ كود التصميم!'));
-        }
-
-        window.downloadPNG = function() {
-            showToast('⏳ جاري تحضير PNG بدقة عالية...');
-            const svgClone = prepareSVGForExport(true);
-            const blob = new Blob([svgClone], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas'); canvas.width = 3000; canvas.height = 3000;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, 3000, 3000);
-                triggerDownload(canvas.toDataURL('image/png'), `Pattern-${Date.now()}.png`);
-                URL.revokeObjectURL(url);
-                showToast('✅ تم حفظ PNG!');
-            };
-            img.src = url;
-        }
-
-        window.downloadJPG = function() {
-            showToast('⏳ جاري تحضير JPG بجودة عالية...');
-            const svgClone = prepareSVGForExport(false);
-            const blob = new Blob([svgClone], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas'); canvas.width = 3000; canvas.height = 3000;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = (elements.transBg && elements.transBg.checked) ? '#ffffff' : (elements.colBg?.value || '#f4edd8');
-                ctx.fillRect(0, 0, 3000, 3000);
-                ctx.drawImage(img, 0, 0, 3000, 3000);
-                triggerDownload(canvas.toDataURL('image/jpeg', 0.95), `Pattern-${Date.now()}.jpg`);
-                URL.revokeObjectURL(url);
-                showToast('✅ تم حفظ JPG!');
-            };
-            img.src = url;
-        }
-
-        function prepareSVGForExport(forPNG) {
-            const clone = document.getElementById('svgCanvas').cloneNode(true);
-            const pg = clone.querySelector('#patternGroup');
-            if (pg) { pg.style.animation = 'none'; pg.classList.remove('glow-effect', 'shadow-3d'); animClassNames.forEach(c => pg.classList.remove(c)); }
-            return new XMLSerializer().serializeToString(clone);
-        }
-
-        document.querySelectorAll('.section-title').forEach(title => {
-            title.addEventListener('click', function() {
-                const grp = this.nextElementSibling;
-                if (grp && grp.classList.contains('control-group')) {
-                    const isCollapsed = grp.style.maxHeight === '0px';
-                    grp.style.maxHeight = isCollapsed ? grp.scrollHeight + "px" : '0px';
-                    grp.style.opacity = isCollapsed ? '1' : '0';
-                }
-            });
-        });
-
-        inputs.forEach(el => {
-            el.addEventListener('input', () => {
-                if (el.id === 'enableGlow') document.getElementById('glowRow').style.display = el.checked ? 'flex' : 'none';
-                if (el.id === 'enableShadow') document.getElementById('shadowRow').style.display = el.checked ? 'flex' : 'none';
-                if (el.id === 'enableAnimation') {
-                    document.getElementById('animTypeRow').style.display = el.checked ? 'flex' : 'none';
-                    document.getElementById('animSpeedRow').style.display = el.checked ? 'flex' : 'none';
-                }
-                update();
-            });
-            el.addEventListener('change', update);
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            update();
-            setTimeout(showIntroModal, 800);
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
-
